@@ -1,0 +1,28 @@
+extends /layout
+
+block content
+    .login-page
+        form(action='/signup' method='POST').login-page__card.mdl-card.mdl-shadow--2dp
+            +csrf(csrf)
+            .mdl-card__title
+                h2.mdl-card__title-text Create a new account
+            .mdl-card__supporting-text
+                p Signing up for a account will allow you to manage your photos in albums, and share them to whole world!
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#name.mdl-textfield__input(name='displayName' required)
+                    label.mdl-textfield__label(for='name') Name
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#email.mdl-textfield__input(type='email' name='email' required)
+                    label.mdl-textfield__label(for='email') Email
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#password.mdl-textfield__input(type='password' name='password' required)
+                    label.mdl-textfield__label(for='password') Password
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#password2.mdl-textfield__input(type='password' name='password2' required)
+                    label.mdl-textfield__label(for='password2') Confirm password
+            .mdl-card__actions.mdl-card--border(style='display: flex; align-items: center;')
+                button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
+                    | Create Account
+                .mdl-layout-spacer
+                small.mdl-color-text--grey-600.
+                    Already registered? #[a(href='/login') Log in]
