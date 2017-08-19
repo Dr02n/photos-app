@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const crypto = require('crypto');
+const sendMail = require('../nodemailer');
 
 
 exports.get = (ctx) => {
@@ -15,10 +16,12 @@ exports.post = async (ctx) => {
   user.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
   await user.save();
 
-  // TODO: send email
+  const url = `${process.env.APP_URL}/reset-password/${user.resetPasswordToken}`;
 
-  // ctx.state.flash('success', 'password reset instructions were send to your email.');
-  // ctx.redirect('/login');
+  sendMail(user.email, 'Password Reset', 'reset-password', { url });
 
-  ctx.redirect(`/reset-password/${user.id}/${user.resetPasswordToken}`);
+  ctx.state.flash('success', 'Password reset instructions were send to your email.');
+  ctx.redirect('/login');
+
+  // ctx.redirect(url);
 }

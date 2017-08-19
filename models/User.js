@@ -19,7 +19,10 @@ const User = new mongoose.Schema({
     type: String,
     default: 'There is no description yet'
   },
-  resetPasswordToken: String,
+  resetPasswordToken: {
+    type: String,
+    index: true
+  },
   resetPasswordExpires: Date,
   githubId: Number,
   githubProfileUrl: String,

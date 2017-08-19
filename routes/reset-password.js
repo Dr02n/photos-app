@@ -18,14 +18,10 @@ exports.post = async (ctx) => {
   ctx.redirect('/login');
 }
 
-exports.checkPasswordResetStatus = async (ctx, next) => {
-  const { userId, token } = ctx.params;
-  const user = await User.findById(userId);
+exports.checkStatus = async (ctx, next) => {
+  const user = await User.findOne({ resetPasswordToken: ctx.params.token });
 
-  if (!user ||
-    user.resetPasswordToken !== token ||
-    user.resetPasswordExpires > Date.now
-  ) {
+  if (!user || user.resetPasswordExpires > Date.now) {
     ctx.flash('error', 'Password reset is invalid or has expired!');
     ctx.redirect('/login');
     return;

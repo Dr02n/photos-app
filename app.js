@@ -6,7 +6,7 @@ require('dotenv').config();
 // require('trace');
 // require('clarify'); // remove nodecore related stack trace noise
 
-app.keys = ['some secret hurr'];
+app.keys = [process.env.APP_KEY];
 
 
 // configure mongoose
@@ -28,7 +28,6 @@ const User = require('./models/User');
 passport.use(User.createStrategy()); // local
 passport.use(require('./passport/github-strategy'));
 
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -41,7 +40,6 @@ const pug = new Pug({
   noCache: process.env.NODE_ENV === 'development',
   app,
 });
-
 
 // midlewares
 // app.use(require('koa-favicon')('public/favicon.ico'));
