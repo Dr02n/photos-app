@@ -18,7 +18,7 @@ mongoose.plugin(beautifyUnique);
 mongoose.set('debug', true);
 
 mongoose.connect(process.env.MONGO_URI, { useMongoClient: true })
-  .then(db => null, err => console.error(err.message));
+  .then(() => null, err => console.error(err.message));
 
 
 // configure passport
@@ -34,7 +34,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // configure pug
 const Pug = require('koa-pug');
-const pug = new Pug({
+const pug = new Pug({ // eslint-disable-line
   viewPath: './templates',
   basedir: './templates',
   noCache: process.env.NODE_ENV === 'development',
@@ -52,9 +52,8 @@ app.use(require('koa-session')(app)); // TODO: add mongo store
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./middleware/flash')());
-app.use(new (require('koa-csrf')));
+app.use(new (require('koa-csrf'))()); // eslint-disable-line
 app.use(async (ctx, next) => {
-  // ctx.state.flash = ctx.flash();
   ctx.state.csrf = ctx.csrf;
   await next();
 });

@@ -4,7 +4,7 @@ const promisify = require('../promisify');
 
 exports.get = (ctx) => {
   ctx.render('signup');
-}
+};
 
 exports.post = async (ctx) => {
   const { displayName, email, password, password2 } = ctx.request.body;
@@ -16,4 +16,4 @@ exports.post = async (ctx) => {
   ctx.flash('success', 'Your account has been created');
   await ctx.login(user);
   ctx.redirect('/');
-}
+};
