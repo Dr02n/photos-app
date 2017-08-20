@@ -1,6 +1,6 @@
 {
     "extends": "airbnb-base",
     "rules": {
-        "import/newline-after-import": "off"
+        // "import/newline-after-import": "off"
     }
 }

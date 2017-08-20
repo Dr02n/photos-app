@@ -1,6 +1,7 @@
 const Router = require('koa-router');
-const router = new Router();
 const resetPassword = require('./routes/reset-password');
+
+const router = new Router();
 
 router.get('/', (ctx) => {
   if (ctx.isAuthenticated()) {
@@ -17,7 +18,7 @@ router.post('/login', require('./routes/login').post);
 router.get('/logout', require('./routes/logout').get);
 
 router.get('/forgot-password', require('./routes/forgot-password').get);
-router.post('/forgot-password', require('./routes/forgot-password').post);
+router.post('/forgot-password', require('./routes/forgot-password').post); // eslint-disable-line
 router.get('/reset-password/:token', resetPassword.checkStatus, resetPassword.get);
 router.post('/reset-password/:token', resetPassword.checkStatus, resetPassword.post);
 

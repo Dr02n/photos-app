@@ -6,32 +6,32 @@ const findOrCreate = require('mongoose-findorcreate');
 const User = new mongoose.Schema({
   displayName: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
     validate: [val => validator.isEmail(val), 'Invalid Email Address'],
-    trim: true
+    trim: true,
   },
   about: {
     type: String,
-    default: 'There is no description yet'
+    default: 'There is no description yet',
   },
   resetPasswordToken: {
     type: String,
-    index: true
+    index: true,
   },
   resetPasswordExpires: Date,
   githubId: Number,
   githubProfileUrl: String,
-  photoUrl: String
+  photoUrl: String,
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-User.plugin(passportLocalMongoose, {usernameField: 'email'});
+User.plugin(passportLocalMongoose, { usernameField: 'email' });
 User.plugin(findOrCreate);
 
 module.exports = mongoose.model('User', User);

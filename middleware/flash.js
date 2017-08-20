@@ -1,10 +1,10 @@
-module.exports = () => async function(ctx, next) {
+module.exports = () => async (ctx, next) => {
   const key = 'koa-flash';
   const data = ctx.session[key] || {};
 
   delete ctx.session[key];
 
-  ctx.flash = ctx.state.flash = function(type, html) {
+  ctx.flash = ctx.state.flash = (type, html) => { // eslint-disable-line
     if (type === undefined) return data || {};
     if (html === undefined) return data[type] || [];
     if (!ctx.session[key]) ctx.session[key] = {};
@@ -17,5 +17,4 @@ module.exports = () => async function(ctx, next) {
   if (ctx.status === 302 && ctx.session && !ctx.session[key]) {
     ctx.session[key] = data;
   }
-
 };

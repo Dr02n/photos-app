@@ -5,7 +5,7 @@ const sendMail = require('../nodemailer');
 
 exports.get = (ctx) => {
   ctx.render('forgot-password');
-}
+};
 
 exports.post = async (ctx) => {
   const { email } = ctx.request.body;
@@ -24,4 +24,4 @@ exports.post = async (ctx) => {
   ctx.redirect('/login');
 
   // ctx.redirect(url);
-}
+};

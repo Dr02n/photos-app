@@ -1,6 +1,7 @@
 const Koa = require('koa');
-const app = new Koa();
 require('dotenv').config();
+
+const app = new Koa();
 
 // Error.stackTraceLimit = 100;
 // require('trace');
@@ -23,9 +24,9 @@ mongoose.connect(process.env.MONGO_URI, { useMongoClient: true })
 
 // configure passport
 const passport = require('koa-passport');
-
 const User = require('./models/User');
-passport.use(User.createStrategy()); // local
+
+passport.use(User.createStrategy());
 passport.use(require('./passport/github-strategy'));
 
 passport.serializeUser(User.serializeUser());
@@ -34,6 +35,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // configure pug
 const Pug = require('koa-pug');
+
 const pug = new Pug({ // eslint-disable-line
   viewPath: './templates',
   basedir: './templates',
@@ -48,7 +50,7 @@ app.use(require('koa-logger')());
 app.use(require('./middleware/errors')());
 app.use(require('koa-bodyparser')());
 // multipart parser
-app.use(require('koa-session')(app)); // TODO: add mongo store
+app.use(require('koa-session')(app)); // eslint-disable-line
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./middleware/flash')());

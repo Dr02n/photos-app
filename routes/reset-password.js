@@ -4,7 +4,7 @@ const promisify = require('../promisify');
 
 exports.get = (ctx) => {
   ctx.render('reset-password');
-}
+};
 
 exports.post = async (ctx) => {
   const { password } = ctx.request.body;
@@ -16,7 +16,7 @@ exports.post = async (ctx) => {
 
   ctx.flash('success', 'Your password has been reset');
   ctx.redirect('/login');
-}
+};
 
 exports.checkStatus = async (ctx, next) => {
   const user = await User.findOne({ resetPasswordToken: ctx.params.token });
@@ -29,4 +29,4 @@ exports.checkStatus = async (ctx, next) => {
 
   ctx.user = user;
   await next();
-}
+};
