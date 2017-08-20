@@ -18,10 +18,8 @@ exports.post = async (ctx) => {
 
   const url = `${process.env.APP_URL}/reset-password/${user.resetPasswordToken}`;
 
-  sendMail(user.email, 'Password Reset', 'reset-password', { url });
+  await sendMail(user.email, 'Password Reset', 'reset-password', { url });
 
   ctx.state.flash('success', 'Password reset instructions were send to your email.');
   ctx.redirect('/login');
-
-  // ctx.redirect(url);
 };

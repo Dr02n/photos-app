@@ -8,5 +8,5 @@ exports.get = (ctx) => {
 exports.post = passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
-  failureFlash: true,
+  failureFlash: true
 });

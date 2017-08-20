@@ -1,0 +1,14 @@
+dialog#edit-dialog.mdl-dialog
+  h4.mdl-dialog__title User settings
+  .mdl-dialog__content
+    form(action='/login' method='POST')
+      +csrf(csrf)
+      .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+        input#name.mdl-textfield__input(name='displayName' value=user.displayName required)
+        label.mdl-textfield__label(for='name') Name
+      .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+        textarea#about.mdl-textfield__input(name='about' rows='3')= user.about
+        label.mdl-textfield__label(for='about') About
+  .mdl-dialog__actions
+    button.mdl-button(type='button' data-close-modal) Cancel
+    button.mdl-button(type='button') Save

@@ -1,6 +1,8 @@
 {
-    "extends": "airbnb-base",
+    "extends": "standard",
     "rules": {
-        // "import/newline-after-import": "off"
+        "semi": ["error", "always"],
+        "no-multiple-empty-lines": "off",
+        "space-before-function-paren": "off"
     }
 }

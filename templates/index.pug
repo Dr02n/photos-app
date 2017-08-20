@@ -1,6 +1,39 @@
 extends /layout
 
 block content
-    h1 Home page
-    h4: a(href='/logout') Logout
-    pre= user
+  include /includes/edit-dialog
+
+  header.page-header
+    .page-header__inner
+      img(src=user.photoUrl width=150 height=150).page-header__photo
+      .page-header__body
+        p.mdl-typography--display-1= user.displayName
+        p.page-header__about Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam animi perspiciatis cumque quis dicta, alias nostrum ipsam a consectetur nemo quod non earum veniam quisquam iure dolorum. Facilis, nam nulla.
+        ul.page-header__links
+          li: a(href=`mailto:${user.email}`) Email
+          if user.githubProfileUrl
+            li: a(href=user.githubProfileUrl target='_blank') GitHub
+        .page-header__actions
+          button(data-show-modal href='#edit-dialog')#edit.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect
+            i.material-icons edit
+          .mdl-tooltip.mdl-tooltip--large.mdl-tooltip--left(for='edit') Profile
+          a(href='/logout')#logout.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect
+            i.material-icons power_settings_new
+          .mdl-tooltip.mdl-tooltip--large.mdl-tooltip--left(for='logout') Logout
+  .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
+    .mdl-tabs__tab-bar.page-tabs__tab-bar
+      a.mdl-tabs__tab.is-active(href='#explore') Explore
+      a.mdl-tabs__tab(href='#my-albums') My albums
+      .mdl-layout-spacer
+      form(action='#')
+        .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable
+          label.mdl-button.mdl-js-button.mdl-button--icon(for='sample6')
+            i.material-icons search
+          .mdl-textfield__expandable-holder
+            input#sample6.mdl-textfield__input(type='text')
+            label.mdl-textfield__label(for='sample-expandable') Expandable Input
+    #explore.mdl-tabs__panel.is-active
+      pre= user
+
+    #my-albums.mdl-tabs__panel
+      include /includes/my-albums

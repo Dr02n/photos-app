@@ -6,14 +6,14 @@ const findOrCreate = require('mongoose-findorcreate');
 const User = new mongoose.Schema({
   displayName: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
     required: true,
     unique: true,
     validate: [val => validator.isEmail(val), 'Invalid Email Address'],
-    trim: true,
+    trim: true
   },
   about: {
     type: String,
@@ -21,14 +21,14 @@ const User = new mongoose.Schema({
   },
   resetPasswordToken: {
     type: String,
-    index: true,
+    index: true
   },
   resetPasswordExpires: Date,
   githubId: Number,
   githubProfileUrl: String,
-  photoUrl: String,
+  photoUrl: String
 }, {
-  timestamps: true,
+  timestamps: true
 });
 
 User.plugin(passportLocalMongoose, { usernameField: 'email' });
