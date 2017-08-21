@@ -1,0 +1,41 @@
+extends /layout
+
+block content
+  h3 Edit album
+  form(action=`/albums/${album.id}` method='POST')
+    +csrf(csrf)
+    +method('PATCH')
+    p: input(name='name' placeholder='Name' value=album.name)
+    p: input(name='description' placeholder='Description' value=album.description)
+    p: button Submit
+
+  form(action=`/albums/${album.id}` method='POST')
+    +csrf(csrf)
+    +method('DELETE')
+    p: button Delete album
+
+  h3 Add photo
+    form(action=`/albums/${album.id}/photos` method='POST')
+      +csrf(csrf)
+      +method('PUT')
+      p: input(name='name' placeholder='Name')
+      p: input(name='url' placeholder='Url')
+      p: button Submit
+
+  h3 Photos
+  ul
+    each photo in album.photos
+      li
+        form(action=`/photos/${photo.id}` method='POST')
+          +csrf(csrf)
+          +method('PATCH')
+          p: input(name='name' placeholder='Name' value=photo.name)
+          p: input(name='description' placeholder='Description' value=photo.description)
+          p: button Submit
+
+        form(action=`/photos/${photo.id}` method='POST')
+          +csrf(csrf)
+          +method('DELETE')
+          p: button Delete photo
+
+  //- pre= album

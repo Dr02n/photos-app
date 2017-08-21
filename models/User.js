@@ -15,9 +15,17 @@ const User = new mongoose.Schema({
     validate: [val => validator.isEmail(val), 'Invalid Email Address'],
     trim: true
   },
-  about: {
+  bio: {
     type: String,
-    default: 'There is no description yet',
+    default: 'Lorem ipsum'
+  },
+  avatar: {
+    type: String,
+    default: '/img/default_avatar.jpg'
+  },
+  background: {
+    type: String,
+    default: '/img/no_album_cover.jpg'
   },
   resetPasswordToken: {
     type: String,
@@ -26,7 +34,10 @@ const User = new mongoose.Schema({
   resetPasswordExpires: Date,
   githubId: Number,
   githubProfileUrl: String,
-  photoUrl: String
+  likes: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Photo'
+  }
 }, {
   timestamps: true
 });

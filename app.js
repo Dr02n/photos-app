@@ -40,21 +40,22 @@ const pug = new Pug({ // eslint-disable-line
   viewPath: './templates',
   basedir: './templates',
   noCache: process.env.NODE_ENV === 'development',
-  app,
+  app
 });
 
 // midlewares
-// app.use(require('koa-favicon')('public/favicon.ico'));
+app.use(require('koa-favicon')('public/favicon.ico'));
 app.use(require('koa-static')('public'));
 app.use(require('koa-logger')());
-app.use(require('./middleware/errors')());
+app.use(require('./middleware/errors'));
 app.use(require('koa-bodyparser')());
 // multipart parser
-app.use(require('koa-session')(app)); // eslint-disable-line
+app.use(require('koa-session')(app));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(require('./middleware/flash')());
-app.use(new (require('koa-csrf'))()); // eslint-disable-line
+app.use(require('./middleware/flash'));
+app.use(new (require('koa-csrf'))());
+app.use(require('./middleware/method-override'));
 app.use(async (ctx, next) => {
   ctx.state.csrf = ctx.csrf;
   await next();

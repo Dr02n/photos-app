@@ -6,7 +6,7 @@ const notification = document.querySelector('.mdl-js-snackbar');
 
 docReady(() => {
   for (let type in messages) {
-    messages[type].forEach((message) => notification.MaterialSnackbar.showSnackbar({message}));
+    messages[type].forEach((message) => notification.MaterialSnackbar.showSnackbar({ message }));
   }
 });
 

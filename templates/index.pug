@@ -3,12 +3,12 @@ extends /layout
 block content
   include /includes/edit-dialog
 
-  header.page-header
+  header.page-header(style=`background: url("${user.background}") center / cover;`)
     .page-header__inner
-      img(src=user.photoUrl width=150 height=150).page-header__photo
+      img(src=user.avatar width=150 height=150).page-header__photo
       .page-header__body
         p.mdl-typography--display-1= user.displayName
-        p.page-header__about Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam animi perspiciatis cumque quis dicta, alias nostrum ipsam a consectetur nemo quod non earum veniam quisquam iure dolorum. Facilis, nam nulla.
+        p.page-header__about= user.bio
         ul.page-header__links
           li: a(href=`mailto:${user.email}`) Email
           if user.githubProfileUrl
@@ -33,7 +33,16 @@ block content
             input#sample6.mdl-textfield__input(type='text')
             label.mdl-textfield__label(for='sample-expandable') Expandable Input
     #explore.mdl-tabs__panel.is-active
-      pre= user
+      .container
+        h2 Add album
+        form(action='/albums' method='POST')
+          +method('PUT')
+          +csrf(csrf)
+          p: input(name='name' placeholder='Name')
+          p: input(name='description' placeholder='Description')
+          button(type='submit') Submit
+
+        pre= user
 
     #my-albums.mdl-tabs__panel
-      include /includes/my-albums
+      //- include /includes/my-albums

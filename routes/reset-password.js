@@ -18,8 +18,8 @@ exports.post = async (ctx) => {
   ctx.redirect('/login');
 };
 
-exports.checkStatus = async (ctx, next) => {
-  const user = await User.findOne({ resetPasswordToken: ctx.params.token });
+exports.checkStatus = async (resetPasswordToken, ctx, next) => {
+  const user = await User.findOne({ resetPasswordToken });
 
   if (!user || user.resetPasswordExpires > Date.now) {
     ctx.flash('error', 'Password reset is invalid or has expired!');

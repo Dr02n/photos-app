@@ -37,7 +37,11 @@
     "eslint-plugin-standard": "^3.0.1"
   },
   "scripts": {
-    "start": "cls && nodemon app --ignore public/"
+    "app": "nodemon app --ignore public/ --ignore src/",
+    "watch-css": "node-sass-chokidar src/scss/ -o public/css/ --watch --recursive --source-map true --include-path ./node_modules",
+    "watch-js": "webpack src/js/index.js public/js/bundle.js --watch --devtool eval-cheap-module-source-map",
+    "server": "browser-sync start --port 3001 -p localhost:3000 --ss public -f templates/*.pug public/css/*.css public/js/*.js",
+    "start": "cls && concurrently \"npm run watch-css\" \"npm run watch-js\" \"npm run server\" \"npm run app\" --names \"css,js,server,app\" --prefix name"
   },
   "keywords": [],
   "author": "",

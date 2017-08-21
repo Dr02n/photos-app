@@ -24,7 +24,7 @@ async (accessToken, refreshToken, profile, cb) => {
 
     if (!user.githubId) user.githubId = profile.id;
     if (!user.githubProfileUrl) user.githubProfileUrl = profile.profileUrl;
-    if (!user.photUrl) user.photoUrl = photo;
+    if (!user.avatar) user.avatar = photo;
 
     await user.save();
 
