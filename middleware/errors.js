@@ -4,32 +4,30 @@ const AuthenticationError = require('passport-local-mongoose').errors.Authentica
 module.exports = async (ctx, next) => {
   try {
     await next();
-  } catch (e) {
+  } catch (err) {
     ctx.set('X-Content-Type-Options', 'nosniff');
 
     const preferredType = ctx.accepts('html', 'json');
 
-    if (e.status) {
-      ctx.status = e.status;
-      ctx.body = (preferredType === 'json') ? { error: e.message } : e.message; // TODO
-    } else if (e.name === 'ValidationError') {
+    if (err.name === 'ValidationError') {
       const errors = {};
-      for (const field in e.errors) {
-        errors[field] = e.errors[field].message;
-      };
-
+      for (const field in err.errors) {
+        errors[field] = err.errors[field].message;
+      }
       ctx.status = 400;
-      ctx.body = (preferredType === 'json') ? { errors } : errors; // 'Incorrect data!';
-    } else if (e instanceof AuthenticationError) {
+      ctx.body = (preferredType === 'json') ? { errors } : errors; // TBD: flash
+    } else if (err instanceof AuthenticationError || err.name === 'InternalOAuthError') {
       ctx.status = 400;
-      ctx.body = (preferredType === 'json') ? { error: e.message } : e.message; // TODO
-    } else if (e.name === 'InternalOAuthError') {
-      ctx.status = 400;
-      ctx.body = (preferredType === 'json') ? { error: e.message } : e.message; // TODO
+      ctx.body = (preferredType === 'json') ? { error: err.message } : err.message; // TBD: flash
     } else {
-      ctx.status = 500;
-      ctx.body = process.env.NODE_ENv === 'development' ? e.stack : 'Error 500';
-      console.error(e);
+      // set locals, only providing error in development
+      ctx.state.message = err.message;
+      // e.stack = e.stack.replace(/[a-z_-\d]+.js:\d+:\d+/gi, '<mark>$&</mark>');
+      ctx.state.error = process.env.NODE_ENV === 'development' ? err : {};
+
+      // render the error page
+      ctx.status = err.status || 500;
+      (preferredType === 'json') ? ctx.body = { error: err.message } : ctx.render('error');
     }
   }
 };

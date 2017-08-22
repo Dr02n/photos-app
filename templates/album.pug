@@ -15,11 +15,12 @@ block content
     p: button Delete album
 
   h3 Add photo
-    form(action=`/albums/${album.id}/photos` method='POST')
+    form(action=`/albums/${album.id}/photos` method='POST' enctype='multipart/form-data')
       +csrf(csrf)
       +method('PUT')
       p: input(name='name' placeholder='Name')
       p: input(name='url' placeholder='Url')
+      p: input(type='file' name='file')
       p: button Submit
 
   h3 Photos

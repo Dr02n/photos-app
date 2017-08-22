@@ -3,9 +3,9 @@ const Album = require('../models/Album');
 const Photo = require('../models/Photo');
 
 exports.loadAlbumByid = async (id, ctx, next) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) ctx.throw(404);
+  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Invalid link!');
   ctx.album = await Album.findById(id).populate('photos');
-  if (!ctx.album) ctx.throw(404);
+  ctx.assert(ctx.album, 404, 'Album not found!');
   await next();
 };
 

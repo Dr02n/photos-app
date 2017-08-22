@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Photo = require('../models/Photo');
 
 exports.loadPhotoById = async (id, ctx, next) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) ctx.throw(404);
+  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Invalid link!');
   ctx.photo = await Photo.findById(id).populate('album');
-  if (!ctx.photo) ctx.throw(404);
+  ctx.assert(ctx.photo, 404, 'Photo not found!');
   await next();
 };
 
@@ -19,6 +19,7 @@ exports.put = async (ctx, next) => {
 
 exports.patch = async (ctx, next) => {
   const { name, description } = ctx.request.body;
+
   Object.assign(ctx.photo, { name, description });
   await ctx.photo.save();
 
