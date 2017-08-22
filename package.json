@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "eslint": "^4.5.0",
-    "eslint-config-airbnb-base": "^11.3.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
@@ -38,7 +37,9 @@
   },
   "scripts": {
     "app": "nodemon app --ignore public/ --ignore src/",
-    "watch-css": "node-sass-chokidar src/scss/ -o public/css/ --watch --recursive --source-map true --include-path ./node_modules",
+    "watch-css-sass": "node-sass-chokidar src/scss/ -o public/css/ --watch --recursive --source-map true --include-path ./node_modules",
+    "watch-css-less": "less-watch-compiler src/less public/css style.less --source-map",
+    "watch-css": "stylus -w -m src/styl/style.styl -o public/css/style.css",
     "watch-js": "webpack src/js/index.js public/js/bundle.js --watch --devtool eval-cheap-module-source-map",
     "server": "browser-sync start --port 3001 -p localhost:3000 --ss public -f templates/*.pug public/css/*.css public/js/*.js",
     "start": "cls && concurrently \"npm run watch-css\" \"npm run watch-js\" \"npm run server\" \"npm run app\" --names \"css,js,server,app\" --prefix name"
