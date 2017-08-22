@@ -6,7 +6,7 @@ module.exports = new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: `${process.env.APP_URL}/auth/github/callback`,
-  scope: 'user:email',
+  scope: 'user:email'
 },
 async (accessToken, refreshToken, profile, cb) => {
   const email = profile.emails && profile.emails[0].value;
@@ -18,7 +18,7 @@ async (accessToken, refreshToken, profile, cb) => {
     if (!user) {
       user = new User({
         displayName: profile.displayName || profile.username,
-        email,
+        email
       });
     }
 
