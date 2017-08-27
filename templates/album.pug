@@ -1,41 +1,46 @@
 extends /layout
 
 block content
-  h3 Edit album
-  form(action=`/albums/${album.id}` method='POST')
-    +csrf(csrf)
-    +method('PATCH')
-    p: input(name='name' placeholder='Name' value=album.name)
-    p: input(name='description' placeholder='Description' value=album.description)
-    p: button Submit
+  p: a(href='/') go back
 
-  form(action=`/albums/${album.id}` method='POST')
-    +csrf(csrf)
-    +method('DELETE')
-    p: button Delete album
-
-  h3 Add photos
-    form(action=`/albums/${album.id}/photos` method='POST' enctype='multipart/form-data')
+  if (user.id === album.author.toString())
+    h3 Edit album
+    form(action=`/albums/${album.id}` method='POST' enctype='multipart/form-data')
       +csrf(csrf)
-      +method('PUT')
-      p: input(type='file' name='file' multiple)
+      +method('PATCH')
+      p: input(name='name' placeholder='Name' value=album.name)
+      p: input(name='description' placeholder='Description' value=album.description)
+      P: input(name='cover' type='file')
       p: button Submit
+
+    form(action=`/albums/${album.id}` method='POST')
+      +csrf(csrf)
+      +method('DELETE')
+      p: button Delete album
+
+    h3 Add photos
+      form(action=`/albums/${album.id}/photos` method='POST' enctype='multipart/form-data')
+        +csrf(csrf)
+        +method('PUT')
+        p: input(type='file' name='file' multiple)
+        p: button Submit
 
   h3 Photos
   ul
     each photo in album.photos
       li
         P: img(src=photo.path.replace('public', '') width=200 alt=photo.name)
-        form(action=`/photos/${photo.id}` method='POST')
-          +csrf(csrf)
-          +method('PATCH')
-          p: input(name='name' placeholder='Name' value=photo.name)
-          p: input(name='description' placeholder='Description' value=photo.description)
-          p: button Submit
+        if (user.id === album.author.toString())
+          form(action=`/photos/${photo.id}` method='POST')
+            +csrf(csrf)
+            +method('PATCH')
+            p: input(name='name' placeholder='Name' value=photo.name)
+            p: input(name='description' placeholder='Description' value=photo.description)
+            p: button Submit
 
-        form(action=`/photos/${photo.id}` method='POST')
-          +csrf(csrf)
-          +method('DELETE')
-          p: button Delete photo
+          form(action=`/photos/${photo.id}` method='POST')
+            +csrf(csrf)
+            +method('DELETE')
+            p: button Delete photo
 
   //- pre= album

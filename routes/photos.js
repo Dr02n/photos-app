@@ -4,6 +4,11 @@ const fs = require('fs-extra');
 
 
 exports.checkFiles = async (ctx, next) => {
+  if (!ctx.request.files) {
+    await next();
+    return;
+  }
+
   const images = ctx.request.files.filter(readable => {
     const isImage = readable.mime.startsWith('image/');
     if (isImage) return readable;
@@ -18,7 +23,7 @@ exports.checkFiles = async (ctx, next) => {
 
 exports.loadPhotoById = async (id, ctx, next) => {
   ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Invalid link!');
-  ctx.photo = await Photo.findById(id).populate('album');
+  ctx.photo = await Photo.findById(id);
   ctx.assert(ctx.photo, 404, 'File not found!');
   await next();
 };
@@ -30,8 +35,6 @@ exports.put = async (ctx, next) => {
   });
 
   await Promise.all(files);
-
-  console.log('all saved');
 
   if (ctx.request.files.length) ctx.flash('success', 'Photos added');
   ctx.redirect('back');
@@ -48,6 +51,7 @@ exports.patch = async (ctx, next) => {
 };
 
 exports.delete = async (ctx, next) => {
+  await ctx.photo.populate('album').execPopulate();
   if (ctx.photo.id === ctx.photo.album.cover.toString()) {
     ctx.flash('error', 'You can\'t remove album cover!');
   } else {

@@ -24,11 +24,11 @@ router.post('/reset-password/:resetPasswordToken', resetPassword.post);
 router.get('/auth/github', require('./routes/auth-github').get);
 router.get('/auth/github/callback', require('./routes/auth-github').callback);
 
-router.get('/', privateRoute, (ctx) => { ctx.render('index'); });
+router.get('/', privateRoute, require('./routes/index').get);
 
 router.patch('/users/:user', () => null);
 
-router.put('/albums', albums.put);
+router.put('/albums', photos.checkFiles, albums.put);
 router.get('/albums/:album', albums.get);
 router.patch('/albums/:album', albums.patch);
 router.delete('/albums/:album', albums.delete);

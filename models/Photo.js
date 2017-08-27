@@ -57,9 +57,13 @@ Photo.methods.saveToDisk = async function (readable) {
   await this.save();
 };
 
-Photo.pre('remove', async function(next) {
-  await fs.unlink(this.path);
-  next();
+Photo.pre('remove', async function (next) {
+  fs.unlink(this.path)
+    .then(() => next())
+    .catch(err => {
+      if (err.code === 'ENOENT') next(); // skip if file not found
+      next(err);
+    });
 });
 
 module.exports = mongoose.model('Photo', Photo);

@@ -12,6 +12,9 @@ const pug = new (require('koa-pug'))({ // eslint-disable-line
   viewPath: './templates',
   basedir: './templates',
   noCache: process.env.NODE_ENV === 'development',
+  helperPath: [
+    { moment: require('moment') }
+  ],
   app
 });
 

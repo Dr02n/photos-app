@@ -20,29 +20,41 @@ block content
           a(href='/logout')#logout.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.mdl-button--colored.mdl-js-ripple-effect
             i.material-icons power_settings_new
           .mdl-tooltip.mdl-tooltip--large.mdl-tooltip--left(for='logout') Logout
-  .mdl-tabs.mdl-js-tabs.mdl-js-ripple-effect
-    .mdl-tabs__tab-bar.page-tabs__tab-bar
-      a.mdl-tabs__tab.is-active(href='#explore') Explore
-      a.mdl-tabs__tab(href='#my-albums') My albums
-      .mdl-layout-spacer
-      form(action='#')
-        .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable
-          label.mdl-button.mdl-js-button.mdl-button--icon(for='sample6')
-            i.material-icons search
-          .mdl-textfield__expandable-holder
-            input#sample6.mdl-textfield__input(type='text')
-            label.mdl-textfield__label(for='sample-expandable') Expandable Input
-    #explore.mdl-tabs__panel.is-active
-      .container
-        h2 Add album
-        form(action='/albums' method='POST')
-          +method('PUT')
-          +csrf(csrf)
-          p: input(name='name' placeholder='Name')
-          p: input(name='description' placeholder='Description')
-          button(type='submit') Submit
 
-        pre= user
+  .container
+    //- pre= user
+    h2 Add album
+    form(action='/albums' method='POST' enctype='multipart/form-data')
+      +method('PUT')
+      +csrf(csrf)
+      p: input(name='name' placeholder='Name')
+      p: input(name='description' placeholder='Description')
+      P: input(name='cover' type='file')
+      P: button(type='submit') Submit
 
-    #my-albums.mdl-tabs__panel
-      //- include /includes/my-albums
+    h2 My albums
+      ul
+        each album in user.albums
+          li
+            img(src=album.cover.path.replace('public', '') width=200 alt=album.name)
+            h4: a(href=`/albums/${album.id}`)= album.name
+            p= album.description
+            p= album.photos.length + ' photos'
+            p= 'created ' + moment(album.createdAt).fromNow()
+
+    h2 Latest photos
+      ul
+        each photo in photos
+          li
+            img(src=photo.path.replace('public', '') width=200 alt=photo.name)
+            h5= photo.name
+            p
+              | album:
+              |
+              a(href=`/albums/${photo.album.id}`)= photo.album.name
+            p
+              | author:
+              |
+              a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
+            p= 'added ' + moment(photo.createdAt).fromNow()
+

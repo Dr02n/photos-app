@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const passportLocalMongoose = require('passport-local-mongoose');
-const findOrCreate = require('mongoose-findorcreate');
+
 
 const User = new mongoose.Schema({
   displayName: {
@@ -42,7 +42,12 @@ const User = new mongoose.Schema({
   timestamps: true
 });
 
+User.virtual('albums', {
+  ref: 'Album',
+  localField: '_id',
+  foreignField: 'author'
+});
+
 User.plugin(passportLocalMongoose, { usernameField: 'email' });
-User.plugin(findOrCreate);
 
 module.exports = mongoose.model('User', User);
