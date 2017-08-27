@@ -33,7 +33,7 @@ router.get('/albums/:album', albums.get);
 router.patch('/albums/:album', albums.patch);
 router.delete('/albums/:album', albums.delete);
 
-router.put('/albums/:album/photos', photos.put);
+router.put('/albums/:album/photos', photos.checkFiles, photos.put);
 router.patch('/photos/:photo', photos.patch);
 router.delete('/photos/:photo', photos.delete);
 

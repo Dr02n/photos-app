@@ -13,7 +13,7 @@ exports.put = async (ctx, next) => {
   // TBD: album cover
   const { name, description } = ctx.request.body;
   const album = new Album({ name, description, author: ctx.state.user });
-  const cover = await Photo.create({ name: 'Noname', url: '/img/no_photo.jpg', album });
+  const cover = await Photo.create({ name: 'test image', extension: '.test', album });
   album.cover = cover;
   await album.save();
 

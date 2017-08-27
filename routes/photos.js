@@ -1,19 +1,39 @@
 const mongoose = require('mongoose');
 const Photo = require('../models/Photo');
+const fs = require('fs-extra');
+
+
+exports.checkFiles = async (ctx, next) => {
+  const images = ctx.request.files.filter(readable => {
+    const isImage = readable.mime.startsWith('image/');
+    if (isImage) return readable;
+
+    fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
+    ctx.flash('error', `${readable.filename} - is not image!`);
+  });
+
+  ctx.request.files = images;
+  await next();
+};
 
 exports.loadPhotoById = async (id, ctx, next) => {
   ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Invalid link!');
   ctx.photo = await Photo.findById(id).populate('album');
-  ctx.assert(ctx.photo, 404, 'Photo not found!');
+  ctx.assert(ctx.photo, 404, 'File not found!');
   await next();
 };
 
 exports.put = async (ctx, next) => {
-  // TBD
-  const { name, url } = ctx.request.body;
-  await Photo.create({ name, url, album: ctx.album });
+  const files = ctx.request.files.map(async readable => {
+    const photo = new Photo({ album: ctx.album });
+    await photo.saveToDisk(readable);
+  });
 
-  ctx.flash('success', 'Photo added');
+  await Promise.all(files);
+
+  console.log('all saved');
+
+  if (ctx.request.files.length) ctx.flash('success', 'Photos added');
   ctx.redirect('back');
 };
 

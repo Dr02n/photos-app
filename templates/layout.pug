@@ -19,6 +19,7 @@ html(lang='en')
       button.mdl-snackbar__action(type='button')
 
     script(defer, src='https://code.getmdl.io/1.3.0/material.min.js')
-    script.
-      var messages = !{JSON.stringify(flash())};
+    if flash
+      script.
+        var messages = !{JSON.stringify(flash())};
     script(src='/js/bundle.js')

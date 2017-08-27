@@ -14,19 +14,18 @@ block content
     +method('DELETE')
     p: button Delete album
 
-  h3 Add photo
+  h3 Add photos
     form(action=`/albums/${album.id}/photos` method='POST' enctype='multipart/form-data')
       +csrf(csrf)
       +method('PUT')
-      p: input(name='name' placeholder='Name')
-      p: input(name='url' placeholder='Url')
-      p: input(type='file' name='file')
+      p: input(type='file' name='file' multiple)
       p: button Submit
 
   h3 Photos
   ul
     each photo in album.photos
       li
+        P: img(src=photo.path.replace('public', '') width=200 alt=photo.name)
         form(action=`/photos/${photo.id}` method='POST')
           +csrf(csrf)
           +method('PATCH')

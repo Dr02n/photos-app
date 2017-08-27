@@ -5,7 +5,7 @@ const passport = require('./passport');
 
 const app = new Koa();
 
-app.keys = [process.env.APP_KEY];
+app.keys = ['some secret hurr'];
 
 // configure pug
 const pug = new (require('koa-pug'))({ // eslint-disable-line
@@ -21,7 +21,8 @@ app.use(require('koa-static')('public'));
 app.use(require('koa-logger')());
 app.use(require('./middleware/errors'));
 app.use(require('koa-bodyparser')());
-require('./middleware/multipart-parser').init(app);
+// require('./middleware/multipart-parser').init(app);
+app.use(require('./middleware/multipart'));
 app.use(require('koa-session')(app));
 app.use(passport.initialize());
 app.use(passport.session());
