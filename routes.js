@@ -28,12 +28,12 @@ router.get('/', privateRoute, require('./routes/index').get);
 
 router.patch('/users/:user', () => null);
 
-router.put('/albums', photos.checkFiles, albums.put);
+router.put('/albums', photos.filterImages, albums.put);
 router.get('/albums/:album', albums.get);
-router.patch('/albums/:album', albums.patch);
+router.patch('/albums/:album', photos.filterImages, albums.patch);
 router.delete('/albums/:album', albums.delete);
 
-router.put('/albums/:album/photos', photos.checkFiles, photos.put);
+router.put('/albums/:album/photos', photos.filterImages, photos.put);
 router.patch('/photos/:photo', photos.patch);
 router.delete('/photos/:photo', photos.delete);
 

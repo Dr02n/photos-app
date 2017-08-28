@@ -3,19 +3,14 @@ const Photo = require('../models/Photo');
 const fs = require('fs-extra');
 
 
-exports.checkFiles = async (ctx, next) => {
-  if (!ctx.request.files) {
-    await next();
-    return;
+exports.filterImages = async (ctx, next) => {
+  if (ctx.request.files) {
+    ctx.request.files = ctx.request.files.filter(readable => {
+      const isImage = readable.mime.startsWith('image/');
+      if (isImage) return readable;
+      fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
+    });
   }
-  const images = ctx.request.files.filter(readable => {
-    const isImage = readable.mime.startsWith('image/');
-    if (isImage) return readable;
-
-    fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
-    ctx.flash('error', `${readable.filename} - is not image!`);
-  });
-  ctx.request.files = images;
   await next();
 };
 
@@ -27,8 +22,10 @@ exports.loadPhotoById = async (id, ctx, next) => {
 };
 
 exports.put = async (ctx, next) => {
-  await Promise.all(ctx.request.files.map(readable => Photo.createAndSaveToDisk({ album: ctx.album }, readable)));
-  if (ctx.request.files.length) ctx.flash('success', 'Photos added');
+  await Promise.all(ctx.request.files.map(readable =>
+    Photo.createAndSaveToDisk({ album: ctx.album }, readable)
+  ));
+  ctx.flash('success', `${ctx.request.files.length} photos added`);
   ctx.redirect('back');
 };
 
