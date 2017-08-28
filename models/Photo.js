@@ -36,7 +36,7 @@ Photo.virtual('filename').get(function () {
 });
 
 Photo.virtual('path').get(function () {
-  return 'public/uploads/photos/' + this.filename;
+  return '/uploads/photos/' + this.filename;
 });
 
 Photo.statics.createAndSaveToDisk = async function(fields, readable) {
@@ -46,7 +46,7 @@ Photo.statics.createAndSaveToDisk = async function(fields, readable) {
   photo.extension = image.getExtension();
   image
     // .scaleToFit(Math.min(width, 800), Math.min(height, 600))
-    .write(photo.path);
+    .write('public' + photo.path);
   fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
   await photo.save();
   return photo;
@@ -54,12 +54,12 @@ Photo.statics.createAndSaveToDisk = async function(fields, readable) {
 
 Photo.statics.removeFromDiskAndDbByAlbumId = async function(album) {
   const photos = await this.find({ album });
-  await Promise.all(photos.map(photo => fs.unlink(photo.path)));
+  await Promise.all(photos.map(photo => fs.unlink('public' + photo.path)));
   await this.remove({ album });
 };
 
 Photo.methods.removeFromDiskAndDb = async function () {
-  await fs.unlink(this.path);
+  await fs.unlink('public' + this.path);
   await this.remove();
 };
 

@@ -53,10 +53,10 @@ User.virtual('albums', {
 User.methods.saveAvatarToDisk = async function(readable) {
   const image = await Jimp.read(readable.path);
   const extension = image.getExtension();
-  const path = `public/uploads/avatars/${this.id}.${extension}`;
+  const path = `/uploads/avatars/${this.id}.${extension}`;
   image
     .cover(300, 300)
-    .write(path);
+    .write('public' + path);
   fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
   return path;
 };
@@ -64,10 +64,10 @@ User.methods.saveAvatarToDisk = async function(readable) {
 User.methods.saveBackgroundToDisk = async function(readable) {
   const image = await Jimp.read(readable.path);
   const extension = image.getExtension();
-  const path = `public/uploads/backgrounds/${this.id}.${extension}`;
+  const path = `/uploads/backgrounds/${this.id}.${extension}`;
   image
     .cover(1349, 400)
-    .write(path);
+    .write('public' + path);
   fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
   return path;
 };
