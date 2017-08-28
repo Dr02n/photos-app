@@ -36,10 +36,11 @@ const User = new mongoose.Schema({
   resetPasswordExpires: Date,
   githubId: Number,
   githubProfileUrl: String,
-  likes: {
+  likes: [{
     type: mongoose.Schema.ObjectId,
-    ref: 'Photo'
-  }
+    ref: 'Photo',
+    index: true
+  }]
 }, {
   timestamps: true
 });

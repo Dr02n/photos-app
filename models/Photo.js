@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const fs = require('fs-extra');
-var Jimp = require('jimp');
+const Jimp = require('jimp');
+const User = require('./User');
 
 
 const Photo = new mongoose.Schema({
@@ -15,7 +16,8 @@ const Photo = new mongoose.Schema({
   album: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Album',
-    required: true
+    required: true,
+    index: true
   },
   extension: {
     type: String,
@@ -39,7 +41,7 @@ Photo.virtual('path').get(function () {
   return '/uploads/photos/' + this.filename;
 });
 
-Photo.statics.createAndSaveToDisk = async function(fields, readable) {
+Photo.statics.createAndSaveToDisk = async function (fields, readable) {
   const photo = new this(fields);
   const image = await Jimp.read(readable.path);
   // const { width, height } = image.bitmap;
@@ -52,7 +54,7 @@ Photo.statics.createAndSaveToDisk = async function(fields, readable) {
   return photo;
 };
 
-Photo.statics.removeFromDiskAndDbByAlbumId = async function(album) {
+Photo.statics.removeFromDiskAndDbByAlbumId = async function (album) {
   const photos = await this.find({ album });
   await Promise.all(photos.map(photo => fs.unlink('public' + photo.path)));
   await this.remove({ album });
@@ -61,6 +63,10 @@ Photo.statics.removeFromDiskAndDbByAlbumId = async function(album) {
 Photo.methods.removeFromDiskAndDb = async function () {
   await fs.unlink('public' + this.path);
   await this.remove();
+};
+
+Photo.methods.populateLikesCount = async function () {
+  this.likesCount = await User.find({ likes: { $in: [this.id] } }).count();
 };
 
 module.exports = mongoose.model('Photo', Photo);

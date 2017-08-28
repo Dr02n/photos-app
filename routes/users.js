@@ -29,6 +29,6 @@ exports.patch = async (ctx, next) => {
     ctx.user.background = await ctx.user.saveBackgroundToDisk(background);
   }
   await ctx.user.save();
-  ctx.flash('success', 'User saved');
+  ctx.flash('success', 'User updated');
   ctx.redirect('back');
 };

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Photo = require('../models/Photo');
 
 
 const Album = new mongoose.Schema({
@@ -18,7 +19,8 @@ const Album = new mongoose.Schema({
   author: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
+    index: true
   }
 }, {
   timestamps: true
@@ -29,5 +31,9 @@ Album.virtual('photos', {
   localField: '_id',
   foreignField: 'album'
 });
+
+Album.methods.populatePhotosCount = async function () {
+  this.photosCount = await Photo.find({album: {$in: [this.id]}}).count();
+};
 
 module.exports = mongoose.model('Album', Album);
