@@ -25,7 +25,7 @@ block content
         p: input(type='file' name='file' multiple)
         p: button Submit
 
-  h3 Photos
+  h3 Photos - #{album.photos.length}
   ul
     each photo in album.photos
       li

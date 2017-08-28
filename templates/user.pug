@@ -1,0 +1,14 @@
+extends /layout
+
+block content
+  h1= currentUser.displayName
+
+  h2 Albums
+  ul
+    each album in currentUser.albums
+      li
+        img(src=album.cover.path.replace('public', '') width=200 alt=album.name)
+        h4: a(href=`/albums/${album.id}`)= album.name
+        p= album.description
+        p= album.photos.length + ' photos'
+        p= 'created ' + moment(album.createdAt).fromNow()

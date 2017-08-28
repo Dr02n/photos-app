@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const resetPassword = require('./routes/reset-password');
 const albums = require('./routes/albums');
 const photos = require('./routes/photos');
+const users = require('./routes/users');
 const { publicRoute, privateRoute } = require('./middleware/public-private');
 
 const router = new Router();
@@ -9,6 +10,7 @@ const router = new Router();
 router.param('resetPasswordToken', resetPassword.checkStatus);
 router.param('album', albums.loadAlbumByid);
 router.param('photo', photos.loadPhotoById);
+router.param('user', users.loadUserById);
 
 router.get('/signup', require('./routes/signup').get);
 router.post('/signup', require('./routes/signup').post);
@@ -26,7 +28,8 @@ router.get('/auth/github/callback', require('./routes/auth-github').callback);
 
 router.get('/', privateRoute, require('./routes/index').get);
 
-router.patch('/users/:user', () => null);
+router.get('/users/:user', users.get);
+router.patch('/users/:user', photos.filterImages, users.patch);
 
 router.put('/albums', photos.filterImages, albums.put);
 router.get('/albums/:album', albums.get);
@@ -39,5 +42,6 @@ router.delete('/photos/:photo', photos.delete);
 
 router.put('/photos/:photo/comments', () => null);
 router.put('/photos/:photo/likes', () => null);
+router.get('/search', () => null);
 
 module.exports = router.routes();

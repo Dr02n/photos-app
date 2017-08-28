@@ -5,7 +5,8 @@ const Album = require('../models/Album');
 exports.get = async (ctx, next) => {
   // const albums = await Album.find({author: ctx.state.user.id}).populate('cover').populate('photos', 'id');
   const { user } = ctx.state;
-  await user.populate({ path: 'albums', populate: { path: 'cover' } }).execPopulate();
+  await user.populate('albums').execPopulate();
+  await Album.populate(user.albums, 'cover');
   await Album.populate(user.albums, 'photos');
 
   const photos = await Photo.find().populate({ path: 'album', populate: { path: 'author' } });

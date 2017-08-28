@@ -3,9 +3,9 @@ extends /layout
 block content
   include /includes/edit-dialog
 
-  header.page-header(style=`background: url("${user.background}") center / cover;`)
+  header.page-header(style=`height: 250px; background: url("${user.background.replace('public', '')}") top / cover;`)
     .page-header__inner
-      img(src=user.avatar width=150 height=150).page-header__photo
+      img(src=user.avatar.replace('public', '') width=150 height=150).page-header__photo
       .page-header__body
         p.mdl-typography--display-1= user.displayName
         p.page-header__about= user.bio
@@ -58,3 +58,4 @@ block content
               a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
             p= 'added ' + moment(photo.createdAt).fromNow()
 
+  footer(style=`height: 150px; background: url("${user.background.replace('public', '')}") bottom / cover;`)

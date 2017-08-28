@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const passportLocalMongoose = require('passport-local-mongoose');
+const fs = require('fs-extra');
+const Jimp = require('Jimp');
 
 
 const User = new mongoose.Schema({
@@ -47,6 +49,28 @@ User.virtual('albums', {
   localField: '_id',
   foreignField: 'author'
 });
+
+User.methods.saveAvatarToDisk = async function(readable) {
+  const image = await Jimp.read(readable.path);
+  const extension = image.getExtension();
+  const path = `public/uploads/avatars/${this.id}.${extension}`;
+  image
+    .cover(300, 300)
+    .write(path);
+  fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
+  return path;
+};
+
+User.methods.saveBackgroundToDisk = async function(readable) {
+  const image = await Jimp.read(readable.path);
+  const extension = image.getExtension();
+  const path = `public/uploads/backgrounds/${this.id}.${extension}`;
+  image
+    .cover(1349, 400)
+    .write(path);
+  fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
+  return path;
+};
 
 User.plugin(passportLocalMongoose, { usernameField: 'email' });
 
