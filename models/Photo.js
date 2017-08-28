@@ -43,27 +43,28 @@ Photo.virtual('path').get(function () {
   return this.destination + this.filename;
 });
 
-Photo.methods.saveToDisk = async function (readable) {
+Photo.statics.createAndSaveToDisk = async function(fields, readable) {
+  const photo = new this(fields);
   const image = await Jimp.read(readable.path);
   // const { width, height } = image.bitmap;
-  this.extension = image.getExtension();
-
+  photo.extension = image.getExtension();
   image
     // .scaleToFit(Math.min(width, 800), Math.min(height, 600))
-    .write(this.path);
-
+    .write(photo.path);
   fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
-
-  await this.save();
+  await photo.save();
+  return photo;
 };
 
-Photo.pre('remove', async function (next) {
-  fs.unlink(this.path)
-    .then(() => next())
-    .catch(err => {
-      if (err.code === 'ENOENT') next(); // skip if file not found
-      next(err);
-    });
-});
+Photo.statics.removeFromDiskAndDbByAlbumId = async function(album) {
+  const photos = await this.find({ album });
+  await Promise.all(photos.map(photo => fs.unlink(photo.path)));
+  await this.remove({ album });
+};
+
+Photo.methods.removeFromDiskAndDb = async function () {
+  await fs.unlink(this.path);
+  await this.remove();
+};
 
 module.exports = mongoose.model('Photo', Photo);

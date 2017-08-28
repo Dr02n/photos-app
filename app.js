@@ -42,17 +42,4 @@ app.use(async (ctx, next) => {
 app.use(require('./routes'));
 
 app.listen(3000);
-
-
-// dev
-(async () => {
-  // try {
-  //   await User.create({});
-  // } catch (err) {
-  //   console.log(err);
-  // }
-  // await User.remove({});
-  // console.log(await User.find());
-  // const user = await User.findOne({email: 'test@ma.com'});
-  // console.log(user);
-})();
+console.log('App is listening on http://localhost:3000');
