@@ -22,9 +22,7 @@ module.exports = async (ctx, next) => {
     } else {
       // set locals, only providing error in development
       ctx.state.message = err.message;
-      // e.stack = e.stack.replace(/[a-z_-\d]+.js:\d+:\d+/gi, '<mark>$&</mark>');
       ctx.state.error = process.env.NODE_ENV === 'development' ? err : {};
-
       // render the error page
       ctx.status = err.status || 500;
       (preferredType === 'json') ? ctx.body = { error: err.message } : ctx.render('error');

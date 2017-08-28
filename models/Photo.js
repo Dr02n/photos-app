@@ -35,12 +35,8 @@ Photo.virtual('filename').get(function () {
   return `${this.id}.${this.extension}`;
 });
 
-Photo.virtual('destination').get(function () {
-  return 'public/uploads/photos/';
-});
-
 Photo.virtual('path').get(function () {
-  return this.destination + this.filename;
+  return 'public/uploads/photos/' + this.filename;
 });
 
 Photo.statics.createAndSaveToDisk = async function(fields, readable) {
