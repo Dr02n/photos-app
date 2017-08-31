@@ -10,12 +10,15 @@ dialog#edit-dialog.mdl-dialog
         .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
           textarea#about.mdl-textfield__input(name='bio' rows='3')= user.bio
           label.mdl-textfield__label(for='about') About
-        p
-          div avatar
-          input(type='file' name='avatar')
-        p
-          div background
-          input(type='file' name='background')
+        div
+          img(src=user.avatar width='100')
+          div
+            input(type='file' name='avatar')
+        br
+        div
+          img(src=user.background width='300')
+          div
+            input(type='file' name='background')
     .mdl-dialog__actions
       button.mdl-button(type='button' data-close-modal) Cancel
       button.mdl-button(type='submit') Save

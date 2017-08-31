@@ -42,9 +42,9 @@ Photo.virtual('path').get(function () {
 });
 
 Photo.statics.createAndSaveToDisk = async function (fields, readable) {
-  const photo = new this(fields);
   const image = await Jimp.read(readable.path);
   // const { width, height } = image.bitmap;
+  const photo = new this(fields);
   photo.extension = image.getExtension();
   image
     // .scaleToFit(Math.min(width, 800), Math.min(height, 600))

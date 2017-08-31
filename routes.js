@@ -41,7 +41,7 @@ router.patch('/photos/:photo', photos.patch);
 router.delete('/photos/:photo', photos.delete);
 
 router.put('/photos/:photo/comments', () => null);
-router.put('/photos/:photo/likes', () => null);
+router.get('/photos/:photo/like', require('./routes/likes').put);
 router.get('/search', () => null);
 
 module.exports = router.routes();

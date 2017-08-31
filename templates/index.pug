@@ -33,30 +33,34 @@ block content
       P: button(type='submit') Submit
 
     h2 My albums
-      ul
+      ul(style='display: flex; list-style: none; padding: 0;')
         each album in user.albums
-          li
+          li(style='margin: 0 15px;')
             img(src=album.cover.path.replace('public', '') width=200 alt=album.name)
             h4: a(href=`/albums/${album.id}`)= album.name
-            p= album.description
-            p= album.photosCount + ' photos'
-            p= 'created ' + moment(album.createdAt).fromNow()
+            div= album.description
+            div= album.photosCount + ' photos'
+            div= 'created ' + moment(album.createdAt).fromNow()
 
     h2 Latest photos
-      ul
+      ul(style='display: flex; list-style: none; padding: 0;')
         each photo in photos
-          li
-            img(src=photo.path.replace('public', '') width=200 alt=photo.name)
-            h5= photo.name
+          li(style='margin: 0 15px;')
             p
+              img(src=photo.path.replace('public', '') width=200 alt=photo.name)
+            h5(style='margin-bottom: 5px;')= photo.name
+            div
               | album:
               |
               a(href=`/albums/${photo.album.id}`)= photo.album.name
-            p
+            div
               | author:
               |
               a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
-            p= 'added ' + moment(photo.createdAt).fromNow()
-            p likes #{photo.likesCount}
+            div= 'added ' + moment(photo.createdAt).fromNow()
+            p
+              a(href=`/photos/${photo.id}/like`) like
+              |
+              | &middot; #{photo.likesCount}
 
   footer(style=`height: 150px; background: url("${user.background.replace('public', '')}") bottom / cover;`)
