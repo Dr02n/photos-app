@@ -25,14 +25,17 @@ exports.put = async (ctx, next) => {
   await Promise.all(ctx.request.files.map(readable =>
     Photo.createAndSaveToDisk({ album: ctx.album }, readable)
   ));
+
   ctx.flash('success', `${ctx.request.files.length} photos added`);
   ctx.redirect('back');
 };
 
 exports.patch = async (ctx, next) => {
   const { name, description } = ctx.request.body;
+
   Object.assign(ctx.photo, { name, description });
   await ctx.photo.save();
+
   ctx.flash('success', 'Photo successfully updated');
   ctx.redirect('back');
 };
