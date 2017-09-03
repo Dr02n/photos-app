@@ -10,10 +10,10 @@ module.exports = async (ctx, next) => {
     const preferredType = ctx.accepts('html', 'json');
 
     if (err.name === 'ValidationError') {
-      const errors = {};
-      for (const field in err.errors) {
-        errors[field] = err.errors[field].message;
-      }
+      const errors = Object.keys(err.errors).reduce((acc, key) => Object.assign(acc, {
+        [key]: err.errors[key].message
+      }), {});
+
       ctx.status = 400;
       ctx.body = (preferredType === 'json') ? { errors } : errors; // TBD: flash
     } else if (err instanceof AuthenticationError || err.name === 'InternalOAuthError') {
