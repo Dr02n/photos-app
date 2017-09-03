@@ -27,6 +27,10 @@ const Photo = new mongoose.Schema({
   timestamps: true
 });
 
+/**
+ * VIRTUALS
+ */
+
 Photo.virtual('comments', {
   ref: 'Comment',
   localField: '_id',
@@ -38,8 +42,16 @@ Photo.virtual('filename').get(function () {
 });
 
 Photo.virtual('path').get(function () {
+  return 'public/uploads/photos/' + this.filename;
+});
+
+Photo.virtual('url').get(function () {
   return '/uploads/photos/' + this.filename;
 });
+
+/**
+ * STATICS
+ */
 
 Photo.statics.createAndSaveToDisk = async function (fields, readable) {
   const image = await Jimp.read(readable.path);
@@ -48,20 +60,32 @@ Photo.statics.createAndSaveToDisk = async function (fields, readable) {
   photo.extension = image.getExtension();
   image
     // .scaleToFit(Math.min(width, 800), Math.min(height, 600))
-    .write('public' + photo.path);
+    .write(photo.path);
   fs.unlink(readable.path); // probably don't need to use fs.unlink(). The OS will do the clean up.
   await photo.save();
   return photo;
 };
 
-Photo.statics.removeFromDiskAndDbByAlbumId = async function (album) {
-  const photos = await this.find({ album });
-  await Promise.all(photos.map(photo => fs.unlink('public' + photo.path)));
-  await this.remove({ album });
+Photo.statics.removeFromDisk = async function (query) {
+  const photos = await this.find(query);
+  await Promise.all(photos.map(photo => photo.removeFromDisk()));
+};
+
+Photo.statics.removeFromDiskAndDb = async function (query) {
+  await this.removeFromDisk(query);
+  await this.remove(query);
+};
+
+/**
+ * METHODS
+ */
+
+Photo.methods.removeFromDisk = async function () {
+  await fs.unlink(this.path);
 };
 
 Photo.methods.removeFromDiskAndDb = async function () {
-  await fs.unlink('public' + this.path);
+  await this.removeFromDisk();
   await this.remove();
 };
 

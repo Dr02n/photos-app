@@ -36,7 +36,7 @@ block content
       ul(style='display: flex; list-style: none; padding: 0;')
         each album in user.albums
           li(style='margin: 0 15px;')
-            img(src=album.cover.path.replace('public', '') width=200 alt=album.name)
+            img(src=album.cover.url width=200 alt=album.name)
             h4: a(href=`/albums/${album.id}`)= album.name
             div= album.description
             div= album.photosCount + ' photos'
@@ -47,7 +47,7 @@ block content
         each photo in photos
           li(style='margin: 0 15px;')
             p
-              img(src=photo.path.replace('public', '') width=200 alt=photo.name)
+              img(src=photo.url width=200 alt=photo.name)
             h5(style='margin-bottom: 5px;')= photo.name
             div
               | album:

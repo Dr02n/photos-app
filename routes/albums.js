@@ -15,9 +15,14 @@ exports.put = async (ctx, next) => {
   if (!ctx.request.files.length) ctx.throw(400, 'Album cover is required!');
   const { name, description } = ctx.request.body;
   const album = new Album({ name, description, author: ctx.state.user });
+  const cover = album.cover = await Photo.createAndSaveToDisk({ album }, ctx.request.files[0]);
 
-  album.cover = await Photo.createAndSaveToDisk({ album }, ctx.request.files[0]);
-  await album.save();
+  try {
+    await album.save();
+  } catch (err) {
+    cover.removeFromDiskAndDb();
+    throw err;
+  }
 
   ctx.redirect(`/albums/${album.id}`);
 };
@@ -41,7 +46,7 @@ exports.patch = async (ctx, next) => {
 };
 
 exports.delete = async (ctx, next) => {
-  await Photo.removeFromDiskAndDbByAlbumId(ctx.album.id);
+  await Photo.removeFromDiskAndDb({ album: ctx.album.id });
   await ctx.album.remove();
 
   ctx.flash('success', 'Album successfully removed');
