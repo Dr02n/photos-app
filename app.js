@@ -24,7 +24,6 @@ app.use(require('koa-static')('public'));
 app.use(require('koa-logger')());
 app.use(require('./middleware/errors'));
 app.use(require('koa-bodyparser')());
-// require('./middleware/multipart-parser').init(app);
 app.use(require('./middleware/multipart'));
 app.use(require('koa-session')(app));
 app.use(passport.initialize());

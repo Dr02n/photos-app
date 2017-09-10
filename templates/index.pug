@@ -43,9 +43,9 @@ block content
             div= 'created ' + moment(album.createdAt).fromNow()
 
     h2 Latest photos
-      ul(style='display: flex; list-style: none; padding: 0;')
+      ul(style='display: flex; list-style: none; padding: 0; flex-wrap: wrap;')
         each photo in photos
-          li(style='margin: 0 15px;')
+          li(style='margin: 15px;')
             p
               img(src=photo.url width=200 alt=photo.name)
             h5(style='margin-bottom: 5px;')= photo.name
@@ -59,7 +59,7 @@ block content
               a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
             div= 'added ' + moment(photo.createdAt).fromNow()
             p
-              a(href=`/photos/${photo.id}/like`) like
+              a(href=`/photos/${photo.id}/like`)= photo.isLiked ? 'unlike' : 'like'
               |
               | &middot; #{photo.likesCount}
 

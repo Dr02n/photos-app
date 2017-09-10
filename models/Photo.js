@@ -93,4 +93,8 @@ Photo.methods.populateLikesCount = async function () {
   this.likesCount = await User.find({ likes: { $in: [this.id] } }).count();
 };
 
+Photo.methods.isLiked = function (user) {
+  return !!user.likes.find(like => like.toString() === this.id);
+};
+
 module.exports = mongoose.model('Photo', Photo);

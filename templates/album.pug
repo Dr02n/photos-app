@@ -1,46 +1,58 @@
 extends /layout
 
 block content
-  p: a(href='/') go back
+  .container
+    br
+    p: a(href='/') Home
 
-  if (user.id === album.author.toString())
-    h3 Edit album
-    form(action=`/albums/${album.id}` method='POST' enctype='multipart/form-data')
-      +csrf(csrf)
-      +method('PATCH')
-      p: input(name='name' placeholder='Name' value=album.name)
-      p: input(name='description' placeholder='Description' value=album.description)
-      P: input(name='cover' type='file')
-      p: button Submit
+    div(style='display: flex; align-items: center;')
+      div(style='margin-right: 15px;')
+        img(src=album.cover.url width=300)
+      div
+        h1= album.name
+        p=album.description
+    hr
 
-    form(action=`/albums/${album.id}` method='POST')
-      +csrf(csrf)
-      +method('DELETE')
-      p: button Delete album
+    if (user.id === album.author.toString())
+      h3 Edit album
+      form(action=`/albums/${album.id}` method='POST' enctype='multipart/form-data')
+        +csrf(csrf)
+        +method('PATCH')
+        p: input(name='name' placeholder='Name' value=album.name)
+        p: input(name='description' placeholder='Description' value=album.description)
+        P: input(name='cover' type='file')
+        p: button Submit
+      hr
 
-    h3 Add photos
+      h3 Delete album
+      form(action=`/albums/${album.id}` method='POST')
+        +csrf(csrf)
+        +method('DELETE')
+        p: button Delete album
+      hr
+
+      h3 Add photos
       form(action=`/albums/${album.id}/photos` method='POST' enctype='multipart/form-data')
         +csrf(csrf)
         +method('PUT')
         p: input(type='file' name='file' multiple)
         p: button Submit
+      hr
 
-  h3 Photos - #{album.photos.length}
-  ul
-    each photo in album.photos
-      li
-        P: img(src=photo.url width=200 alt=photo.name)
-        if (user.id === album.author.toString())
-          form(action=`/photos/${photo.id}` method='POST')
-            +csrf(csrf)
-            +method('PATCH')
-            p: input(name='name' placeholder='Name' value=photo.name)
-            p: input(name='description' placeholder='Description' value=photo.description)
-            p: button Submit
+    h3 Photos (#{album.photos.length})
+    ul(style='display: flex; list-style: none; padding: 0;')
+      each photo in album.photos
+        li(style='margin: 0 15px;')
+          P: img(src=photo.url width=200 alt=photo.name)
+          if (user.id === album.author.toString())
+            form(action=`/photos/${photo.id}` method='POST')
+              +csrf(csrf)
+              +method('PATCH')
+              p: input(name='name' placeholder='Name' value=photo.name)
+              p: input(name='description' placeholder='Description' value=photo.description)
+              p: button Submit
 
-          form(action=`/photos/${photo.id}` method='POST')
-            +csrf(csrf)
-            +method('DELETE')
-            p: button Delete photo
-
-  //- pre= album
+            form(action=`/photos/${photo.id}` method='POST')
+              +csrf(csrf)
+              +method('DELETE')
+              p: button Delete photo

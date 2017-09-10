@@ -28,7 +28,7 @@ exports.put = async (ctx, next) => {
 };
 
 exports.get = async (ctx, next) => {
-  await ctx.album.populate('photos').execPopulate();
+  await ctx.album.populate('photos').populate('cover').execPopulate();
   ctx.render('album', { album: ctx.album });
 };
 
