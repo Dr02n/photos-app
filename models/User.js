@@ -4,7 +4,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const fs = require('fs-extra');
 const Jimp = require('Jimp');
 
-
 const User = new mongoose.Schema({
   displayName: {
     type: String,

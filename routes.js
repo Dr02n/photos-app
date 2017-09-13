@@ -40,7 +40,7 @@ router.put('/albums/:album/photos', photos.filterImages, photos.put);
 router.patch('/photos/:photo', photos.patch);
 router.delete('/photos/:photo', photos.delete);
 
-router.put('/photos/:photo/comments', () => null);
+router.put('/photos/:photo/comments', require('./routes/comments').put);
 router.get('/photos/:photo/like', require('./routes/likes').put);
 router.get('/search', () => null);
 

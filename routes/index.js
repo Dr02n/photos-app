@@ -7,7 +7,9 @@ exports.get = async (ctx, next) => {
   await user.populate({ path: 'albums', populate: { path: 'cover' } }).execPopulate();
   await Promise.all(user.albums.map(album => album.populatePhotosCount()));
 
-  const photos = await Photo.find().populate({ path: 'album', populate: { path: 'author' } });
+  const photos = await Photo.find()
+    .populate({ path: 'album', populate: { path: 'author' } })
+    .populate({ path: 'comments', populate: { path: 'author' } }); // temp
   await Promise.all(photos.map(photo => photo.populateLikesCount()));
   photos.forEach(photo => {
     photo.isLiked = photo.isLiked(user);
