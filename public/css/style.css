@@ -2,12 +2,7 @@ body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
 }
 
@@ -33,7 +28,7 @@ h6 {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url("/img/beach.jpg") center/cover;
+  background: url('/img/beach.jpg') center / cover;
 }
 
 .login-page__card {
@@ -48,7 +43,7 @@ h6 {
 .page-header__inner {
   display: flex;
   padding: 48px;
-  /* background: url("/img/beach.jpg") center/cover; */
+  background: url('/img/beach.jpg') center / cover;
   color: #fff;
 }
 
@@ -92,6 +87,3 @@ h6 {
   padding: 0 48px;
   margin-bottom: 48px;
 }
-
-
-/*# sourceMappingURL=style.css.map */
