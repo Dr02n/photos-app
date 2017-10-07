@@ -1,0 +1,36 @@
+extends /layout
+
+block content
+  .auth-page
+    form.mdc-card.auth-page__card(action='' method='POST' style='background: #fff;')
+      +csrf(csrf)
+      .mdc-card__primary
+        h2.mdc-card__title.mdc-card__title--large Create a new account
+
+        label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 100%;')
+          input.mdc-textfield__input(type='text' name='displayName' required)
+          span.mdc-textfield__label Name
+          .mdc-textfield__bottom-line
+
+        label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 100%;')
+          input.mdc-textfield__input(type='email' name='email' required)
+          span.mdc-textfield__label Email
+          .mdc-textfield__bottom-line
+
+        label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 100%;')
+          input.mdc-textfield__input(type='password' name='password' required pattern='.{3,}')
+          span.mdc-textfield__label Password
+          .mdc-textfield__bottom-line
+        .mdc-textfield-helptext.mdc-textfield-helptext--persistent.mdc-textfield-helptext--validation-msg
+          | Must be at least 3 characters long
+
+        label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 100%;')
+          input.mdc-textfield__input(type='password' name='password2' required pattern='.{3,}')
+          span.mdc-textfield__label Confirm Password
+          .mdc-textfield__bottom-line
+        .mdc-textfield-helptext.mdc-textfield-helptext--persistent.mdc-textfield-helptext--validation-msg
+          | Must be at least 3 characters long
+
+      .mdc-card__actions
+        button.mdc-button.mdc-button--compact.mdc-card__action Creata Account
+        a(href='/login').mdc-button.mdc-button--compact.mdc-card__action Login

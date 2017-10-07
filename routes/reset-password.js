@@ -3,7 +3,7 @@ const promisify = require('../promisify');
 
 
 exports.get = (ctx) => {
-  ctx.render('reset-password');
+  ctx.render('auth/reset-password');
 };
 
 exports.post = async (ctx) => {

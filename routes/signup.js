@@ -3,7 +3,7 @@ const promisify = require('../promisify');
 
 
 exports.get = (ctx) => {
-  ctx.render('signup');
+  ctx.render('auth/signup');
 };
 
 exports.post = async (ctx) => {

@@ -3,7 +3,7 @@ extends /layout
 block content
   include /includes/edit-dialog
 
-  header.page-header(style=`height: 250px; background: url("${user.background.replace('public', '')}") top / cover;`)
+  header.page-header(style=`background: url("${user.background.replace('public', '')}") top / cover;`)
     .page-header__inner
       img(src=user.avatar.replace('public', '') width=150 height=150).page-header__photo
       .page-header__body

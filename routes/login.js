@@ -2,7 +2,7 @@ const passport = require('koa-passport');
 
 
 exports.get = (ctx) => {
-  ctx.render('login');
+  ctx.render('auth/login');
 };
 
 exports.post = passport.authenticate('local', {

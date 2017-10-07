@@ -4,7 +4,7 @@ const sendMail = require('../nodemailer');
 
 
 exports.get = (ctx) => {
-  ctx.render('forgot-password');
+  ctx.render('auth/forgot-password');
 };
 
 exports.post = async (ctx) => {
