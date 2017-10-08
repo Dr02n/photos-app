@@ -1,8 +1,9 @@
 {
     "extends": "standard",
     "rules": {
-        "semi": ["error", "always"],
-        "no-multiple-empty-lines": "off",
-        "space-before-function-paren": "off"
+        "space-before-function-paren": 0,
+        "no-multiple-empty-lines": 0,
+        "arrow-parens": ["warn", "as-needed"],
+        "no-debugger": 0
     }
 }

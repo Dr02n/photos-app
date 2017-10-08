@@ -1,14 +1,14 @@
-/* global messages */
+/* global MESSAGES */
 
-// const notification = document.querySelector('.mdl-js-snackbar');
+window.mdc.autoInit()
 
-// FLASH
+// Flash Messages
+const MDCSnackbar = mdc.snackbar.MDCSnackbar
+const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'))
 
-// docReady(() => {
-//   for (let type in messages) {
-//     messages[type].forEach((message) => notification.MaterialSnackbar.showSnackbar({ message }));
-//   }
-// });
+for (let type in MESSAGES) {
+  MESSAGES[type].forEach(mes => snackbar.show({message: `${type.toUpperCase()}: ${mes}`}))
+}
 
 // MODALS
 
@@ -23,9 +23,3 @@
 //     e.currentTarget.closest('.mdl-dialog').close();
 //   });
 // });
-
-// UTILS
-
-// function docReady(f) {
-//   /in/.test(document.readyState) ? setTimeout(() => docReady(f), 9) : f();
-// }
