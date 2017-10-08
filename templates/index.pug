@@ -1,72 +1,41 @@
 extends /layout
 
-include /mixins/user
-include /mixins/edit-profile
+//- include /mixins/user
+//- include /mixins/edit-profile
+include /mixins/photo
 
 block content
   include /partials/toolbar
 
   main.mdc-toolbar-fixed-adjust.page-main
-    +user(user)
-    +edit-profile(user)
+    //- +user(user)
+    //- +edit-profile(user)
 
-    .container
-      br
-      h2 Add album
-      form(action='/albums' method='POST' enctype='multipart/form-data')
-        +method('PUT')
-        +csrf(csrf)
-        p: input(name='name' placeholder='Name')
-        p: input(name='description' placeholder='Description')
-        P: input(name='cover' type='file')
-        P: button(type='submit') Submit
-      hr
+    //- h2 Add album
+    //- form(action='/albums' method='POST' enctype='multipart/form-data')
+    //-   +method('PUT')
+    //-   +csrf(csrf)
+    //-   p: input(name='name' placeholder='Name')
+    //-   p: input(name='description' placeholder='Description')
+    //-   P: input(name='cover' type='file')
+    //-   P: button(type='submit') Submit
+    //- hr
 
-      h2 My albums
-      ul(style='display: flex; list-style: none; padding: 0;')
-        each album in user.albums
-          li(style='margin: 0 15px;')
-            img(src=album.cover.url width=200 alt=album.name)
-            h4: a(href=`/albums/${album.id}`)= album.name
-            div= album.description
-            div= album.photosCount + ' photos'
-            div= 'created ' + moment(album.createdAt).fromNow()
-      hr
+    //- h2 My albums
+    //- ul(style='display: flex; list-style: none; padding: 0;')
+    //-   each album in user.albums
+    //-     li(style='margin: 0 15px;')
+    //-       img(src=album.cover.url width=200 alt=album.name)
+    //-       h4: a(href=`/albums/${album.id}`)= album.name
+    //-       div= album.description
+    //-       div= album.photosCount + ' photos'
+    //-       div= 'created ' + moment(album.createdAt).fromNow()
+    //- hr
 
-      h2 Latest photos
-      ul(style='display: flex; list-style: none; padding: 0; flex-wrap: wrap;')
+    .mdc-layout-grid
+      .mdc-layout-grid__inner
         each photo in photos
-          li(style='margin: 15px;')
-            p
-              img(src=photo.url width=200 alt=photo.name)
-            h5(style='margin-bottom: 5px;')= photo.name
-            div
-              | album:
-              |
-              a(href=`/albums/${photo.album.id}`)= photo.album.name
-            div
-              | author:
-              |
-              a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
-            div= 'added ' + moment(photo.createdAt).fromNow()
-            div
-              a(href=`/photos/${photo.id}/like`)= photo.isLiked ? 'unlike' : 'like'
-              |
-              | &middot; #{photo.likesCount}
-            hr
-            div Comments
-            form(action=`photos/${photo.id}/comments` method='POST')
-              +method('PUT')
-              +csrf(csrf)
-              input(name='text')
-              button(type='submit') add comment
-            ul
-              each comment in photo.comments
-                li
-                  div(style='display:flex;')
-                    img(src=comment.author.avatar width=50 height=50 style='margin-right: 15px;')
-                    div
-                      div: b= comment.author.displayName
-                      div= comment.text
+          .mdc-layout-grid__cell
+            +photo(photo)
 
   footer(style=`height: 150px; background: url("${user.background.replace('public', '')}") bottom / cover;`)

@@ -79,3 +79,24 @@ textarea {
 .user__edit-profile {
   margin-left: 20px;
 }
+
+
+/* Cards */
+.photo-card__avatar {
+  position: absolute;
+  background: #bdbdbd;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+}
+
+.photo-card .mdc-card__title,
+.photo-card .mdc-card__subtitle {
+  margin-left: 56px;
+}
+
+.photo-card .mdc-card__title a,
+.photo-card .mdc-card__subtitle a {
+  color: inherit;
+  text-decoration: none;
+}

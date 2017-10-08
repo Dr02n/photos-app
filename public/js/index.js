@@ -15,9 +15,11 @@ const toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-too
 toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust')
 
 // Dialogs
-const dialog = new mdc.dialog.MDCDialog(document.querySelector('#edit-profile'))
-document.querySelector('[href="/edit-profile"]').addEventListener('click', function (evt) {
-  evt.preventDefault()
-  dialog.lastFocusedTarget = evt.target
-  dialog.show()
-})
+try {
+  const dialog = new mdc.dialog.MDCDialog(document.querySelector('#edit-profile'))
+  document.querySelector('[href="/edit-profile"]').addEventListener('click', function (evt) {
+    evt.preventDefault()
+    dialog.lastFocusedTarget = evt.target
+    dialog.show()
+  })
+} catch (err) {}
