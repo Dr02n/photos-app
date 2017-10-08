@@ -14,16 +14,10 @@ for (let type in MESSAGES) {
 const toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'))
 toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust')
 
-// MODALS
-
-// [...document.querySelectorAll('[data-show-modal')].forEach(el => {
-//   el.addEventListener('click', (e) => {
-//     document.querySelector(e.currentTarget.getAttribute('href')).showModal();
-//   });
-// });
-
-// [...document.querySelectorAll('[data-close-modal]')].forEach(el => {
-//   el.addEventListener('click', (e) => {
-//     e.currentTarget.closest('.mdl-dialog').close();
-//   });
-// });
+// Dialogs
+const dialog = new mdc.dialog.MDCDialog(document.querySelector('#edit-profile'))
+document.querySelector('[href="/edit-profile"]').addEventListener('click', function (evt) {
+  evt.preventDefault()
+  dialog.lastFocusedTarget = evt.target
+  dialog.show()
+})

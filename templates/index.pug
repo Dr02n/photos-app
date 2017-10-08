@@ -1,12 +1,14 @@
 extends /layout
 
 include /mixins/user
+include /mixins/edit-profile
 
 block content
   include /partials/toolbar
 
   main.mdc-toolbar-fixed-adjust.page-main
     +user(user)
+    +edit-profile(user)
 
     .container
       br

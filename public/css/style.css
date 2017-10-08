@@ -7,6 +7,10 @@ body {
   --mdc-theme-primary: #212121;
 }
 
+textarea {
+  resize: none;
+}
+
 
 /* Auth */
 .auth-page {
