@@ -1,4 +1,4 @@
-/* global MESSAGES */
+/* global MESSAGES, mdc */
 
 window.mdc.autoInit()
 
@@ -9,6 +9,10 @@ const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'))
 for (let type in MESSAGES) {
   MESSAGES[type].forEach(mes => snackbar.show({message: `${type.toUpperCase()}: ${mes}`}))
 }
+
+// Toolbar
+const toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'))
+toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust')
 
 // MODALS
 

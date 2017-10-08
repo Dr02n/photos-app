@@ -1,0 +1,19 @@
+mixin user(user)
+  section.user
+    .user__avatar
+      button(title='Change profile photo')
+        img(src=user.avatar width=150 height=150)
+    .user__body
+      .mdc-typography--headline
+        | #{user.displayName}
+        a.mdc-button.user__edit-profile(href='/edit-profile') Edit Profile
+      .mdc-typography--subheading2
+        ul.user__stats
+          li 00 albums
+          li 00 photos
+      .mdc-typography--subheading1= user.bio
+
+      //- ul.page-header__links
+        li: a(href=`mailto:${user.email}`) Email
+        if user.githubProfileUrl
+          li: a(href=user.githubProfileUrl target='_blank') GitHub
