@@ -6,7 +6,8 @@ mixin user(user)
     .user__body
       .mdc-typography--headline
         | #{user.displayName}
-        a.mdc-button.user__edit-profile(href='/edit-profile') Edit Profile
+        a.mdc-button.user__edit-profile(href='#edit-profile') Edit Profile
+        a.mdc-button.user__add-album(href='#add-album') Add Album
       .mdc-typography--subheading2
         ul.user__stats
           li 00 albums

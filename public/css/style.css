@@ -31,6 +31,8 @@ textarea {
   max-width: 935px;
   padding: 60px 20px 30px;
   margin: 0 auto;
+  min-height: 1125px;
+  box-sizing: border-box;
 }
 
 
@@ -76,7 +78,8 @@ textarea {
   margin-right: 40px;
 }
 
-.user__edit-profile {
+.user__edit-profile,
+.user__add-album {
   margin-left: 20px;
 }
 

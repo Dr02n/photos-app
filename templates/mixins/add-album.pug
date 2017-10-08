@@ -1,33 +1,28 @@
-mixin edit-profile(user)
-  aside#edit-profile.mdc-dialog(
+mixin add-album()
+  aside#add-album.mdc-dialog(
     role='alertdialog',
     aria-labelledby='my-mdc-dialog-label',
     aria-describedby='my-mdc-dialog-description'
   )
-    form(action=`/users/${user.id}` method='POST' enctype='multipart/form-data').mdc-dialog__surface
-      +method('PATCH')
+    form(action='/albums' method='POST' enctype='multipart/form-data').mdc-dialog__surface
+      +method('PUT')
       +csrf(csrf)
       header.mdc-dialog__header
-        h2#my-mdc-dialog-label.mdc-dialog__header__title Edit Profile
+        h2#my-mdc-dialog-label.mdc-dialog__header__title Add Album
 
       section#my-mdc-dialog-description.mdc-dialog__body
         label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 400px; margin-bottom: 20px;')
-          input.mdc-textfield__input(type='text' name='displayName' required value=user.displayName)
+          input.mdc-textfield__input(type='text' name='name' required)
           span.mdc-textfield__label Name
           .mdc-textfield__bottom-line
 
         .mdc-textfield.mdc-textfield--textarea(style='width: 400px; margin-bottom: 20px;')
-          textarea#bio.mdc-textfield__input(name='bio' rows=5 placeholder='Tell us a little bit about yourself')=user.bio
+          textarea#bio.mdc-textfield__input(name='bio' rows=5 placeholder='Album description')
 
-        div(style='display: inline-block;')
-          img(src=user.avatar height='100')
+        label(style='display: block;')
+          | Album cover
           br
-          input(type='file' name='avatar')
-
-        div(style='display: inline-block;')
-          img(src=user.background height='100')
-          br
-          input(type='file' name='background')
+          input(type='file' name='cover')
 
       footer.mdc-dialog__footer
         button.mdc-button.mdc-dialog__footer__button.mdc-dialog__footer__button--cancel(type='button') Decline

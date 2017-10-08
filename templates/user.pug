@@ -1,15 +1,22 @@
 extends /layout
 
-block content
-  .container
-    h1= currentUser.displayName
+include /mixins/user
+include /mixins/album
+include /mixins/edit-profile
+include /mixins/add-album
 
-    h2 Albums
-    ul(style='display: flex; list-style: none; padding: 0;')
-      each album in currentUser.albums
-        li(style='margin: 0 15px;')
-          img(src=album.cover.path.replace('public', '') width=200 alt=album.name)
-          h4: a(href=`/albums/${album.id}`)= album.name
-          p= album.description
-          p= album.photos.length + ' photos'
-          p= 'created ' + moment(album.createdAt).fromNow()
+block content
+  include /partials/toolbar
+
+  main.mdc-toolbar-fixed-adjust.page-main
+    +user(user)
+    +edit-profile(user)
+    +add-album()
+
+    .mdc-layout-grid
+      .mdc-layout-grid__inner
+        each album in currentUser.albums
+          .mdc-layout-grid__cell
+            +album(album)
+
+  include /partials/footer
