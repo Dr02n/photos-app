@@ -19,7 +19,8 @@ const dialogs = [
   '#edit-profile',
   '#add-album',
   '#edit-album',
-  '#add-photos'
+  '#add-photos',
+  '#delete-album'
 ].map(selector => {
   try {
     const dialog = new mdc.dialog.MDCDialog(document.querySelector(selector))

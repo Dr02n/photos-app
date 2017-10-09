@@ -4,6 +4,7 @@ include /mixins/photo-card
 include /mixins/album-header
 include /mixins/add-album
 include /mixins/add-photos
+include /mixins/delete-album
 
 block content
   include /partials/toolbar
@@ -21,17 +22,9 @@ block content
 
   +add-album(album)
   +add-photos(album)
-
-
+  +delete-album(album)
 
   //- .container
-      h3 Delete album
-      form(action=`/albums/${album.id}` method='POST')
-        +csrf(csrf)
-        +method('DELETE')
-        p: button Delete album
-      hr
-
     h3 Photos (#{album.photos.length})
     ul(style='display: flex; list-style: none; padding: 0;')
       each photo in album.photos
