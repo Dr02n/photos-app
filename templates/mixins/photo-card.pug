@@ -1,18 +1,19 @@
 mixin photo-card(photo, inAlbum = false)
-  .mdc-card(class= inAlbum ? '' : 'photo-card')
+  .mdc-card(class= 'photo-card ' + (!inAlbum ? 'photo-card--with-avatar' : ''))
     section.mdc-card__primary
       if (!inAlbum)
-        a(href=`/users/${photo.album.author.id}`)
-          img.photo-card__avatar(src=photo.album.author.avatar alt=photo.album.author.displayName title=photo.album.author.displayName)
+        a.photo-card__avatar-link(href=`/users/${photo.album.author.id}` title=photo.album.author.displayName)
+          img.photo-card__avatar(src=photo.album.author.avatar alt=photo.album.author.displayName)
       h1.mdc-card__title= photo.name
       if (!inAlbum)
-        h2.mdc-card__subtitle: a(href=`/albums/${photo.album.id}`)= photo.album.name
-        //- h2.mdc-card__subtitle: a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
-    img(src=photo.url alt=photo.name style='max-width: 100%; height: auto;')
+        h2.mdc-card__subtitle
+          a.mdc-theme--primary(href=`/albums/${photo.album.id}`)= photo.album.name
+    a(href=photo.url data-caption=photo.name)
+      img.photo-card__photo(src=photo.url alt=photo.name)
     section.mdc-card__supporting-text
-      //- a.mdc-theme--secondary(href=`/albums/${photo.album.id}`)= photo.album.name
       div #{photo.likesCount} likes &middot; 0 comments
       .mdc-typography--caption.mdc-theme--primary-light= 'added ' + moment(photo.createdAt).fromNow()
+
     //- section.mdc-card__actions
       a.mdc-button.mdc-button--compact.mdc-card__action(href=`/photos/${photo.id}/like`)= photo.isLiked ? 'unlike' : 'like'
       button.mdc-button.mdc-button--compact.mdc-card__action Comment

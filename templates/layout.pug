@@ -9,10 +9,11 @@ html(lang='en')
     title Photo Book
     link(href='https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css' rel='stylesheet')
     link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet')
-    link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet')
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet')
     link(href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/min/dropzone.min.css' rel='stylesheet')
     //- link(href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/basic.css' rel='stylesheet')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.9.1/baguetteBox.min.css' rel='stylesheet')
     link(href='/css/style.css' rel='stylesheet')
   body
     block content
@@ -24,6 +25,7 @@ html(lang='en')
 
     script(src='https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/min/dropzone.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.9.1/baguetteBox.min.js')
     script.
       const MESSAGES = !{JSON.stringify(flash())}
     script(src='/js/index.js')

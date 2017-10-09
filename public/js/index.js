@@ -1,4 +1,4 @@
-/* global MESSAGES, mdc, Dropzone */
+/* global MESSAGES, mdc, Dropzone, baguetteBox */
 
 let photosAdded
 
@@ -67,9 +67,12 @@ const menus = [
   }
 })
 
-//  Dropzone.js
+// Dropzone.js
 Dropzone.options.addPhotosForm = {
   init: function() {
     this.on('addedfile', file => { photosAdded = true })
   }
 }
+
+// baguetteBox.js
+baguetteBox.run('.gallery')
