@@ -1,8 +1,9 @@
-mixin add-album()
-  aside#add-album.mdc-dialog(
+mixin add-album(album = {})
+  aside.mdc-dialog(
     role='alertdialog',
     aria-labelledby='my-mdc-dialog-label',
     aria-describedby='my-mdc-dialog-description'
+    id= album.id ? 'edit-album' : 'add-album'
   )
     form(action='/albums' method='POST' enctype='multipart/form-data').mdc-dialog__surface
       +method('PUT')
@@ -12,15 +13,18 @@ mixin add-album()
 
       section#my-mdc-dialog-description.mdc-dialog__body
         label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 400px; margin-bottom: 20px;')
-          input.mdc-textfield__input(type='text' name='name' required)
+          input.mdc-textfield__input(type='text' name='name' required value=album.name)
           span.mdc-textfield__label Name
           .mdc-textfield__bottom-line
 
         .mdc-textfield.mdc-textfield--textarea(style='width: 400px; margin-bottom: 20px;')
-          textarea#bio.mdc-textfield__input(name='bio' rows=5 placeholder='Album description')
+          textarea#bio.mdc-textfield__input(name='description' rows=5 placeholder='Album description')= album.description
 
         label(style='display: block;')
-          | Album cover
+          if (album.cover)
+            img(src=album.cover.url height='100')
+          else
+            | Album cover
           br
           input(type='file' name='cover')
 

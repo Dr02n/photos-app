@@ -9,7 +9,7 @@ exports.loadAlbumByid = async (id, ctx, next) => {
   ctx.assert(ctx.album, 404, 'Album not found!')
 
   await next()
-};
+}
 
 exports.put = async (ctx, next) => {
   if (!ctx.request.files.length) ctx.throw(400, 'Album cover is required!')
@@ -25,12 +25,15 @@ exports.put = async (ctx, next) => {
   }
 
   ctx.redirect(`/albums/${album.id}`)
-};
+}
 
 exports.get = async (ctx, next) => {
   await ctx.album.populate('photos').populate('cover').execPopulate()
-  ctx.render('album', { album: ctx.album })
-};
+  ctx.render('album', {
+    album: ctx.album,
+    title: ctx.album.name
+  })
+}
 
 exports.patch = async (ctx, next) => {
   const { name, description } = ctx.request.body
@@ -43,7 +46,7 @@ exports.patch = async (ctx, next) => {
 
   ctx.flash('success', 'Album successfully updated')
   ctx.redirect('back')
-};
+}
 
 exports.delete = async (ctx, next) => {
   await Photo.removeFromDiskAndDb({ album: ctx.album.id })
@@ -51,4 +54,4 @@ exports.delete = async (ctx, next) => {
 
   ctx.flash('success', 'Album successfully removed')
   ctx.redirect('/')
-};
+}

@@ -1,8 +1,9 @@
 mixin edit-profile(user)
-  aside#edit-profile.mdc-dialog(
+  aside.mdc-dialog(
     role='alertdialog',
     aria-labelledby='my-mdc-dialog-label',
     aria-describedby='my-mdc-dialog-description'
+    id='edit-profile'
   )
     form(action=`/users/${user.id}` method='POST' enctype='multipart/form-data').mdc-dialog__surface
       +method('PATCH')

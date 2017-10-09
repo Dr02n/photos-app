@@ -1,29 +1,26 @@
 extends /layout
 
+include /mixins/photo-card
+include /mixins/album-header
+include /mixins/add-album
+
 block content
-  .container
-    br
-    p: a(href='/') Home
+  include /partials/toolbar
 
-    div(style='display: flex; align-items: center;')
-      div(style='margin-right: 15px;')
-        img(src=album.cover.url width=300)
-      div
-        h1= album.name
-        p=album.description
-    hr
+  main.mdc-toolbar-fixed-adjust.page-main
+    +album-header(album)
+    +add-album(album)
 
-    if (user.id === album.author.toString())
-      h3 Edit album
-      form(action=`/albums/${album.id}` method='POST' enctype='multipart/form-data')
-        +csrf(csrf)
-        +method('PATCH')
-        p: input(name='name' placeholder='Name' value=album.name)
-        p: input(name='description' placeholder='Description' value=album.description)
-        P: input(name='cover' type='file')
-        p: button Submit
-      hr
+    .mdc-layout-grid
+      .mdc-layout-grid__inner
+        each photo in album.photos
+          .mdc-layout-grid__cell
+            +photo-card(photo, true)
 
+  include /partials/footer
+
+
+  //- .container
       h3 Delete album
       form(action=`/albums/${album.id}` method='POST')
         +csrf(csrf)

@@ -17,16 +17,33 @@ toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust')
 // Dialogs
 const dialogs = [
   '#edit-profile',
-  '#add-album'
+  '#add-album',
+  '#edit-album'
 ].map(selector => {
   try {
     const dialog = new mdc.dialog.MDCDialog(document.querySelector(selector))
-    document.querySelector(`[href="${selector}"]`).addEventListener('click', function (evt) {
+    document.querySelector(`[data-href="${selector}"]`).addEventListener('click', function (evt) {
       evt.preventDefault()
       dialog.lastFocusedTarget = evt.target
       dialog.show()
     })
     return dialog
+  } catch (err) {
+    // console.error(err)
+    return null
+  }
+})
+
+//  Menus
+const menus = [
+  '.mdc-simple-menu'
+].map(selector => {
+  try {
+    let menu = new mdc.menu.MDCSimpleMenu(document.querySelector(selector))
+    // Add event listener to some button to toggle the menu on and off.
+    document.querySelector(`[data-toggle-menu="${selector}"]`)
+      .addEventListener('click', () => { menu.open = !menu.open })
+    return menu
   } catch (err) {
     // console.error(err)
     return null

@@ -1,0 +1,25 @@
+mixin album-header(album)
+  section.user
+    .user__avatar
+      button(title='Change profile photo')
+        div(style=`width: 150px; height: 150px; background: url("${album.cover.url}") center / cover`)
+        //- img(src=album.cover.url width=150 height=150)
+    .user__body
+      .mdc-typography--headline.user__headline
+        | #{album.name}
+        div
+          .mdc-simple-menu(tabindex='-1')
+            ul.mdc-simple-menu__items.mdc-list(role='menu', aria-hidden='true')
+              li.mdc-list-item(role='menuitem', tabindex='0' data-href='#')
+                | Add Photos
+              li.mdc-list-item(role='menuitem', tabindex='0' data-href='#edit-album')
+                | Edit Album
+              li.mdc-list-item(role='menuitem', tabindex='0' data-href='#delete-album')
+                | Delete Album
+          button.mdc-button(data-toggle-menu='.mdc-simple-menu') Actions
+      .mdc-typography--subheading2
+        ul.user__stats
+          li #{album.photos.length} photos
+      .mdc-typography--subheading1= album.description
+
+

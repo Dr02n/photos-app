@@ -1,4 +1,4 @@
-mixin album(album)
+mixin album-card(album)
   .mdc-card
     a(href=`/albums/${album.id}`)
       img(src=album.cover.path.replace('public', '') alt=album.name style='max-width: 100%; height: auto;')

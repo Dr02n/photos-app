@@ -78,9 +78,9 @@ textarea {
   margin-right: 40px;
 }
 
-.user__edit-profile,
-.user__add-album {
-  margin-left: 20px;
+.user__headline {
+  display: flex;
+  justify-content: space-between;
 }
 
 

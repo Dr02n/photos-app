@@ -1,7 +1,7 @@
 extends /layout
 
 include /mixins/user
-include /mixins/album
+include /mixins/album-card
 include /mixins/edit-profile
 include /mixins/add-album
 
@@ -17,6 +17,6 @@ block content
       .mdc-layout-grid__inner
         each album in currentUser.albums
           .mdc-layout-grid__cell
-            +album(album)
+            +album-card(album)
 
   include /partials/footer

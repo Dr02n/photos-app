@@ -1,11 +1,13 @@
-mixin photo(photo)
-  .mdc-card.photo-card
+mixin photo-card(photo, inAlbum = false)
+  .mdc-card(class= inAlbum ? '' : 'photo-card')
     section.mdc-card__primary
-      a(href=`/users/${photo.album.author.id}`)
-        img.photo-card__avatar(src=photo.album.author.avatar alt=photo.album.author.displayName title=photo.album.author.displayName)
+      if (!inAlbum)
+        a(href=`/users/${photo.album.author.id}`)
+          img.photo-card__avatar(src=photo.album.author.avatar alt=photo.album.author.displayName title=photo.album.author.displayName)
       h1.mdc-card__title= photo.name
-      //- h2.mdc-card__subtitle: a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
-      h2.mdc-card__subtitle: a(href=`/albums/${photo.album.id}`)= photo.album.name
+      if (!inAlbum)
+        h2.mdc-card__subtitle: a(href=`/albums/${photo.album.id}`)= photo.album.name
+        //- h2.mdc-card__subtitle: a(href=`/users/${photo.album.author.id}`)= photo.album.author.displayName
     img(src=photo.url alt=photo.name style='max-width: 100%; height: auto;')
     section.mdc-card__supporting-text
       //- a.mdc-theme--secondary(href=`/albums/${photo.album.id}`)= photo.album.name

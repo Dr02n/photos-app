@@ -1,7 +1,7 @@
 extends /layout
 
 
-include /mixins/photo
+include /mixins/photo-card
 
 block content
   include /partials/toolbar
@@ -11,6 +11,6 @@ block content
       .mdc-layout-grid__inner
         each photo in photos
           .mdc-layout-grid__cell
-            +photo(photo)
+            +photo-card(photo)
 
   include /partials/footer
