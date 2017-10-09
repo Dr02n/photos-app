@@ -20,6 +20,4 @@ mixin album-header(album)
       .mdc-typography--subheading2
         ul.user__stats
           li #{album.photos.length} photos
-      .mdc-typography--subheading1= album.description
-
-
+      .mdc-typography--subheading1= album.description || 'No description'

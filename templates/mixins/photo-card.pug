@@ -8,7 +8,7 @@ mixin photo-card(photo, inAlbum = false)
       if (!inAlbum)
         h2.mdc-card__subtitle
           a.mdc-theme--primary(href=`/albums/${photo.album.id}`)= photo.album.name
-    a(href=photo.url data-caption=photo.name)
+    a(href=photo.url data-caption=photo.description || photo.name)
       img.photo-card__photo(src=photo.url alt=photo.name)
     section.mdc-card__supporting-text
       div #{photo.likesCount} likes &middot; 0 comments
