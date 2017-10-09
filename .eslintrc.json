@@ -5,5 +5,10 @@
         "no-multiple-empty-lines": 0,
         "arrow-parens": ["warn", "as-needed"],
         "no-debugger": 0
+    },
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
     }
 }

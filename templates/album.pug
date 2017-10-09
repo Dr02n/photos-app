@@ -3,13 +3,13 @@ extends /layout
 include /mixins/photo-card
 include /mixins/album-header
 include /mixins/add-album
+include /mixins/add-photos
 
 block content
   include /partials/toolbar
 
   main.mdc-toolbar-fixed-adjust.page-main
     +album-header(album)
-    +add-album(album)
 
     .mdc-layout-grid
       .mdc-layout-grid__inner
@@ -19,6 +19,10 @@ block content
 
   include /partials/footer
 
+  +add-album(album)
+  +add-photos(album)
+
+
 
   //- .container
       h3 Delete album
@@ -26,14 +30,6 @@ block content
         +csrf(csrf)
         +method('DELETE')
         p: button Delete album
-      hr
-
-      h3 Add photos
-      form(action=`/albums/${album.id}/photos` method='POST' enctype='multipart/form-data')
-        +csrf(csrf)
-        +method('PUT')
-        p: input(type='file' name='file' multiple)
-        p: button Submit
       hr
 
     h3 Photos (#{album.photos.length})

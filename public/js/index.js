@@ -18,14 +18,28 @@ toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust')
 const dialogs = [
   '#edit-profile',
   '#add-album',
-  '#edit-album'
+  '#edit-album',
+  '#add-photos'
 ].map(selector => {
   try {
     const dialog = new mdc.dialog.MDCDialog(document.querySelector(selector))
-    document.querySelector(`[data-href="${selector}"]`).addEventListener('click', function (evt) {
+    document.querySelector(`[data-href="${selector}"]`).addEventListener('click', evt => {
       evt.preventDefault()
       dialog.lastFocusedTarget = evt.target
       dialog.show()
+    })
+    dialog.listen('MDCDialog:accept', () => {
+      // console.log('accepted')
+      if (selector === '#add-photos') {
+        location.reload()
+      }
+    })
+
+    dialog.listen('MDCDialog:cancel', () => {
+      // console.log('canceled')
+      if (selector === '#add-photos') {
+        location.reload()
+      }
     })
     return dialog
   } catch (err) {
