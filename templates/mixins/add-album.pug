@@ -5,8 +5,12 @@ mixin add-album(album = {})
     aria-describedby='my-mdc-dialog-description'
     id= album.id ? 'edit-album' : 'add-album'
   )
-    form(action='/albums' method='POST' enctype='multipart/form-data').mdc-dialog__surface
-      +method('PUT')
+    form(
+      action=album.id ? `/albums/${album.id}` : '/albums'
+      method='POST'
+      enctype='multipart/form-data'
+    ).mdc-dialog__surface
+      +method(album.id ? 'PATCH' : 'PUT')
       +csrf(csrf)
       header.mdc-dialog__header
         h2#my-mdc-dialog-label.mdc-dialog__header__title Add Album
