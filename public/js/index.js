@@ -1,4 +1,6 @@
-/* global MESSAGES, mdc */
+/* global MESSAGES, mdc, Dropzone */
+
+let photosAdded
 
 window.mdc.autoInit()
 
@@ -31,14 +33,14 @@ const dialogs = [
     })
     dialog.listen('MDCDialog:accept', () => {
       // console.log('accepted')
-      if (selector === '#add-photos') {
+      if (selector === '#add-photos' && photosAdded) {
         location.reload()
       }
     })
 
     dialog.listen('MDCDialog:cancel', () => {
       // console.log('canceled')
-      if (selector === '#add-photos') {
+      if (selector === '#add-photos' && photosAdded) {
         location.reload()
       }
     })
@@ -64,3 +66,10 @@ const menus = [
     return null
   }
 })
+
+//  Dropzone.js
+Dropzone.options.addPhotosForm = {
+  init: function() {
+    this.on('addedfile', file => { photosAdded = true })
+  }
+}

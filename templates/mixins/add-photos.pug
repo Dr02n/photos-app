@@ -10,7 +10,7 @@ mixin add-photos(album)
         h2#my-mdc-dialog-label.mdc-dialog__header__title Add Photos
 
       section#my-mdc-dialog-description.mdc-dialog__body
-        form.dropzone(action=`/albums/${album.id}/photos`)
+        form#add-photos-form.dropzone(action=`/albums/${album.id}/photos`)
           +csrf(csrf)
           +method('PUT')
           .fallback
