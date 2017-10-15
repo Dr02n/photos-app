@@ -1,0 +1,27 @@
+.photo-card__avatar {
+  display: block;
+  background: #bdbdbd;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+}
+
+.photo-card__avatar-link {
+  position: absolute;
+}
+
+.photo-card--with-avatar .mdc-card__title,
+.photo-card--with-avatar .mdc-card__subtitle {
+  margin-left: 56px;
+}
+
+.photo-card .mdc-card__title a,
+.photo-card .mdc-card__subtitle a {
+  text-decoration: none;
+}
+
+.photo-card__photo {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

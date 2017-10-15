@@ -1,6 +1,8 @@
+include /mixins/comments
+
 mixin photo-card(photo, inAlbum = false)
   .mdc-card(class= 'photo-card ' + (!inAlbum ? 'photo-card--with-avatar' : ''))
-    section.mdc-card__primary
+    //- section.mdc-card__primary
       if (!inAlbum)
         a.photo-card__avatar-link(href=`/users/${photo.album.author.id}` title=photo.album.author.displayName)
           img.photo-card__avatar(src=photo.album.author.avatar alt=photo.album.author.displayName)
@@ -8,28 +10,21 @@ mixin photo-card(photo, inAlbum = false)
       if (!inAlbum)
         h2.mdc-card__subtitle
           a.mdc-theme--primary(href=`/albums/${photo.album.id}`)= photo.album.name
-    a(href=photo.url data-caption=photo.description || photo.name)
+
+    a(
+      href=photo.url
+      data-caption=photo.description || photo.name
+      data-sub-html=`#comments-${photo.id}`
+    )
       img.photo-card__photo(src=photo.url alt=photo.name)
-    section.mdc-card__supporting-text
+
+    //- section.mdc-card__supporting-text
       div #{photo.likesCount} likes &middot; 0 comments
-      .mdc-typography--caption.mdc-theme--primary-light= 'added ' + moment(photo.createdAt).fromNow()
+      .mdc-typography--caption.mdc-theme--primary-light= moment(photo.createdAt).fromNow()
+
+  template(id=`comments-${photo.id}`)
+    +comments(photo)
 
     //- section.mdc-card__actions
       a.mdc-button.mdc-button--compact.mdc-card__action(href=`/photos/${photo.id}/like`)= photo.isLiked ? 'unlike' : 'like'
       button.mdc-button.mdc-button--compact.mdc-card__action Comment
-
-
-    //- div Comments
-    //- form(action=`photos/${photo.id}/comments` method='POST')
-      +method('PUT')
-      +csrf(csrf)
-      input(name='text')
-      button(type='submit') add comment
-    //- ul
-      each comment in photo.comments
-        li
-          div(style='display:flex;')
-            img(src=comment.author.avatar width=50 height=50 style='margin-right: 15px;')
-            div
-              div: b= comment.author.displayName
-              div= comment.text

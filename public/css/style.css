@@ -1,3 +1,7 @@
+@import url('photo-card.css');
+@import url('user.css');
+@import url('light-gallery.css');
+
 body {
   margin: 0;
   font-family: Roboto, sans-serif;
@@ -9,6 +13,11 @@ body {
 
 textarea {
   resize: none;
+}
+
+.lg-on {
+  overflow-y: hidden;
+  padding-right: 17px;
 }
 
 
@@ -35,80 +44,12 @@ textarea {
   box-sizing: border-box;
 }
 
-
-/* User */
-.user {
-  margin-bottom: 44px;
-  display: flex;
-}
-
-.user__avatar {
-  flex: 1;
-  margin-right: 30px;
-  text-align: center;
-}
-
-.user__avatar button {
-  padding: 0;
-  border: none;
-  background: none;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.user__avatar img {
-  display: block;
-}
-
-.user__body {
-  flex: 2;
-}
-
-.user__stats {
-  list-style: none;
-  padding: 0;
-}
-
-.user__stats li {
+.mdc-button__icon {
   display: inline-block;
-}
-
-.user__stats li:not(:last-child) {
-  margin-right: 40px;
-}
-
-.user__headline {
-  display: flex;
-  justify-content: space-between;
-}
-
-
-/* Photo card */
-.photo-card__avatar {
-  display: block;
-  background: #bdbdbd;
-  height: 2.5rem;
-  width: 2.5rem;
-  border-radius: 50%;
-}
-
-.photo-card__avatar-link {
-  position: absolute;
-}
-
-.photo-card--with-avatar .mdc-card__title,
-.photo-card--with-avatar .mdc-card__subtitle {
-  margin-left: 56px;
-}
-
-.photo-card .mdc-card__title a,
-.photo-card .mdc-card__subtitle a {
-  text-decoration: none;
-}
-
-.photo-card__photo {
-  display: block;
-  max-width: 100%;
-  height: auto;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  font-size: 18px;
+  line-height: inherit;
+  vertical-align: top;
 }

@@ -1,6 +1,6 @@
 extends /layout
 
-include /mixins/user
+include /mixins/user-header
 include /mixins/album-card
 include /mixins/edit-profile
 include /mixins/add-album
@@ -9,9 +9,7 @@ block content
   include /partials/toolbar
 
   main.mdc-toolbar-fixed-adjust.page-main
-    +user(user)
-    +edit-profile(user)
-    +add-album()
+    +user-header(user)
 
     .mdc-layout-grid
       .mdc-layout-grid__inner
@@ -20,3 +18,6 @@ block content
             +album-card(album)
 
   include /partials/footer
+
+  +edit-profile(user)
+  +add-album()

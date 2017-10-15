@@ -1,4 +1,4 @@
-/* global MESSAGES, mdc, Dropzone, baguetteBox */
+/* global MESSAGES, mdc, Dropzone, lightGallery */
 
 let photosAdded
 
@@ -17,7 +17,7 @@ const toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-too
 toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust')
 
 // Dialogs
-const dialogs = [
+const dialogs = [ // eslint-disable-line
   '#edit-profile',
   '#add-album',
   '#edit-album',
@@ -52,7 +52,7 @@ const dialogs = [
 })
 
 //  Menus
-const menus = [
+const menus = [ // eslint-disable-line
   '.mdc-simple-menu'
 ].map(selector => {
   try {
@@ -75,4 +75,14 @@ Dropzone.options.addPhotosForm = {
 }
 
 // baguetteBox.js
-baguetteBox.run('.gallery')
+// baguetteBox.run('.gallery')
+
+// lightgallery.js
+const lg = document.querySelector('.gallery')
+
+lightGallery(lg, {
+  selector: '[data-caption]',
+  addClass: 'lg--with-sidebar'
+})
+
+lg.addEventListener('onAfterAppendSubHtml', () => window.mdc.autoInit())

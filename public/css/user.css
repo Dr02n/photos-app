@@ -1,0 +1,45 @@
+.user {
+  margin-bottom: 44px;
+  display: flex;
+}
+
+.user__avatar {
+  flex: 1;
+  margin-right: 30px;
+  text-align: center;
+}
+
+.user__avatar button {
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.user__avatar img {
+  display: block;
+}
+
+.user__body {
+  flex: 2;
+}
+
+.user__stats {
+  list-style: none;
+  padding: 0;
+}
+
+.user__stats li {
+  display: inline-block;
+}
+
+.user__stats li:not(:last-child) {
+  margin-right: 40px;
+}
+
+.user__headline {
+  display: flex;
+  justify-content: space-between;
+}

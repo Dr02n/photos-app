@@ -13,7 +13,8 @@ html(lang='en')
     link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet')
     link(href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/min/dropzone.min.css' rel='stylesheet')
     //- link(href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/basic.css' rel='stylesheet')
-    link(href='https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.9.1/baguetteBox.min.css' rel='stylesheet')
+    //- link(href='https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.9.1/baguetteBox.min.css' rel='stylesheet')
+    link(href='https://cdn.jsdelivr.net/npm/lightgallery.js@1.0.1/dist/css/lightgallery.min.css' rel='stylesheet')
     link(href='/css/style.css' rel='stylesheet')
   body
     block content
@@ -25,7 +26,9 @@ html(lang='en')
 
     script(src='https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/min/dropzone.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.9.1/baguetteBox.min.js')
+    //- script(src='https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.9.1/baguetteBox.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/lightgallery.js@1.0.1/dist/js/lightgallery.min.js')
+    script(src='https://unpkg.com/lg-zoom.js@latest/dist/lg-zoom.min.js')
     script.
       const MESSAGES = !{JSON.stringify(flash())}
     script(src='/js/index.js')
