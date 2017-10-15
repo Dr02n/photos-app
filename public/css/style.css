@@ -1,4 +1,5 @@
 @import url('photo-card.css');
+@import url('photo-tile.css');
 @import url('user.css');
 @import url('light-gallery.css');
 
@@ -9,15 +10,11 @@ body {
 
 :root {
   --mdc-theme-primary: #212121;
+  --mdc-grid-list-tile-width: 296px;
 }
 
 textarea {
   resize: none;
-}
-
-.lg-on {
-  overflow-y: hidden;
-  padding-right: 17px;
 }
 
 
@@ -37,11 +34,10 @@ textarea {
 
 /* Layout */
 .page-main {
-  max-width: 935px;
-  padding: 60px 20px 30px;
+  max-width: 900px;
+  padding: 60px 20px;
   margin: 0 auto;
-  min-height: 1125px;
-  box-sizing: border-box;
+  min-height: 900px;
 }
 
 .mdc-button__icon {
@@ -53,3 +49,10 @@ textarea {
   line-height: inherit;
   vertical-align: top;
 }
+
+
+/* Material icons */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }

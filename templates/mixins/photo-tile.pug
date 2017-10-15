@@ -1,0 +1,18 @@
+include /mixins/comments
+
+mixin photo-tile(photo)
+  li.mdc-grid-tile.photo-tile
+    .mdc-grid-tile__primary
+      //- img.mdc-grid-tile__primary-content(src=photo.url)
+      a.mdc-grid-tile__primary-content(
+        style=`background: url("${photo.url}") no-repeat center / cover`
+        href=photo.url
+        data-caption=''
+      )
+    .mdc-grid-tile__secondary.photo-tile__secondary
+      i.mdc-grid-tile__icon.material-icons favorite_border
+      span.mdc-grid-tile__title= photo.name
+      span.mdc-grid-tile__support-text #{photo.likesCount} likes &middot; 0 comments
+
+  template(id=`comments-${photo.id}`)
+    +comments(photo)

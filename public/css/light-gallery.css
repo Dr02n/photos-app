@@ -1,3 +1,8 @@
+.lg-on {
+  overflow-y: hidden;
+  padding-right: 17px;
+}
+
 .lg-backdrop {
   background: rgba(0, 0, 0, 0.70);
 }
@@ -7,12 +12,12 @@
   max-height: 80%;
 }
 
-.lg-outer.lg--with-sidebar {
+.lg-outer.lg-with-sidebar {
   width: auto;
   right: 350px;
 }
 
-.lg-outer.lg--with-sidebar .lg-sub-html {
+.lg-outer.lg-with-sidebar .lg-sub-html {
   position: fixed;
   left: auto;
   right: 0;

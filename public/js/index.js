@@ -82,7 +82,7 @@ const lg = document.querySelector('.gallery')
 
 lightGallery(lg, {
   selector: '[data-caption]',
-  addClass: 'lg--with-sidebar'
+  addClass: 'lg-with-sidebar'
 })
 
 lg.addEventListener('onAfterAppendSubHtml', () => window.mdc.autoInit())
