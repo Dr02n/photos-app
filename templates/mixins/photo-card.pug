@@ -23,7 +23,7 @@ mixin photo-card(photo, inAlbum = false)
       .mdc-typography--caption.mdc-theme--primary-light= moment(photo.createdAt).fromNow()
 
   template(id=`comments-${photo.id}`)
-    +comments(photo)
+    //- +comments(photo)h
 
     //- section.mdc-card__actions
       a.mdc-button.mdc-button--compact.mdc-card__action(href=`/photos/${photo.id}/like`)= photo.isLiked ? 'unlike' : 'like'

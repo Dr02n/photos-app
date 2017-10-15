@@ -5,7 +5,7 @@ mixin photo-tile(photo)
     .mdc-grid-tile__primary
       //- img.mdc-grid-tile__primary-content(src=photo.url)
       a.mdc-grid-tile__primary-content(
-        style=`background: url("${photo.url}") no-repeat center / cover`
+        style=`background: url("${photo.thumbnail}") no-repeat center / cover`
         href=photo.url
         data-caption=''
       )
