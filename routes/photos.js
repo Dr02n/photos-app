@@ -22,8 +22,9 @@ exports.loadPhotoById = async (id, ctx, next) => {
 }
 
 exports.put = async (ctx, next) => {
-  await Promise.all(ctx.request.files.map(readable =>
-    Photo.createAndSaveToDisk({ album: ctx.album }, readable)
+  await Promise.all(ctx.request.files.map(readable => Photo.createAndSaveToDisk({
+    album: ctx.album,
+    author: ctx.state.user }, readable)
   ))
 
   // ctx.flash('success', `${ctx.request.files.length} photos added`);

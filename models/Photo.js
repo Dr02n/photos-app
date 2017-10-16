@@ -19,6 +19,12 @@ const Photo = new mongoose.Schema({
     required: true,
     index: true
   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    index: true
+  },
   extension: {
     type: String,
     required: true
@@ -40,10 +46,6 @@ Photo.virtual('comments', {
 Photo.virtual('filename').get(function () {
   return `${this.id}.${this.extension}`
 })
-
-// Photo.virtual('path').get(function () {
-//   return 'public/uploads/photos/' + this.filename
-// })
 
 Photo.virtual('url').get(function () {
   return '/uploads/photos/original/' + this.filename

@@ -15,7 +15,7 @@ exports.put = async (ctx, next) => {
   if (!ctx.request.files.length) ctx.throw(400, 'Album cover is required!')
   const { name, description } = ctx.request.body
   const album = new Album({ name, description, author: ctx.state.user })
-  const cover = album.cover = await Photo.createAndSaveToDisk({ album }, ctx.request.files[0])
+  const cover = album.cover = await Photo.createAndSaveToDisk({ album, author: ctx.state.user }, ctx.request.files[0])
 
   try {
     await album.save()

@@ -86,3 +86,4 @@ lightGallery(lg, {
 })
 
 lg.addEventListener('onAfterAppendSubHtml', () => window.mdc.autoInit())
+// lg.addEventListener('onAfterSlide', e => console.log(e.detail))
