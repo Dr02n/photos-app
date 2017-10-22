@@ -29,7 +29,7 @@ exports.put = async (ctx, next) => {
 
 exports.get = async (ctx, next) => {
   await ctx.album.populate('photos').populate('cover').execPopulate()
-  ctx.render('album', {
+  ctx.render('albums/show', {
     album: ctx.album,
     title: ctx.album.name
   })

@@ -17,7 +17,7 @@ exports.get = async (ctx, next) => {
   await Album.populate(ctx.user.albums, 'cover')
   await Album.populate(ctx.user.albums, 'photos')
 
-  ctx.render('user', {
+  ctx.render('users/show', {
     currentUser: ctx.user,
     title: ctx.user.displayName
   })

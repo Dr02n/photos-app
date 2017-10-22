@@ -33,13 +33,19 @@ mixin photo-details(photo)
         i.material-icons.mdc-button__icon mode_edit
         | Edit
 
-      form(action=`/photos/${photo.id}/comments` method='POST')
-        +method('PUT')
-        +csrf(csrf)
-        label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 100%;')
-          input.mdc-textfield__input(type='text' name='text' required)
-          span.mdc-textfield__label Add a comment...
-          .mdc-textfield__bottom-line
+      br
+      br
+
+      .mdc-typography--subheading.mdc-typography--adjust-margin= `${photo.comments.length} Comments`
+      div(style='display: flex; align-items: center;')
+        img(src=user.avatar alt=user.name width=40 height=40 style='margin: 0 16px; border-radius: 50%;')
+        form(action=`/photos/${photo.id}/comments` method='POST')
+          +method('PUT')
+          +csrf(csrf)
+          label.mdc-textfield(data-mdc-auto-init='MDCTextfield' style='width: 100%; margin-top: 0;')
+            input.mdc-textfield__input(type='text' name='text' required)
+            span.mdc-textfield__label Add a comment...
+            .mdc-textfield__bottom-line
 
       ul.mdc-list.mdc-list--two-line.mdc-list--dense.mdc-list--avatar-list
         for comment in photo.comments

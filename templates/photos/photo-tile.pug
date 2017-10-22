@@ -1,4 +1,4 @@
-include /mixins/photo-details
+include /photos/photo-details
 
 mixin photo-tile(photo)
   li.mdc-grid-tile.photo-tile
@@ -11,7 +11,7 @@ mixin photo-tile(photo)
         data-sub-html=`#photo-${photo.id}`
       )
     .mdc-grid-tile__secondary.photo-tile__secondary
-      i.mdc-grid-tile__icon.material-icons favorite_border
+      i.mdc-grid-tile__icon.material-icons= photo.isLiked ? 'favorite' : 'favorite_border'
       span.mdc-grid-tile__title= photo.name
       span.mdc-grid-tile__support-text #{photo.likesCount} likes &middot; 0 comments
 
