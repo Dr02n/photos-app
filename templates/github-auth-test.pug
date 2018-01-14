@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Github auth test
+  body
+    h1 Github auth test
+
+    button#login(onclick="authenticate()") Login
+
+    script.
+      function authenticate() {
+        window.authenticateCallback = (token) => {
+          window.authenticateCallback = null
+          console.log(token)
+        }
+        window.open('/auth/github/')
+      }
