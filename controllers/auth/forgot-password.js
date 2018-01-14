@@ -1,6 +1,6 @@
-const User = require('../models/User')
+const User = require('../../models/User')
 const crypto = require('crypto')
-const sendMail = require('../modules/nodemailer')
+const sendMail = require('../../modules/nodemailer')
 
 
 exports.get = ctx => {

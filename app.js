@@ -1,44 +1,33 @@
-const Koa = require('koa')
 require('dotenv').config()
+const Koa = require('koa')
+const debug = require('debug')('app:http')
+const router = require('./routes')
+require('./modules/passport')
 require('./modules/mongoose')
-const passport = require('./modules/passport')
+
+debug('start')
 
 const app = new Koa()
 
-app.keys = ['some secret hurr']
-
-// configure pug
-const pug = new (require('koa-pug'))({ // eslint-disable-line
-  viewPath: './templates',
-  basedir: './templates',
-  noCache: process.env.NODE_ENV === 'development',
-  helperPath: [
-    { moment: require('moment') }
-  ],
-  app
-})
-
-// midleware
-app.use(require('koa-favicon')('public/favicon.ico'))
+// Set middlewares
+// app.use(require('koa-favicon')('public/favicon.ico'))
 app.use(require('koa-static')('public'))
 app.use(require('koa-logger')())
 app.use(require('./middleware/errors'))
 app.use(require('koa-bodyparser')())
-app.use(require('./middleware/multipart'))
-app.use(require('koa-session')(app))
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(require('./middleware/flash'))
+// app.use(require('./middleware/multipart'))
+// app.use(passport.initialize())
+// app.use(require('./middleware/flash'))
 app.use(new (require('koa-csrf'))())
 app.use(async (ctx, next) => {
   ctx.state.csrf = ctx.csrf
   await next()
 })
-app.use(require('./middleware/method-override'))
 
+// Bootstrap application router
+app.use(router.routes())
+app.use(router.allowedMethods())
 
-// routes
-app.use(require('./routes'))
-
-app.listen(3000)
-console.log('App is listening on http://localhost:3000')
+// Start server
+const server = app.listen(process.env.PORT || 3000)
+server.on('listening', () => debug('Listening on ' + server.address().port))

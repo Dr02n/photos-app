@@ -14,4 +14,4 @@ module.exports = async (ctx, next) => {
   ctx.request.files = files
 
   await next()
-};
+}

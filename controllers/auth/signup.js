@@ -1,5 +1,5 @@
-const User = require('../models/User')
-const promisify = require('../utils/promisify')
+const User = require('../../models/User')
+const promisify = require('../../utils/promisify')
 
 
 exports.get = ctx => {
