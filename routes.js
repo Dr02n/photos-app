@@ -6,16 +6,14 @@ const resetPassword = require('./controllers/auth/reset-password')
 // const photos = require('./controllers/photos')
 // const users = require('./controllers/users')
 
-// const { publicRoute, privateRoute } = require('./middleware/public-private')
-
 const router = new Router({
   prefix: '/api'
 })
 
-// const requireAuth = passport.authenticate('jwt', { session: false })
+const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
 
-router.param('resetPasswordToken', resetPassword.checkStatus)
+// router.param('resetPasswordToken', resetPassword.checkStatus)
 // router.param('album', albums.loadAlbumByid)
 // router.param('photo', photos.loadPhotoById)
 // router.param('user', users.loadUserById)
@@ -23,11 +21,11 @@ router.param('resetPasswordToken', resetPassword.checkStatus)
 router.post('/auth/signup', require('./controllers/auth/signup'))
 router.post('/auth/login', requireSignin, require('./controllers/auth/login'))
 
-router.get('/auth/github', require('./controllers/auth/github').get)
-router.get('/auth/github/callback', require('./controllers/auth/github').callback)
+// router.get('/auth/github', require('./controllers/auth/github').get)
+// router.get('/auth/github/callback', require('./controllers/auth/github').callback)
 
-// router.post('/forgot-password', require('./controllers/auth/forgot-password').post)
-// router.post('/reset-password/:resetPasswordToken', resetPassword.post)
+router.post('/auth/password/forgot', require('./controllers/auth/forgot-password'))
+router.post('reset-password', '/auth/password/reset/:resetPasswordToken', resetPassword.checkStatus, resetPassword.reset)
 
 // router.get('/users/:user', users.get)
 // router.patch('/users/:user', photos.filterImages, users.patch)

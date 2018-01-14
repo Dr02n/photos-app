@@ -9,25 +9,27 @@ module.exports = new GitHubStrategy({
 },
 async (accessToken, refreshToken, profile, cb) => {
   const email = profile.emails && profile.emails[0].value
-  const photo = profile.photos && profile.photos[0].value
+  // const photo = profile.photos && profile.photos[0].value
 
   try {
     let user = await User.findOne({ email })
 
     if (!user) {
       user = new User({
-        displayName: profile.displayName || profile.username,
+        // displayName: profile.displayName || profile.username,
         email
       })
+
+      await user.save()
+
+      cb(null, user)
+    } else {
+      throw new Error('Email is in use')
     }
 
-    if (!user.githubId) user.githubId = profile.id
-    if (!user.githubProfileUrl) user.githubProfileUrl = profile.profileUrl
-    if (!user.avatar) user.avatar = photo
-
-    await user.save()
-
-    cb(null, user)
+    // if (!user.githubId) user.githubId = profile.id
+    // if (!user.githubProfileUrl) user.githubProfileUrl = profile.profileUrl
+    // if (!user.avatar) user.avatar = photo
   } catch (err) {
     cb(err)
   }

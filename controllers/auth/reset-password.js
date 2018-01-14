@@ -1,32 +1,28 @@
 const User = require('../../models/User')
-const promisify = require('../../utils/promisify')
 
-
-exports.get = ctx => {
-  ctx.render('auth/reset-password')
-}
-
-exports.post = async ctx => {
-  const { password } = ctx.request.body
-  const user = await promisify(ctx.user.setPassword, ctx.user)(password)
-
-  user.resetPasswordToken = undefined
-  user.resetPasswordExpires = undefined
-  await user.save()
-
-  ctx.flash('success', 'Your password has been reset')
-  ctx.redirect('/login')
-}
-
-exports.checkStatus = async (resetPasswordToken, ctx, next) => {
-  const user = await User.findOne({ resetPasswordToken })
+exports.checkStatus = async (ctx, next) => {
+  const {resetPasswordToken} = ctx.params
+  const user = await User.findOne({resetPasswordToken})
 
   if (!user || user.resetPasswordExpires > Date.now) {
-    ctx.flash('error', 'Password reset is invalid or has expired!')
-    ctx.redirect('/login')
-    return
+    ctx.throw(422, 'Password reset is invalid or has expired')
   }
 
-  ctx.user = user
+  ctx.state.user = user
+
   await next()
 }
+
+exports.reset = async ctx => {
+  const {password} = ctx.request.body
+  const {user} = ctx.state
+
+  user.password = password
+  user.resetPasswordToken = undefined
+  user.resetPasswordExpires = undefined
+
+  await user.save()
+
+  ctx.body = 'OK'
+}
+

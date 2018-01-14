@@ -5,8 +5,6 @@ const router = require('./routes')
 require('./modules/passport')
 require('./modules/mongoose')
 
-debug('start')
-
 const app = new Koa()
 
 // Set middlewares

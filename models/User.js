@@ -6,10 +6,6 @@ const bcrypt = require('bcrypt-nodejs')
 // const Jimp = require('Jimp')
 
 const userSchema = new mongoose.Schema({
-  // username: {
-  //   type: String,
-  // required: true
-  // },
   email: {
     type: String,
     required: true,
@@ -18,14 +14,18 @@ const userSchema = new mongoose.Schema({
     trim: true
   },
   password: String,
+  resetPasswordToken: {
+    type: String,
+    index: true
+  },
+  resetPasswordExpires: Date,
+  // username: {
+  //   type: String,
+  // required: true
+  // },
   // bio: String,
   // avatar: String,
   // background: String,
-  // resetPasswordToken: {
-  //   type: String,
-  //   index: true
-  // },
-  // resetPasswordExpires: Date,
   // githubId: Number,
   // githubProfileUrl: String,
   // likes: [{
@@ -67,23 +67,20 @@ User.methods.saveBackgroundToDisk = async function(readable) {
 }
 */
 
-// User.plugin(passportLocalMongoose, { usernameField: 'email' })
-
 // On Save Hook, encrypt password
 userSchema.pre('save', function(next) {
-  // get access to the user model
   const user = this
 
-  // generate a salt then run callback
+  if (! user.isModified('password')) return next()
+
   bcrypt.genSalt(10, function(err, salt) {
-    if (err) { return next(err) }
+    if (err) return next(err)
 
-    // hash (encrypt) our password using the salt
     bcrypt.hash(user.password, salt, null, function(err, hash) {
-      if (err) { return next(err) }
+      if (err) return next(err)
 
-      // overwrite plain text password with encrypted password
       user.password = hash
+
       next()
     })
   })
@@ -91,7 +88,7 @@ userSchema.pre('save', function(next) {
 
 userSchema.methods.comparePassword = function(candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if (err) { return callback(err) }
+    if (err) return callback(err)
 
     callback(null, isMatch)
   })
