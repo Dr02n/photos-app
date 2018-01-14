@@ -11,7 +11,9 @@ exports.get = async (ctx, next) => {
     .populate({ path: 'album' })
     .populate({ path: 'author' })
     .populate({ path: 'comments', populate: { path: 'author' } }) // temp
+
   await Promise.all(photos.map(photo => photo.populateLikesCount()))
+
   photos.forEach(photo => {
     photo.isLiked = photo.isLiked(user)
   })

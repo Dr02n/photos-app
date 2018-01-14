@@ -1,7 +1,7 @@
 const Koa = require('koa')
 require('dotenv').config()
-require('./mongoose')
-const passport = require('./passport')
+require('./modules/mongoose')
+const passport = require('./modules/passport')
 
 const app = new Koa()
 

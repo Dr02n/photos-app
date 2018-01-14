@@ -97,6 +97,7 @@ Photo.methods.removeFromDiskAndDb = async function () {
   await this.remove()
 }
 
+// TODO: withCount('likes') -> likesCount: 123
 Photo.methods.populateLikesCount = async function () {
   this.likesCount = await User.find({ likes: { $in: [this.id] } }).count()
 }
