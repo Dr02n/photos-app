@@ -25,4 +25,3 @@ exports.reset = async ctx => {
 
   ctx.body = 'OK'
 }
-
