@@ -1,4 +1,5 @@
 const Router = require('koa-router')
+const passport = require('koa-passport')
 
 const resetPassword = require('./controllers/auth/reset-password')
 // const albums = require('./controllers/albums')
@@ -7,15 +8,20 @@ const resetPassword = require('./controllers/auth/reset-password')
 
 // const { publicRoute, privateRoute } = require('./middleware/public-private')
 
-const router = new Router()
+const router = new Router({
+  prefix: '/api'
+})
+
+// const requireAuth = passport.authenticate('jwt', { session: false })
+const requireSignin = passport.authenticate('local', { session: false })
 
 router.param('resetPasswordToken', resetPassword.checkStatus)
 // router.param('album', albums.loadAlbumByid)
 // router.param('photo', photos.loadPhotoById)
 // router.param('user', users.loadUserById)
 
-router.post('/auth/signup', require('./controllers/auth/signup').post)
-router.post('/auth/login', require('./controllers/auth/login').post)
+router.post('/auth/signup', require('./controllers/auth/signup'))
+router.post('/auth/login', requireSignin, require('./controllers/auth/login'))
 
 router.get('/auth/github', require('./controllers/auth/github').get)
 router.get('/auth/github/callback', require('./controllers/auth/github').callback)

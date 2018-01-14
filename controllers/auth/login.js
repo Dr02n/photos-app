@@ -1,12 +1,5 @@
-const passport = require('koa-passport')
+const getTokenForUser = require('../../utils/getTokenForUser')
 
-
-exports.get = ctx => {
-  ctx.render('auth/login')
+module.exports = (ctx) => {
+  ctx.body = {token: getTokenForUser(ctx.state.user)}
 }
-
-exports.post = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-})

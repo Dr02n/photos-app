@@ -18,11 +18,11 @@ app.use(require('koa-bodyparser')())
 // app.use(require('./middleware/multipart'))
 // app.use(passport.initialize())
 // app.use(require('./middleware/flash'))
-app.use(new (require('koa-csrf'))())
-app.use(async (ctx, next) => {
-  ctx.state.csrf = ctx.csrf
-  await next()
-})
+// app.use(new (require('koa-csrf'))())
+// app.use(async (ctx, next) => {
+//   ctx.state.csrf = ctx.csrf
+//   await next()
+// })
 
 // Bootstrap application router
 app.use(router.routes())

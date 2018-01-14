@@ -1,19 +1,20 @@
 const User = require('../../models/User')
-const promisify = require('../../utils/promisify')
+const getTokenForUser = require('../../utils/getTokenForUser')
 
+module.exports = async ctx => {
+  const {email, password} = ctx.request.body
 
-exports.get = ctx => {
-  ctx.render('auth/signup')
-}
+  if (!email || !password) {
+    ctx.throw(422, 'You must provide email and password')
+  }
 
-exports.post = async ctx => {
-  const { displayName, email, password, password2 } = ctx.request.body
+  const existingUser = await User.findOne({ email })
 
-  if (password !== password2) ctx.throw(400, 'Passwords do not match!')
+  if (existingUser) {
+    ctx.throw(401, 'Email is in use')
+  }
 
-  const user = await promisify(User.register, User)(new User({ displayName, email }), password)
+  const user = await User.create({email, password})
 
-  ctx.flash('success', 'Your account has been created')
-  await ctx.login(user)
-  ctx.redirect('/')
+  ctx.body = {token: getTokenForUser(user)}
 }

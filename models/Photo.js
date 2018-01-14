@@ -3,7 +3,6 @@ const fs = require('fs-extra')
 const Jimp = require('jimp')
 const User = require('./User')
 
-
 const Photo = new mongoose.Schema({
   name: {
     type: String,
