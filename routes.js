@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const passport = require('koa-passport')
-const resetPassword = require('./controllers/auth/reset-password')
+const resetPassword = require('./controllers/auth/password/reset')
 const pug = require('pug')
 // const albums = require('./controllers/albums')
 // const photos = require('./controllers/photos')
@@ -15,7 +15,7 @@ const githubAuth = passport.authenticate('github', { session: false })
 
 api.post('/auth/signup', require('./controllers/auth/signup'))
 api.post('/auth/login', localAuth, require('./controllers/auth/login'))
-api.post('/auth/password/forgot', require('./controllers/auth/forgot-password'))
+api.post('/auth/password/forgot', require('./controllers/auth/password/forgot'))
 
 // router.get('/users/:user', users.get)
 // router.patch('/users/:user', photos.filterImages, users.patch)
