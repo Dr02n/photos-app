@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = async (to, subject, template, locals) => {
   const from = '"Fred Foo 👻" <foo@blurdybloop.com>'
-  const html = pug.renderFile(`./templates/email/${template}.pug`, locals)
+  const html = pug.renderFile(`templates/email/${template}.pug`, locals)
   const text = htmlToText.fromString(html)
 
   debug('Sending')
