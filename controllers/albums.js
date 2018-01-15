@@ -1,12 +1,4 @@
-const mongoose = require('mongoose')
 const Album = require('../models/Album')
-
-exports.findById = async (id, ctx, next) => {
-  ctx.assert(mongoose.Types.ObjectId.isValid(id), 422)
-  ctx.album = await Album.findById(id)
-  ctx.assert(ctx.album, 404)
-  await next()
-}
 
 exports.post = async (ctx) => {
   const {name, description} = ctx.request.body

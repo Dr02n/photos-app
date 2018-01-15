@@ -1,4 +1,4 @@
-module.exports = async (ctx, next) => {
+module.exports = async(ctx, next) => {
   const { _method } = ctx.request.body
 
   if (_method) {

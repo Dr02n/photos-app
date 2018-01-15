@@ -1,6 +1,6 @@
 // const AuthenticationError = require('passport-local-mongoose').errors.AuthenticationError
 
-module.exports = async (ctx, next) => {
+module.exports = async(ctx, next) => {
   try {
     await next()
   } catch (err) {
@@ -23,6 +23,6 @@ module.exports = async (ctx, next) => {
     ctx.status = err.status || 500
     ctx.body = { error: err.message }
 
-    if (!err.status) console.error(err) // eslint-disable-line
+    if (ctx.status >= 500) console.error(err) // eslint-disable-line
   }
 }

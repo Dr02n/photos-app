@@ -1,16 +1,14 @@
 const mongoose = require('mongoose')
-const fs = require('fs-extra')
-const Jimp = require('jimp')
-const User = require('./User')
+// const fs = require('fs-extra')
+// const Jimp = require('jimp')
+// const User = require('./User')
 
 const Photo = new mongoose.Schema({
   name: {
     type: String,
-    default: 'No name' // TODO: {album.name} photo {number}
   },
   description: {
     type: String,
-    default: ''
   },
   album: {
     type: mongoose.Schema.Types.ObjectId,
@@ -36,28 +34,29 @@ const Photo = new mongoose.Schema({
  * VIRTUALS
  */
 
-Photo.virtual('comments', {
-  ref: 'Comment',
-  localField: '_id',
-  foreignField: 'photo'
-})
+// Photo.virtual('comments', {
+//   ref: 'Comment',
+//   localField: '_id',
+//   foreignField: 'photo'
+// })
 
-Photo.virtual('filename').get(function () {
-  return `${this.id}.${this.extension}`
-})
+// Photo.virtual('filename').get(function () {
+//   return `${this.id}.${this.extension}`
+// })
 
-Photo.virtual('url').get(function () {
-  return '/uploads/photos/original/' + this.filename
-})
+// Photo.virtual('url').get(function () {
+//   return '/uploads/photos/original/' + this.filename
+// })
 
-Photo.virtual('thumbnail').get(function () {
-  return '/uploads/photos/640x640/' + this.filename
-})
+// Photo.virtual('thumbnail').get(function () {
+//   return '/uploads/photos/640x640/' + this.filename
+// })
 
 /**
  * STATICS
  */
 
+/*
 Photo.statics.createAndSaveToDisk = async function (fields, readable) {
   const image = await Jimp.read(readable.path)
   // const { width, height } = image.bitmap;
@@ -81,11 +80,13 @@ Photo.statics.removeFromDiskAndDb = async function (query) {
   await this.removeFromDisk(query)
   await this.remove(query)
 }
+*/
 
 /**
  * METHODS
  */
 
+/*
 Photo.methods.removeFromDisk = async function () {
   await fs.unlink('public' + this.url)
   await fs.unlink('public' + this.thumbnail)
@@ -96,7 +97,7 @@ Photo.methods.removeFromDiskAndDb = async function () {
   await this.remove()
 }
 
-// TODO: withCount('likes') -> likesCount: 123
+TODO: withCount('likes') -> likesCount: 123
 Photo.methods.populateLikesCount = async function () {
   this.likesCount = await User.find({ likes: { $in: [this.id] } }).count()
 }
@@ -104,5 +105,6 @@ Photo.methods.populateLikesCount = async function () {
 Photo.methods.isLiked = function (user) {
   return !!user.likes.find(like => like.toString() === this.id)
 }
+*/
 
 module.exports = mongoose.model('Photo', Photo)

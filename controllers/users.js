@@ -1,12 +1,4 @@
-const mongoose = require('mongoose')
 const User = require('../models/User')
-
-exports.findById = async (id, ctx, next) => {
-  ctx.assert(mongoose.Types.ObjectId.isValid(id), 422)
-  ctx.user = await User.findById(id)
-  ctx.assert(ctx.user, 404)
-  await next()
-}
 
 exports.get = async (ctx) => {
   ctx.body = ctx.user
