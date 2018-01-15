@@ -1,4 +1,4 @@
-const User = require('../../models/User')
+const User = require('../../../models/User')
 
 exports.checkStatus = async (ctx, next) => {
   const {resetPasswordToken} = ctx.params

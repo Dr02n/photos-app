@@ -1,6 +1,6 @@
 const crypto = require('crypto')
-const User = require('../../models/User')
-const sendMail = require('../../modules/nodemailer')
+const User = require('../../../models/User')
+const sendMail = require('../../../modules/nodemailer')
 
 module.exports = async ctx => {
   const {email} = ctx.request.body

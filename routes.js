@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const passport = require('koa-passport')
 const resetPassword = require('./controllers/auth/password/reset')
+const login = require('./controllers/auth/login')
 const pug = require('pug')
 // const albums = require('./controllers/albums')
 // const photos = require('./controllers/photos')
@@ -14,7 +15,7 @@ const localAuth = passport.authenticate('local', { session: false })
 const githubAuth = passport.authenticate('github', { session: false })
 
 api.post('/auth/signup', require('./controllers/auth/signup'))
-api.post('/auth/login', localAuth, require('./controllers/auth/login'))
+api.post('/auth/login', localAuth, login.local)
 api.post('/auth/password/forgot', require('./controllers/auth/password/forgot'))
 
 // router.get('/users/:user', users.get)
@@ -48,7 +49,7 @@ router.post(
 )
 
 router.get('/auth/github', githubAuth)
-router.get(process.env.GITHUB_CALLBACK_URL, githubAuth, require('./controllers/auth/github'))
+router.get(process.env.GITHUB_CALLBACK_URL, githubAuth, login.oauth)
 
 router.get('/github-auth-test', (ctx) => {
   ctx.body = pug.renderFile('templates/github-auth-test.pug')
