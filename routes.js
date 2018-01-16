@@ -7,6 +7,7 @@ const usersController = require('./controllers/users')
 const albumsController = require('./controllers/albums')
 const photosController = require('./controllers/photos')
 const findById = require('./middleware/findById')
+const fileFilter = require('./utils/imageFileFilter')
 
 const pug = require('pug')
 
@@ -21,7 +22,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false })
 const localAuth = passport.authenticate('local', { session: false })
 const githubAuth = passport.authenticate('github', { session: false })
 
-const upload = multer({ dest: 'uploads/', preservePath: true })
+const upload = multer({ dest: 'public/uploads/', fileFilter })
 
 auth.post('/signup', require('./controllers/auth/signup'))
 auth.post('/login', localAuth, loginController.local)
@@ -39,7 +40,8 @@ albums.post('/', albumsController.post)
 albums.get('/:album', albumsController.get)
 albums.patch('/:album', albumsController.patch)
 albums.delete('/:album', albumsController.delete)
-albums.post('/:album/photos', upload.array('photos', 12), photosController.post)
+albums.post('/:album/photos', upload.single('photo'), photosController.post)
+albums.get('/:album/photos', photosController.getByAlbum)
 
 photos.use(jwtAuth)
 photos.param('photo', findById('Photo'))

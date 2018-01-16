@@ -4,7 +4,7 @@ module.exports = async (ctx, next) => {
 
   delete ctx.session[key]
 
-  ctx.flash = ctx.state.flash = (type, html) => { // eslint-disable-line
+  ctx.flash = ctx.state.flash = (type, html) => {
     if (type === undefined) return data || {}
     if (html === undefined) return data[type] || []
     if (!ctx.session[key]) ctx.session[key] = {}

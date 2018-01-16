@@ -4,12 +4,11 @@ const mongoose = require('mongoose')
 // const User = require('./User')
 
 const Photo = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
+  name: String,
+  description: String,
+  mimetype: String,
+  size: String,
+  path: String,
   album: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Album',
@@ -21,10 +20,6 @@ const Photo = new mongoose.Schema({
     ref: 'User',
     required: true,
     index: true
-  },
-  extension: {
-    type: String,
-    required: true
   }
 }, {
   timestamps: true

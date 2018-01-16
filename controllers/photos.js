@@ -1,7 +1,18 @@
+const fs = require('fs')
 const Photo = require('../models/Photo')
 
 exports.post = async(ctx) => {
-  ctx.body = [ctx.req.files, ctx.req.file, ctx.req.body]
+  const { originalName, path, size, mimetype } = ctx.req.file
+  const { album } = ctx.params
+
+  ctx.body = await Photo.create({
+    author: ctx.state.user,
+    name: originalName,
+    path: path.replace('public', ''),
+    size,
+    mimetype,
+    album
+  })
 }
 
 exports.patch = async(ctx) => {
@@ -12,5 +23,11 @@ exports.patch = async(ctx) => {
 }
 
 exports.delete = async(ctx) => {
-  // TBD
+  fs.unlinkSync('public' + ctx.photo.path)
+  await ctx.photo.remove()
+  ctx.body = 'OK'
+}
+
+exports.getByAlbum = async(ctx) => {
+  ctx.body = await Photo.find({ album: ctx.params.album })
 }
