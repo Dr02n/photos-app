@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 // const Jimp = require('jimp')
 // const User = require('./User')
 
-const Photo = new mongoose.Schema({
+const photoSchema = new mongoose.Schema({
   name: String,
   description: String,
   mimetype: String,
@@ -102,4 +102,4 @@ Photo.methods.isLiked = function (user) {
 }
 */
 
-module.exports = mongoose.model('Photo', Photo)
+module.exports = mongoose.model('Photo', photoSchema)

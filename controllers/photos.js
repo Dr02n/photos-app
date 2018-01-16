@@ -29,5 +29,5 @@ exports.delete = async(ctx) => {
 }
 
 exports.getByAlbum = async(ctx) => {
-  ctx.body = await Photo.find({ album: ctx.params.album })
+  ctx.body = await Photo.find({ album: ctx.params.album }).populate('author').populate('album')
 }

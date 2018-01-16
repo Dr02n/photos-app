@@ -27,5 +27,5 @@ exports.delete = async(ctx) => {
 }
 
 exports.getByAuthor = async(ctx) => {
-  ctx.body = await Album.find({ author: ctx.user.id })
+  ctx.body = await Album.find({ author: ctx.user.id }).populate('author')
 }

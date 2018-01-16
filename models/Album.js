@@ -34,12 +34,12 @@ albumSchema.virtual('photos', {
 //   this.photosCount = await Photo.find({album: {$in: [this.id]}}).count()
 // }
 
-function autopopulate(next) {
-  this.populate('author')
-  next()
-}
+// function autopopulate(next) {
+//   this.populate('author')
+//   next()
+// }
 
-albumSchema.pre('find', autopopulate)
-albumSchema.pre('findOne', autopopulate)
+// albumSchema.pre('find', autopopulate)
+// albumSchema.pre('findOne', autopopulate)
 
 module.exports = mongoose.model('Album', albumSchema)
