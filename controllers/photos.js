@@ -18,8 +18,7 @@ exports.post = async(ctx) => {
 exports.patch = async(ctx) => {
   const { name, description } = ctx.request.body
   Object.assign(ctx.photo, { name, description })
-  await ctx.photo.save()
-  ctx.body = ctx.photo
+  ctx.body = await ctx.photo.save()
 }
 
 exports.delete = async(ctx) => {

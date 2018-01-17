@@ -2,12 +2,11 @@ const Album = require('../models/Album')
 
 exports.post = async(ctx) => {
   const { name, description } = ctx.request.body
-  const album = await Album.create({
+  ctx.body = await Album.create({
     name,
     description,
     author: ctx.state.user
   })
-  ctx.body = album
 }
 
 exports.get = async(ctx) => {
@@ -17,12 +16,12 @@ exports.get = async(ctx) => {
 exports.patch = async(ctx) => {
   const { name, description } = ctx.request.body
   Object.assign(ctx.album, { name, description })
-  await ctx.album.save()
-  ctx.body = ctx.album
+  ctx.body = await ctx.album.save()
 }
 
 exports.delete = async(ctx) => {
   await ctx.album.remove()
+  // TODO remove photos
   ctx.body = 'OK'
 }
 
