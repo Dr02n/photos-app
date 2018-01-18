@@ -47,7 +47,7 @@ photos
   .use(authenticate('jwt'))
   .param('photo', findById('Photo'))
   .patch('/:photo', photosController.patch)
-  .delete('/:photo',  photosController.delete)
+  .delete('/:photo', photosController.delete)
 
 api
   .use('/auth', auth.routes(), auth.allowedMethods())
@@ -55,20 +55,13 @@ api
   .use('/albums', albums.routes(), albums.allowedMethods())
   .use('/photos', photos.routes(), photos.allowedMethods())
 
-router.use('/api', api.routes(), api.allowedMethods())
-
-router.post(
-  'reset-password',
-  '/auth/password/reset/:resetPasswordToken',
-  resetPasswordController.checkStatus,
-  resetPasswordController.reset
-)
-
-router.get('/auth/github', authenticate('github'))
-router.get(process.env.GITHUB_CALLBACK_URL, authenticate('github'), loginController.oauth)
-
-router.get('/github-auth-test', (ctx) => {
-  ctx.body = pug.renderFile('templates/github-auth-test.pug')
-})
+router
+  .use('/api', api.routes(), api.allowedMethods())
+  .post('reset-password', '/auth/password/reset/:resetPasswordToken', resetPasswordController.checkStatus, resetPasswordController.reset)
+  .get('/auth/github', authenticate('github'))
+  .get(process.env.GITHUB_CALLBACK_URL, authenticate('github'), loginController.oauth)
+  .get('/github-auth-test', (ctx) => {
+    ctx.body = pug.renderFile('templates/github-auth-test.pug')
+  })
 
 module.exports = router
