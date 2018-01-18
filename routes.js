@@ -8,7 +8,6 @@ const albumsController = require('./controllers/albums')
 const photosController = require('./controllers/photos')
 const findById = require('./middleware/findById')
 const fileFilter = require('./utils/imageFileFilter')
-
 const pug = require('pug')
 
 const router = new Router()
@@ -18,44 +17,43 @@ const users = new Router()
 const albums = new Router()
 const photos = new Router()
 
-const jwtAuth = passport.authenticate('jwt', { session: false })
-const localAuth = passport.authenticate('local', { session: false })
-const githubAuth = passport.authenticate('github', { session: false })
+const authenticate = (type) => passport.authenticate(type, { session: false })
 
 const upload = multer({ dest: 'public/uploads/', fileFilter })
 
-auth.post('/signup', require('./controllers/auth/signup'))
-auth.post('/login', localAuth, loginController.local)
-auth.post('/password/forgot', require('./controllers/auth/password/forgot'))
+auth
+  .post('/signup', require('./controllers/auth/signup'))
+  .post('/login', authenticate('local'), loginController.local)
+  .post('/password/forgot', require('./controllers/auth/password/forgot'))
 
-users.use(jwtAuth)
-users.param('user', findById('User'))
-users.get('/:user', usersController.get)
-users.patch('/:user', usersController.patch)
-users.get('/:user/albums', albumsController.getByAuthor)
+users
+  .use(authenticate('jwt'))
+  .param('user', findById('User'))
+  .get('/:user', usersController.get)
+  .patch('/:user', usersController.patch)
+  .get('/:user/albums', albumsController.getByAuthor)
 
-albums.use(jwtAuth)
-albums.param('album', findById('Album'))
-albums.post('/', albumsController.post)
-albums.get('/:album', albumsController.get)
-albums.patch('/:album', albumsController.patch)
-albums.delete('/:album', albumsController.delete)
-albums.post('/:album/photos', upload.single('photo'), photosController.post)
-albums.get('/:album/photos', photosController.getByAlbum)
+albums
+  .use(authenticate('jwt'))
+  .param('album', findById('Album'))
+  .post('/', albumsController.post)
+  .get('/:album', albumsController.get)
+  .patch('/:album', albumsController.patch)
+  .delete('/:album', albumsController.delete)
+  .post('/:album/photos', upload.single('photo'), photosController.post)
+  .get('/:album/photos', photosController.getByAlbum)
 
-photos.use(jwtAuth)
-photos.param('photo', findById('Photo'))
-photos.patch('/:photo', photosController.patch)
-photos.delete('/:photo',  photosController.delete)
+photos
+  .use(authenticate('jwt'))
+  .param('photo', findById('Photo'))
+  .patch('/:photo', photosController.patch)
+  .delete('/:photo',  photosController.delete)
 
-// router.put('/photos/:photo/comments', require('./controllers/comments').put)
-// router.get('/photos/:photo/like', require('./controllers/likes').put)
-// router.get('/search', () => null)
-
-api.use('/auth', auth.routes(), auth.allowedMethods())
-api.use('/users', users.routes(), users.allowedMethods())
-api.use('/albums', albums.routes(), albums.allowedMethods())
-api.use('/photos', photos.routes(), photos.allowedMethods())
+api
+  .use('/auth', auth.routes(), auth.allowedMethods())
+  .use('/users', users.routes(), users.allowedMethods())
+  .use('/albums', albums.routes(), albums.allowedMethods())
+  .use('/photos', photos.routes(), photos.allowedMethods())
 
 router.use('/api', api.routes(), api.allowedMethods())
 
@@ -66,8 +64,8 @@ router.post(
   resetPasswordController.reset
 )
 
-router.get('/auth/github', githubAuth)
-router.get(process.env.GITHUB_CALLBACK_URL, githubAuth, loginController.oauth)
+router.get('/auth/github', authenticate('github'))
+router.get(process.env.GITHUB_CALLBACK_URL, authenticate('github'), loginController.oauth)
 
 router.get('/github-auth-test', (ctx) => {
   ctx.body = pug.renderFile('templates/github-auth-test.pug')
