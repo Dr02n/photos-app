@@ -5,6 +5,8 @@ const router = require('./routes')
 require('./modules/passport')
 require('./modules/mongoose')
 
+debug('booting app')
+
 const app = new Koa()
 
 // Set middlewares
@@ -25,4 +27,4 @@ app.use(router.allowedMethods())
 
 // Start server
 const server = app.listen(process.env.PORT || 3000)
-server.on('listening', () => debug('Listening on ' + server.address().port))
+server.on('listening', () => debug('listening on ' + server.address().port))

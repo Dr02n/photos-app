@@ -22,7 +22,7 @@
     "koa-passport": "*",
     "koa-router": "^7.2.1",
     "koa-static": "^4.0.1",
-    "mongoose": "^4.11.7",
+    "mongoose": "^5.0.0",
     "mongoose-beautiful-unique-validation": "^7.0.0",
     "nodemailer": "^4.0.1",
     "passport-github": "^1.1.0",

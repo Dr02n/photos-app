@@ -8,10 +8,12 @@ mongoose.plugin(beautifyUnique)
 
 mongoose.set('debug', process.env.MONGOOSE_DEBUG)
 
-debug('Connecting')
+debug('connecting')
 
-mongoose.connect(process.env.MONGO_URI, { useMongoClient: true })
-  .then(() => debug('Connnected'))
-  .catch(err => console.error(err.message))
+mongoose.connect(process.env.MONGO_URI)
+
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:')) // eslint-disable-line
+db.once('open', () => debug('connnected'))
 
 module.exports = mongoose
