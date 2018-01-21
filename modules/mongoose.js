@@ -6,7 +6,7 @@ mongoose.Promise = Promise
 
 mongoose.plugin(beautifyUnique)
 
-mongoose.set('debug', process.env.MONGOOSE_DEBUG)
+if (process.env.MONGOOSE_DEBUG === 'true') mongoose.set('debug', true)
 
 debug('connecting')
 

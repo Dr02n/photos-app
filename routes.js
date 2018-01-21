@@ -29,6 +29,7 @@ auth
 users
   .use(authenticate('jwt'))
   .param('user', findById('User'))
+  .get('/me', usersController.getMe)
   .get('/:user', usersController.get)
   .patch('/:user', usersController.patch)
   .get('/:user/albums', albumsController.getByAuthor)

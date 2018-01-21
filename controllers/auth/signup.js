@@ -11,7 +11,7 @@ module.exports = async ctx => {
   const existingUser = await User.findOne({ email })
 
   if (existingUser) {
-    ctx.throw(401, 'Email is in use')
+    ctx.throw(422, 'Email is in use')
   }
 
   const user = await User.create({email, password})
