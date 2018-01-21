@@ -20,4 +20,8 @@ app.use(require('./middleware/errors'))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
+// defaults
+if (!process.env.PORT) process.env.PORT = 3000
+if (!process.env.APP_URL) process.env.APP_URL = 'http://localhost'
+
 module.exports = app

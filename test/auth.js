@@ -1,14 +1,15 @@
-/* global describe, it, before, after, context, beforeEach */
+/* global describe, it, before, after, beforeEach */
 
 process.env.MONGOOSE_DEBUG = false
 
-const should = require('chai').should() // eslint-disable-line
+require('chai').should()
 const axios = require('axios')
 const app = require('../app')
 const mongoose = require('../modules/mongoose')
 const User = require('../models/User')
+const promisify = require('../utils/promisify')
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = `${process.env.APP_URL}:${process.env.PORT}`
 
 let server
 const testUser = {
@@ -16,96 +17,120 @@ const testUser = {
   password: '123'
 }
 
-describe('Auth', function() {
+describe('Auth', () => {
   before(done => {
     server = app.listen(3000, done)
   })
 
   after(done => {
-    server.close(done)
-    mongoose.disconnect()
+    server.close(() => mongoose.disconnect(done))
   })
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     await User.remove()
   })
 
-  describe('signup', function() {
-    context('user don\'t provide email or password', function() {
-      it('should return 422', async function() {
-        try {
-          await axios.post('/api/auth/signup', {email: '', password: ''})
-        } catch(err) {
-          err.response.status.should.be.equal(422)
-        }
-      })
+  describe('signup', () => {
+    it.only('should return 422 if user don\'t provide email or password', async() => {
+      try {
+        await axios.post('/api/auth/signup', { email: '', password: '' })
+      } catch (err) {
+        err.response.status.should.be.equal(422)
+      }
     })
 
-    context('user doesn\'t exist', function() {
-      it('it should signup user', async function() {
-        const res = await axios.post('/api/auth/signup', testUser)
+    it('it should signup user if user doesn\'t exist', async() => {
+      const res = await axios.post('/api/auth/signup', testUser)
 
-        res.status.should.be.equal(200)
-        res.data.should.have.property('token')
-      })
+      res.status.should.be.equal(200)
+      res.data.should.have.property('token')
     })
 
-    context('user already exists', function() {
-      it('should return 422', async function() {
+    it('should return 422 if user already exists', async() => {
+      await axios.post('/api/auth/signup', testUser)
+
+      try {
         await axios.post('/api/auth/signup', testUser)
-
-        try  {
-          await axios.post('/api/auth/signup', testUser)
-        } catch(err) {
-          err.response.status.should.be.equal(422)
-        }
-      })
+      } catch (err) {
+        err.response.status.should.be.equal(422)
+      }
     })
   })
 
-  describe('login', function() {
-    context('user doesn\'t exist', function() {
-      it('should return 401', async function () {
-        try {
-          await axios.post('/api/auth/login', testUser)
-        } catch(err) {
-          err.response.status.should.be.equal(401)
-        }
-      })
+  describe('login', () => {
+    it('should return 401 if user doesn\'t exist', async() => {
+      try {
+        await axios.post('/api/auth/login', testUser)
+      } catch (err) {
+        err.response.status.should.be.equal(401)
+      }
     })
 
-    context('user exists', () => {
-      it('should login user', async function () {
-        await axios.post('/api/auth/signup', testUser)
+    it('should login user if user exists', async() => {
+      await axios.post('/api/auth/signup', testUser)
 
-        const res = await axios.post('/api/auth/login', testUser)
+      const res = await axios.post('/api/auth/login', testUser)
 
-        res.status.should.be.equal(200)
-        res.data.should.have.property('token')
-      })
+      res.status.should.be.equal(200)
+      res.data.should.have.property('token')
     })
   })
 
-  describe('protected route', function() {
-    context('unauthorized user', function() {
-      it('should return 401', async function() {
-        try {
-          await axios.get('/api/users/me')
-        } catch (err) {
-          err.response.status.should.be.equal(401)
-        }
-      })
+  describe('protected route', () => {
+    it('should return 401 if user is unauthorized', async() => {
+      try {
+        await axios.get('/api/users/me')
+      } catch (err) {
+        err.response.status.should.be.equal(401)
+      }
     })
 
-    context('authorized user', async function() {
-      it('should pass', async function() {
-        const {data: {token}} = await axios.post('/api/auth/signup', testUser)
-        const {status} = await axios.get('/api/users/me', {headers: {
+    it('should pass if user is authorized', async() => {
+      const { data: { token } } = await axios.post('/api/auth/signup', testUser)
+      const { status } = await axios.get('/api/users/me', {
+        headers: {
           Authorization: token
-        }})
-
-        status.should.be.equal(200)
+        }
       })
+
+      status.should.be.equal(200)
+    })
+  })
+
+  describe('password', () => {
+    it('user can update password on existing account', async() => {
+      await axios.post('/api/auth/signup', testUser)
+      await axios.post('/api/auth/password/forgot', { email: testUser.email })
+
+      const { resetPasswordToken } = await User.findOne({ email: testUser.email })
+      const password = 'newPassword'
+
+      await axios.post('/auth/password/reset/' + resetPasswordToken, { password })
+
+      const user = await User.findOne({ email: testUser.email })
+
+      const passwordsMatch = await promisify(user.comparePassword, user)(password)
+
+      passwordsMatch.should.be.equal(true)
+    })
+
+    it('user can\'t update password on account that doesn\'t exists', async() => {
+      try {
+        await axios.post('/api/auth/password/forgot', { email: 'not.existing@email.com' })
+      } catch (err) {
+        err.response.status.should.be.equal(404)
+      }
+    })
+
+    it('user can\'t update password with wrong reset token', async() => {
+      await axios.post('/api/auth/signup', testUser)
+      await axios.post('/api/auth/password/forgot', { email: testUser.email })
+
+      try {
+        await axios.post('/auth/password/reset/' + 123, { password: 'newPassword' })
+      } catch (err) {
+        err.response.status.should.be.equal(422)
+      }
     })
   })
 })
