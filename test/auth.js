@@ -3,7 +3,7 @@
 process.env.MONGOOSE_DEBUG = false
 
 require('chai').should()
-const axios = require('axios')
+const axios = require('axios').create()
 const server = require('../app')
 const User = require('../models/User')
 const promisify = require('../utils/promisify')

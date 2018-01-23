@@ -2,6 +2,8 @@ const fs = require('fs')
 const Photo = require('../models/Photo')
 
 exports.post = async(ctx) => {
+  if (!ctx.req.file) ctx.throw(422)
+
   const { originalName, path, size, mimetype } = ctx.req.file
   const { album } = ctx.params
 
