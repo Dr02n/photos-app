@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon index --ignore client/",
+    "start": "nodemon app --ignore client/",
     "test": "mocha --timeout 10000"
   },
   "dependencies": {

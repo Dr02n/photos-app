@@ -4,14 +4,12 @@ process.env.MONGOOSE_DEBUG = false
 
 require('chai').should()
 const axios = require('axios')
-const app = require('../app')
-const mongoose = require('../modules/mongoose')
+const server = require('../app')
 const User = require('../models/User')
 const promisify = require('../utils/promisify')
 
 axios.defaults.baseURL = `${process.env.APP_URL}:${process.env.PORT}`
 
-let server
 const testUser = {
   email: 'test@user.com',
   password: '123'
@@ -19,11 +17,12 @@ const testUser = {
 
 describe('Auth', () => {
   before(done => {
-    server = app.listen(3000, done)
+    if (server.listening) done()
+    else server.on('listening', done)
   })
 
   after(done => {
-    server.close(() => mongoose.disconnect(done))
+    server.close(done)
   })
 
   beforeEach(async() => {
@@ -31,7 +30,7 @@ describe('Auth', () => {
   })
 
   describe('signup', () => {
-    it.only('should return 422 if user don\'t provide email or password', async() => {
+    it('should return 422 if user don\'t provide email or password', async() => {
       try {
         await axios.post('/api/auth/signup', { email: '', password: '' })
       } catch (err) {

@@ -2,8 +2,8 @@ require('dotenv').config()
 const Koa = require('koa')
 const debug = require('debug')('app:http')
 const router = require('./routes')
+const mongoose = require('./modules/mongoose')
 require('./modules/passport')
-require('./modules/mongoose')
 
 debug('booting app')
 
@@ -20,8 +20,13 @@ app.use(require('./middleware/errors'))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-// defaults
+// Set defaults
 if (!process.env.PORT) process.env.PORT = 3000
 if (!process.env.APP_URL) process.env.APP_URL = 'http://localhost'
 
-module.exports = app
+// Start server
+const server = app.listen(process.env.PORT)
+server.on('listening', () => debug('listening on ' + server.address().port))
+server.on('close', () => mongoose.disconnect())
+
+module.exports = server
