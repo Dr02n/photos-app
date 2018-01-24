@@ -1,14 +1,11 @@
-/* global describe, it, before, after, beforeEach */
-
-process.env.MONGOOSE_DEBUG = false
+/* global describe, it beforeEach */
 
 require('chai').should()
 const axios = require('axios').create()
-const server = require('../app')
 const User = require('../models/User')
 const promisify = require('../utils/promisify')
 
-axios.defaults.baseURL = `http://localhost:${process.env.PORT}`
+axios.defaults.baseURL = 'http://localhost:3000'
 
 const testUser = {
   email: 'test@user.com',
@@ -16,15 +13,6 @@ const testUser = {
 }
 
 describe('Auth', () => {
-  before(done => {
-    if (server.listening) done()
-    else server.on('listening', done)
-  })
-
-  after(done => {
-    server.close(done)
-  })
-
   beforeEach(async() => {
     await User.remove()
   })

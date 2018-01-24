@@ -1,21 +1,18 @@
-/* global describe, it, before, after, beforeEach */
-
-process.env.MONGOOSE_DEBUG = false
+/* global describe, it, before, beforeEach */
 
 const should = require('chai').should()
 const axios = require('axios').create()
 const fs = require('fs-extra')
 const FormData = require('form-data')
-const server = require('../app')
 const User = require('../models/User')
 const Album = require('../models/Album')
 const Photo = require('../models/Photo')
 
 let album
 
-axios.defaults.baseURL = `http://localhost:${process.env.PORT}`
+axios.defaults.baseURL = 'http://localhost:3000'
 
-const postFiles = (url, ...fields) => {
+const postFormData = (url, ...fields) => {
   const form = new FormData()
   fields.forEach(args => {
     form.append(...args)
@@ -24,31 +21,21 @@ const postFiles = (url, ...fields) => {
 }
 
 describe('Photos', () => {
-  before(done => {
-    const callback = async() => {
-      await User.remove()
-      await Album.remove()
+  before(async() => {
+    await User.remove()
+    await Album.remove()
 
-      // Create & authorize user
-      const { data: { token } } = await axios.post('/api/auth/signup', {
-        email: 'test@email.com',
-        password: '123'
-      })
+    // Create & authorize user
+    const { data: { token } } = await axios.post('/api/auth/signup', {
+      email: 'test@email.com',
+      password: '123'
+    })
 
-      axios.defaults.headers.Authorization = token
+    axios.defaults.headers.Authorization = token
 
-      // Create album for all tests
-      const res = await axios.post('/api/albums', { name: 'Test Album' })
-      album = res.data
-
-      done()
-    }
-
-    server.listening ? callback() : server.on('listening', callback)
-  })
-
-  after(done => {
-    server.close(done)
+    // Create album for all tests
+    const res = await axios.post('/api/albums', { name: 'Test Album' })
+    album = res.data
   })
 
   beforeEach(async() => {
@@ -57,7 +44,7 @@ describe('Photos', () => {
   })
 
   it('can create album and add photos', async() => {
-    const { status, data } = await postFiles(
+    const { status, data } = await postFormData(
       `/api/albums/${album._id}/photos`,
       ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
     )
@@ -73,7 +60,7 @@ describe('Photos', () => {
   })
 
   it('can update photo', async() => {
-    const { data: photo } = await postFiles(
+    const { data: photo } = await postFormData(
       `/api/albums/${album._id}/photos`,
       ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
     )
@@ -89,7 +76,7 @@ describe('Photos', () => {
   })
 
   it('can delete photo', async() => {
-    const { data: photo } = await postFiles(
+    const { data: photo } = await postFormData(
       `/api/albums/${album._id}/photos`,
       ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
     )
@@ -101,12 +88,12 @@ describe('Photos', () => {
   })
 
   it('can recieve photos by album', async() => {
-    await postFiles(
+    await postFormData(
       `/api/albums/${album._id}/photos`,
       ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
     )
 
-    await postFiles(
+    await postFormData(
       `/api/albums/${album._id}/photos`,
       ['photo', fs.createReadStream('test/fixtures/photo2.jpg')]
     )
