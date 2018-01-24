@@ -9,6 +9,8 @@ const Album = require('../models/Album')
 const Photo = require('../models/Photo')
 
 let album
+let photosUrl
+const fixtures = 'test/fixtures'
 
 axios.defaults.baseURL = 'http://localhost:3000'
 
@@ -20,7 +22,7 @@ const postFormData = (url, ...fields) => {
   return axios.post(url, form, { headers: form.getHeaders() })
 }
 
-describe('Photos', () => {
+describe.only('Photos', () => {
   before(async() => {
     await User.remove()
     await Album.remove()
@@ -35,7 +37,9 @@ describe('Photos', () => {
 
     // Create album for all tests
     const res = await axios.post('/api/albums', { name: 'Test Album' })
+
     album = res.data
+    photosUrl = `/api/albums/${album._id}/photos`
   })
 
   beforeEach(async() => {
@@ -45,8 +49,7 @@ describe('Photos', () => {
 
   it('can create album and add photos', async() => {
     const { status, data } = await postFormData(
-      `/api/albums/${album._id}/photos`,
-      ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
+      photosUrl, ['photo', fs.createReadStream(fixtures + '/photo.jpg')]
     )
 
     status.should.be.equal(200)
@@ -60,14 +63,11 @@ describe('Photos', () => {
   })
 
   it('can update photo', async() => {
-    const { data: photo } = await postFormData(
-      `/api/albums/${album._id}/photos`,
-      ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
-    )
+    const { data: photo } = await postFormData(photosUrl, ['photo', fs.createReadStream(fixtures + '/photo.jpg')])
 
     const newPhotoName = 'Test Photo Updated'
 
-    const { data: {name} } = await axios.patch(`/api/photos/${photo._id}`, {
+    const { data: { name } } = await axios.patch(`/api/photos/${photo._id}`, {
       name: newPhotoName
     })
 
@@ -76,10 +76,7 @@ describe('Photos', () => {
   })
 
   it('can delete photo', async() => {
-    const { data: photo } = await postFormData(
-      `/api/albums/${album._id}/photos`,
-      ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
-    )
+    const { data: photo } = await postFormData(photosUrl, ['photo', fs.createReadStream(fixtures + '/photo.jpg')])
 
     await axios.delete(`/api/photos/${photo._id}`)
 
@@ -88,17 +85,11 @@ describe('Photos', () => {
   })
 
   it('can recieve photos by album', async() => {
-    await postFormData(
-      `/api/albums/${album._id}/photos`,
-      ['photo', fs.createReadStream('test/fixtures/photo.jpg')]
-    )
+    await postFormData(photosUrl, ['photo', fs.createReadStream(fixtures + '/photo.jpg')])
 
-    await postFormData(
-      `/api/albums/${album._id}/photos`,
-      ['photo', fs.createReadStream('test/fixtures/photo2.jpg')]
-    )
+    await postFormData(photosUrl, ['photo', fs.createReadStream(fixtures + '/photo2.jpg')])
 
-    const {data: photos} = await axios.get(`/api/albums/${album._id}/photos`)
+    const { data: photos } = await axios.get(photosUrl)
 
     photos.length.should.be.equal(2)
     photos.forEach(photo => { photo.album._id.should.be.equal(album._id) })
