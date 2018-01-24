@@ -8,7 +8,7 @@ const server = require('../app')
 const User = require('../models/User')
 const promisify = require('../utils/promisify')
 
-axios.defaults.baseURL = `${process.env.APP_URL}:${process.env.PORT}`
+axios.defaults.baseURL = `http://localhost:${process.env.PORT}`
 
 const testUser = {
   email: 'test@user.com',

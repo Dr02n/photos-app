@@ -13,7 +13,7 @@ const Photo = require('../models/Photo')
 
 let album
 
-axios.defaults.baseURL = `${process.env.APP_URL}:${process.env.PORT}`
+axios.defaults.baseURL = `http://localhost:${process.env.PORT}`
 
 const postFiles = (url, ...fields) => {
   const form = new FormData()
@@ -23,7 +23,7 @@ const postFiles = (url, ...fields) => {
   return axios.post(url, form, { headers: form.getHeaders() })
 }
 
-describe.only('Photos', () => {
+describe('Photos', () => {
   before(done => {
     const callback = async() => {
       await User.remove()
@@ -44,8 +44,7 @@ describe.only('Photos', () => {
       done()
     }
 
-    if (server.listening) callback()
-    else server.on('listening', callback)
+    server.listening ? callback() : server.on('listening', callback)
   })
 
   after(done => {

@@ -22,7 +22,6 @@ app.use(router.allowedMethods())
 
 // Set defaults
 if (!process.env.PORT) process.env.PORT = 3000
-if (!process.env.APP_URL) process.env.APP_URL = 'http://localhost'
 
 // Start server
 const server = app.listen(process.env.PORT)
