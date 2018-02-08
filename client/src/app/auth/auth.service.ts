@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import * as decode from 'jwt-decode';
 import 'rxjs/add/operator/do';
+import { AppState } from '../state';
+import { ActionTypes } from './auth.reducer';
 
-const TOKEN = 'token'
+export const TOKEN = 'token'
 
 export interface Credentials {
   email: string;
@@ -16,13 +20,19 @@ export interface Response {
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private store: Store<AppState>
+  ) {
+    const token = localStorage.getItem(TOKEN)
+    if (token) this.store.dispatch({ type: ActionTypes.LOGIN, payload: decode(token) })
+  }
 
   signup(credentials: Credentials) {
     return this.http.post<Response>('/api/auth/signup', credentials)
       .do(data => {
         localStorage.setItem(TOKEN, data.token)
-        // TODO: add to store
+        this.store.dispatch({ type: ActionTypes.LOGIN, payload: decode(data.token) })
       })
   }
 
@@ -30,12 +40,12 @@ export class AuthService {
     return this.http.post<Response>('/api/auth/login', credentials)
       .do(data => {
         localStorage.setItem(TOKEN, data.token)
-        // TODO: add to store
+        this.store.dispatch({ type: ActionTypes.LOGIN, payload: decode(data.token) })
       })
   }
 
   logout() {
     localStorage.removeItem(TOKEN)
-    // TODO: remove from store
+    this.store.dispatch({ type: ActionTypes.LOGOUT })
   }
 }
