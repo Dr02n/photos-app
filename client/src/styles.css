@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.spacer {
+  flex-grow: 1;
+}
