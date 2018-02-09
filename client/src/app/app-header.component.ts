@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, ngOnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { User } from './auth/auth.reducer';
-import { Observable } from 'rxjs/Observable';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { User } from './auth/auth.reducer'
+import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/switchMap'
 
 @Component({
@@ -24,7 +24,7 @@ import 'rxjs/add/operator/switchMap'
   `
 })
 
-export class AppHeaderComponent {
+export class AppHeaderComponent implements OnInit {
   @Input() user: User
 
   @Output() logout = new EventEmitter<any>()

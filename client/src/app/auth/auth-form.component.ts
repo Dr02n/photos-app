@@ -1,9 +1,34 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Output, EventEmitter } from '@angular/core'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 @Component({
   selector: 'auth-form',
-  templateUrl: 'auth-form.component.html'
+  template: `
+    <mat-card class="col-sm-4 col-sm-offset-4">
+      <ng-content select="h1"></ng-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <mat-form-field class="form-group">
+          <input matInput placeholder="Email" formControlName="email" required>
+          <mat-error *ngIf="email.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <input matInput placeholder="Password" formControlName="password" required>
+          <mat-error *ngIf="password.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        <div class="form-group">
+          <ng-content select="button"></ng-content>
+        </div>
+      </form>
+      <ng-content select="p"></ng-content>
+    </mat-card>
+  `
 })
 export class AuthFormComponent {
   form: FormGroup
@@ -17,9 +42,9 @@ export class AuthFormComponent {
     })
   }
 
-  get email() { return this.form.get('email'); }
+  get email() { return this.form.get('email') }
 
-  get password() { return this.form.get('password'); }
+  get password() { return this.form.get('password') }
 
   onSubmit() {
     if (this.form.valid) {

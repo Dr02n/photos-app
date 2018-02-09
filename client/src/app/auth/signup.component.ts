@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core'
+import { MatSnackBar } from '@angular/material'
+import { Router } from '@angular/router'
 
-import { AuthService } from './auth.service';
+import { AuthService } from './auth.service'
 
 @Component({
-  selector: 'signup',
+  selector: 'signup-page',
   template: `
     <auth-form (success)="signup($event)">
       <h1>Create your account</h1>

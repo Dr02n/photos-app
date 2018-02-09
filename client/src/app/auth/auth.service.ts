@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Store } from '@ngrx/store';
-import * as decode from 'jwt-decode';
-import 'rxjs/add/operator/do';
-import { AppState } from '../state';
-import { ActionTypes } from './auth.reducer';
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Store } from '@ngrx/store'
+import * as decode from 'jwt-decode'
+import 'rxjs/add/operator/do'
+import { AppState } from '../state'
+import { ActionTypes } from './auth.reducer'
 
 export const TOKEN = 'token'
 
 export interface Credentials {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface Response {
@@ -25,7 +25,10 @@ export class AuthService {
     private store: Store<AppState>
   ) {
     const token = localStorage.getItem(TOKEN)
-    if (token) this.store.dispatch({ type: ActionTypes.LOGIN, payload: decode(token) })
+
+    if (token) {
+      this.store.dispatch({ type: ActionTypes.LOGIN, payload: decode(token) })
+    }
   }
 
   signup(credentials: Credentials) {

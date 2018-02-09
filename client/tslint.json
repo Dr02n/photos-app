@@ -91,7 +91,7 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+      "never"
     ],
     "triple-equals": [
       true,
@@ -126,7 +126,7 @@
     "component-selector": [
       true,
       "element",
-      "app",
+      "",
       "kebab-case"
     ],
     "no-output-on-prefix": true,

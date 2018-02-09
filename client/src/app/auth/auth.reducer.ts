@@ -1,4 +1,4 @@
-import { Action } from '../action';
+import { Action } from '../action'
 
 export enum ActionTypes {
   LOGIN = 'LOGIN',
@@ -22,10 +22,10 @@ const initialState = {
 export function reducer(state: AuthState = initialState, action: Action) {
   switch (action.type) {
     case ActionTypes.LOGIN:
-      return {...state, user: action.payload};
+      return {...state, user: action.payload}
     case ActionTypes.LOGOUT:
-      return {...state, user: null};
+      return {...state, user: null}
     default:
-      return state;
+      return state
   }
 }
