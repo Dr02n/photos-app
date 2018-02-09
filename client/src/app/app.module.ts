@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { StoreModule, ActionReducer } from '@ngrx/store'
 import { storeLogger } from 'ngrx-store-logger'
+import { EffectsModule } from '@ngrx/effects'
 
 import { environment } from '../environments/environment'
 import { AngularMaterialModule } from './angular-material.module'
@@ -32,7 +33,8 @@ export const metaReducers = environment.production ? [] : [logger]
     HttpClientModule,
     AngularMaterialModule,
     AuthModule,
-    StoreModule.forRoot({}, {metaReducers})
+    StoreModule.forRoot({}, { metaReducers }),
+    EffectsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]

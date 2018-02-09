@@ -14,3 +14,7 @@ body {
 .spacer {
   flex-grow: 1;
 }
+
+.text-center {
+  text-align: center;
+}

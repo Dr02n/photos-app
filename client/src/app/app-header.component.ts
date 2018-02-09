@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { User } from './auth/auth.reducer'
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/switchMap'
+
+import { User } from './auth/interfaces'
 
 @Component({
   selector: 'app-header',

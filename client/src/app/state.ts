@@ -1,4 +1,4 @@
-import { AuthState } from './auth/auth.reducer'
+import { State as AuthState } from './auth/store/auth.reducer'
 
 export interface AppState {
   auth: AuthState
