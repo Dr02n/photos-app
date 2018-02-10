@@ -22,6 +22,8 @@ export class AuthService {
   user: User | null = null
   pending = false
 
+  private signupUrl = '/api/auth/signup'
+  private loginUrl = '/api/auth/login'
   private tokenKey = 'token'
 
   private authFlow = pipe(
@@ -47,7 +49,7 @@ export class AuthService {
 
   signup(credentials: {email, password}): Observable<{ user?, error? }> {
     this.pending = true
-    return this.http.post<{ token }>('/api/auth/signup', credentials).pipe(
+    return this.http.post<{ token }>(this.signupUrl, credentials).pipe(
       this.authFlow,
       catchError(this.handleError),
       tap(() => this.pending = false)
@@ -56,7 +58,7 @@ export class AuthService {
 
   login(credentials: {email, password}): Observable<{ user?, error? }> {
     this.pending = true
-    return this.http.post<{ token }>('/api/auth/login', credentials).pipe(
+    return this.http.post<{ token }>(this.loginUrl, credentials).pipe(
       this.authFlow,
       catchError(this.handleError),
       tap(() => this.pending = false)
