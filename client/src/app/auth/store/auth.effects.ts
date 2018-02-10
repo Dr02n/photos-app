@@ -19,28 +19,26 @@ export class User implements UserInterface {
   }
 }
 
+const loginSuccess = map(({ token }) => new LoginSuccess({ token, user: new User(decode(token)) }))
+
 @Injectable()
 export class AuthEffects {
   @Effect()
   login$ = this.actions$.pipe(
     ofType(ActionTypes.Login),
-    exhaustMap((action: Login) =>
-      this.authService.login(action.payload).pipe(
-        map(({ token }) => new LoginSuccess({ token, user: new User(decode(token)) })),
-        catchError(error => of(new LoginFailure('Invalid username or password')))
-      )
-    )
+    exhaustMap((action: Login) => this.authService.login(action.payload).pipe(
+      loginSuccess,
+      catchError(error => of(new LoginFailure('Invalid username or password')))
+    ))
   )
 
   @Effect()
   signup$ = this.actions$.pipe(
     ofType(ActionTypes.Signup),
-    exhaustMap((action: Signup) =>
-      this.authService.signup(action.payload).pipe(
-        map(({ token }) => new LoginSuccess({ token, user: new User(decode(token)) })),
-        catchError(error => of(new LoginFailure(error.error.error)))
-      )
-    )
+    exhaustMap((action: Signup) => this.authService.signup(action.payload).pipe(
+      loginSuccess,
+      catchError(error => of(new LoginFailure(error.error.message)))
+    ))
   )
 
   @Effect({ dispatch: false })

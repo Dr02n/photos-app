@@ -21,7 +21,7 @@ module.exports = async(ctx, next) => {
     // }
 
     ctx.status = err.status || 500
-    ctx.body = { error: err.message }
+    ctx.body = { message: err.message }
 
     if (ctx.status >= 500) console.error(err) // eslint-disable-line
   }
