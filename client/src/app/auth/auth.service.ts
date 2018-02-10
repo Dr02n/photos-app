@@ -36,10 +36,10 @@ export class AuthService {
   }
 
   set token(data) {
-    if (!data) {
-      localStorage.removeItem(this.tokenKey)
-    } else {
+    if (data) {
       localStorage.setItem(this.tokenKey, data)
+    } else {
+      localStorage.removeItem(this.tokenKey)
     }
   }
 
