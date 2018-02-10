@@ -36,7 +36,11 @@ export class AuthService {
   }
 
   set token(data) {
-    localStorage.setItem(this.tokenKey, data)
+    if (!data) {
+      localStorage.removeItem(this.tokenKey)
+    } else {
+      localStorage.setItem(this.tokenKey, data)
+    }
   }
 
   signup(credentials) {
@@ -49,7 +53,7 @@ export class AuthService {
 
   logout() {
     this.user = null
-    localStorage.removeItem(this.tokenKey)
+    this.token = null
     this.router.navigate(['auth/login'])
   }
 
