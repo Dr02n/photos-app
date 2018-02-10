@@ -19,6 +19,7 @@ export class User {
 
 @Injectable()
 export class AuthService {
+
   user: User | null = null
   pending = false
 
@@ -26,17 +27,8 @@ export class AuthService {
   private loginUrl = '/api/auth/login'
   private tokenKey = 'token'
 
-  private authFlow = pipe(
-    tap(({ token }) => this.token = token),
-    map(({ token }) => ({ user: new User(decode(token)) })),
-    tap(({ user }) => this.user = user),
-    tap(() => this.router.navigate(['/']))
-  )
-
   constructor(private http: HttpClient, private router: Router) {
-    if (this.token) {
-      this.user = new User(decode(this.token))
-    }
+    if (this.token) { this.user = new User(decode(this.token)) }
   }
 
   get token() {
@@ -47,28 +39,30 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, data)
   }
 
-  signup(credentials: {email, password}): Observable<{ user?, error? }> {
-    this.pending = true
-    return this.http.post<{ token }>(this.signupUrl, credentials).pipe(
-      this.authFlow,
-      catchError(this.handleError),
-      tap(() => this.pending = false)
-    )
+  signup(credentials) {
+    return this.request(this.signupUrl, credentials)
   }
 
-  login(credentials: {email, password}): Observable<{ user?, error? }> {
-    this.pending = true
-    return this.http.post<{ token }>(this.loginUrl, credentials).pipe(
-      this.authFlow,
-      catchError(this.handleError),
-      tap(() => this.pending = false)
-    )
+  login(credentials) {
+    return this.request(this.loginUrl, credentials)
   }
 
   logout() {
     this.user = null
     localStorage.removeItem(this.tokenKey)
     this.router.navigate(['auth/login'])
+  }
+
+  private request(url: string, credentials: { email, password }): Observable<{ user?, error?}> {
+    this.pending = true
+    return this.http.post<{ token }>(url, credentials).pipe(
+      tap(({ token }) => this.token = token),
+      map(({ token }) => ({ user: new User(decode(token)) })),
+      tap(({ user }) => this.user = user),
+      tap(() => this.router.navigate(['/'])),
+      catchError(this.handleError),
+      tap(() => this.pending = false)
+    )
   }
 
   private handleError(err) {
