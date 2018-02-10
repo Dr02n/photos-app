@@ -2,18 +2,22 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { tap } from 'rxjs/operators/tap'
 import { pipe } from 'rxjs/util/pipe'
-import { Credentials } from './interfaces'
 import * as decode from 'jwt-decode'
 import { catchError } from 'rxjs/operators/catchError'
 import { of } from 'rxjs/observable/of'
 import { map } from 'rxjs/operators/map'
 import { Router } from '@angular/router'
 
+interface Credentials {
+  email: string
+  password: string
+}
+
 interface Response {
   token: string
 }
 
-export class User {
+class User {
   email: string
 
   constructor({ email }) {
