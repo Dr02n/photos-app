@@ -1,8 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import 'rxjs/add/operator/switchMap'
-
-import { User } from './auth/interfaces'
+import { User } from './auth/auth.service'
 
 @Component({
   selector: 'app-header',
@@ -13,7 +11,7 @@ import { User } from './auth/interfaces'
           <a routerLink="/" mat-button>My App</a>
           <div class="spacer"></div>
 
-          <a routerLink="/" mat-button *ngIf="user">{{user.email}}</a>
+          <a routerLink="/" mat-button *ngIf="user">{{ user.email }}</a>
           <button (click)="logout.emit()" mat-button *ngIf="user">Log out</button>
 
           <a routerLink="/auth/login" mat-button *ngIf="!user">Log in</a>

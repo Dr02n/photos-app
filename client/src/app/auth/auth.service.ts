@@ -7,17 +7,9 @@ import { catchError } from 'rxjs/operators/catchError'
 import { of } from 'rxjs/observable/of'
 import { map } from 'rxjs/operators/map'
 import { Router } from '@angular/router'
+import { Observable } from 'rxjs/Observable'
 
-interface Credentials {
-  email: string
-  password: string
-}
-
-interface Response {
-  token: string
-}
-
-class User {
+export class User {
   email: string
 
   constructor({ email }) {
@@ -34,10 +26,7 @@ export class AuthService {
 
   private authFlow = pipe(
     tap(({ token }) => this.token = token),
-    map(({ token }) => ({
-      user: new User(decode(token)),
-      error: null
-    })),
+    map(({ token }) => ({ user: new User(decode(token)) })),
     tap(({ user }) => this.user = user),
     tap(() => this.router.navigate(['/']))
   )
@@ -56,18 +45,18 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, data)
   }
 
-  signup(credentials: Credentials) {
+  signup(credentials: {email, password}): Observable<{ user?, error? }> {
     this.pending = true
-    return this.http.post<Response>('/api/auth/signup', credentials).pipe(
+    return this.http.post<{ token }>('/api/auth/signup', credentials).pipe(
       this.authFlow,
       catchError(this.handleError),
       tap(() => this.pending = false)
     )
   }
 
-  login(credentials: Credentials) {
+  login(credentials: {email, password}): Observable<{ user?, error? }> {
     this.pending = true
-    return this.http.post<Response>('/api/auth/login', credentials).pipe(
+    return this.http.post<{ token }>('/api/auth/login', credentials).pipe(
       this.authFlow,
       catchError(this.handleError),
       tap(() => this.pending = false)
