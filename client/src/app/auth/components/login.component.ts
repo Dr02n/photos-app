@@ -1,20 +1,20 @@
 import { Component } from '@angular/core'
-import { Store, select } from '@ngrx/store'
-import { Observable } from 'rxjs/Observable'
-
-import { AppState } from '../../state'
-import { Login } from '../store/auth.actions'
+import { switchMap } from 'rxjs/operators/switchMap'
+import { concat } from 'rxjs/observable/concat'
+import { Subject } from 'rxjs/Subject'
+import { of } from 'rxjs/observable/of'
+import { map } from 'rxjs/operators/map'
+import { AuthService } from '../auth.service'
 
 @Component({
   selector: 'login-page',
   template: `
     <auth-form
       (success)="login($event)"
-      [pending]="pending$ | async"
       [errorMessage]="error$ | async"
     >
       <h1 class="text-center">Log in</h1>
-      <button mat-raised-button color="primary" [disabled]="pending$ | async">Log in</button>
+      <button mat-raised-button color="primary" [disabled]="authService.pending">Log in</button>
       <p><a routerLink="/">Forgot password?</a></p>
       <p>Don't have an account yet? <a routerLink="/auth/signup">Sign up now!</a></p>
     </auth-form>
@@ -22,12 +22,14 @@ import { Login } from '../store/auth.actions'
 })
 
 export class LoginComponent {
-  pending$ = this.store.pipe(select('auth'), select('pending'))
-  error$ = this.store.pipe(select('auth'), select('error'))
+  requests = new Subject<any>()
+  error$ = this.requests.pipe(
+    switchMap(data => concat(of(null), this.authService.login(data).pipe(map(result => result.error))))
+  )
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private authService: AuthService) { }
 
   login(formValue) {
-    this.store.dispatch(new Login(formValue))
+    this.requests.next(formValue)
   }
 }
