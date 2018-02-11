@@ -24,7 +24,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
             </mat-error>
           </mat-form-field>
           <p *ngIf="errorMessage" style="color: red">{{errorMessage}}</p>
-          <ng-content select="button"></ng-content>
+          <button mat-raised-button color="primary" [disabled]="pending || form.touched && form.invalid">
+            <ng-content select="span"></ng-content>
+          </button>
         </form>
       </mat-card-content>
       <ng-content select="p"></ng-content>
@@ -37,7 +39,7 @@ export class AuthFormComponent {
   @Input() pending: boolean
   @Input() errorMessage: string | null
 
-  @Output() success: EventEmitter<any> = new EventEmitter()
+  @Output() submitted: EventEmitter<any> = new EventEmitter()
 
   constructor(private fb: FormBuilder) {
     this.form = fb.group({
@@ -52,7 +54,7 @@ export class AuthFormComponent {
 
   onSubmit() {
     if (this.form.valid) {
-      this.success.emit(this.form.value)
+      this.submitted.emit(this.form.value)
     }
   }
 }

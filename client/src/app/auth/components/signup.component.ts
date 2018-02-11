@@ -10,11 +10,11 @@ import { concat } from 'rxjs/observable/concat'
   selector: 'signup-page',
   template: `
     <auth-form
-      (success)="signup($event)"
+      (submitted)="signup($event)"
       [errorMessage]="error$ | async"
     >
       <h1 class="text-center">Create your account</h1>
-      <button mat-raised-button color="primary" [disabled]="authService.pending">Create account</button>
+      <span>Create account</span>
       <p>Already have an account? <a routerLink="/auth/login">Log in</a> instead.</p>
     </auth-form>
   `

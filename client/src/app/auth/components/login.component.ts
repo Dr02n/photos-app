@@ -10,11 +10,12 @@ import { AuthService } from '../auth.service'
   selector: 'login-page',
   template: `
     <auth-form
-      (success)="login($event)"
+      (submitted)="login($event)"
       [errorMessage]="error$ | async"
+      [pending]="authService.pending"
     >
       <h1 class="text-center">Log in</h1>
-      <button mat-raised-button color="primary" [disabled]="authService.pending">Log in</button>
+      <span>Log in</span>
       <p><a routerLink="/">Forgot password?</a></p>
       <p>Don't have an account yet? <a routerLink="/auth/signup">Sign up now!</a></p>
     </auth-form>
