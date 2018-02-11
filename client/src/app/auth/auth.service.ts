@@ -32,6 +32,10 @@ export class AuthService {
     if (this.token.value) { this.user = new User(decode(this.token.value)) }
   }
 
+  get isLoggedIn() {
+    return !!this.user
+  }
+
   signup(credentials) {
     return this.request(this.signupUrl, credentials)
   }
