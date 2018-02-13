@@ -1,51 +1,37 @@
 import * as decode from 'jwt-decode'
-
-import { ActionTypes, Actions } from './auth.actions'
-import { TOKEN, User } from './auth.effects'
+import * as auth from './auth.actions'
+import { User } from '../user.model'
+import { TOKEN } from '../constatnts'
 
 const token = localStorage.getItem(TOKEN)
+const user = token ? new User(decode(token)) : null
 
 export interface State {
-  user: User | null,
-  error: string | null,
-  pending: boolean
+  loggedIn: boolean
+  user: User | null
 }
 
-const initialState: State = {
-  user: token ? new User(decode(token)) : null,
-  error: null,
-  pending: false
+export const initialState: State = {
+  loggedIn: !!user,
+  user,
 }
 
-export function AuthReducer(state = initialState, action: Actions): State {
+export function reducer(state = initialState, action: auth.Actions): State {
   switch (action.type) {
-    case ActionTypes.Login:
-    case ActionTypes.Signup:
+    case auth.LOGIN_SUCCESS: {
       return {
         ...state,
-        error: null,
-        pending: true,
-      }
-    case ActionTypes.LoginSuccess:
-      return {
-        ...state,
+        loggedIn: true,
         user: action.payload.user,
-        error: null,
-        pending: false
-      }
-    case ActionTypes.LoginFailure: {
-      return {
-        ...state,
-        error: action.payload,
-        pending: false,
       }
     }
-    case ActionTypes.Logout:
-      return {
-        ...state,
-        user: null
-      }
-    default:
+
+    case auth.LOGOUT: {
+      return initialState
+    }
+
+    default: {
       return state
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 @Component({
@@ -24,23 +24,27 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
             </mat-error>
           </mat-form-field>
           <p *ngIf="errorMessage" style="color: red">{{errorMessage}}</p>
-          <ng-content select="button"></ng-content>
+          <button mat-raised-button color="primary" [disabled]="pending || form.touched && form.invalid">
+            <ng-content select="span"></ng-content>
+          </button>
         </form>
       </mat-card-content>
       <ng-content select="p"></ng-content>
     </mat-card>
   `
 })
-export class AuthFormComponent {
+export class AuthFormComponent implements OnInit {
   form: FormGroup
 
   @Input() pending: boolean
   @Input() errorMessage: string | null
 
-  @Output() success: EventEmitter<any> = new EventEmitter()
+  @Output() submitted: EventEmitter<any> = new EventEmitter()
 
-  constructor(fb: FormBuilder) {
-    this.form = fb.group({
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit() {
+    this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     })
@@ -52,7 +56,7 @@ export class AuthFormComponent {
 
   onSubmit() {
     if (this.form.valid) {
-      this.success.emit(this.form.value)
+      this.submitted.emit(this.form.value)
     }
   }
 }

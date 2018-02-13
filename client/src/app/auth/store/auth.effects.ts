@@ -4,47 +4,41 @@ import { Effect, Actions, ofType } from '@ngrx/effects'
 import { of } from 'rxjs/observable/of'
 import { tap, map, exhaustMap, catchError } from 'rxjs/operators'
 import * as decode from 'jwt-decode'
-
 import { AuthService } from '../auth.service'
-import { Login, LoginSuccess, LoginFailure, ActionTypes, Signup, } from './auth.actions'
-import { User as UserInterface } from '../interfaces'
-
-export const TOKEN = 'token'
-
-export class User implements UserInterface {
-  email: string
-
-  constructor({ email }) {
-    this.email = email
-  }
-}
-
-const loginSuccess = map(({ token }) => new LoginSuccess({ token, user: new User(decode(token)) }))
+import * as Auth from './auth.actions'
+import { User } from '../user.model'
+import { TOKEN } from '../constatnts'
 
 @Injectable()
 export class AuthEffects {
   @Effect()
   login$ = this.actions$.pipe(
-    ofType(ActionTypes.Login),
-    exhaustMap((action: Login) => this.authService.login(action.payload).pipe(
-      loginSuccess,
-      catchError(error => of(new LoginFailure('Invalid username or password')))
-    ))
+    ofType(Auth.LOGIN),
+    exhaustMap((action: Auth.Login) =>
+      this.authService
+        .login(action.payload)
+        .pipe(
+          map(({ token }) => new Auth.LoginSuccess({ token, user: new User(decode(token)) })),
+          catchError(error => of(new Auth.LoginFailure('Invalid username or password')))
+        ))
   )
 
   @Effect()
   signup$ = this.actions$.pipe(
-    ofType(ActionTypes.Signup),
-    exhaustMap((action: Signup) => this.authService.signup(action.payload).pipe(
-      loginSuccess,
-      catchError(error => of(new LoginFailure(error.error.message)))
-    ))
+    ofType(Auth.SIGNUP),
+    exhaustMap((action: Auth.Signup) =>
+      this.authService
+        .signup(action.payload)
+        .pipe(
+          map(({ token }) => new Auth.LoginSuccess({ token, user: new User(decode(token)) })),
+          catchError(error => of(new Auth.LoginFailure(error.error.message)))
+        ))
   )
 
   @Effect({ dispatch: false })
   loginSuccess$ = this.actions$.pipe(
-    ofType(ActionTypes.LoginSuccess),
-    tap((action: LoginSuccess) => {
+    ofType(Auth.LOGIN_SUCCESS),
+    tap((action: Auth.LoginSuccess) => {
       localStorage.setItem(TOKEN, action.payload.token)
       this.router.navigate(['/'])
     })
@@ -52,7 +46,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   loginRedirect$ = this.actions$.pipe(
-    ofType(ActionTypes.Logout),
+    ofType(Auth.LOGOUT, Auth.LOGIN_REDIRECT),
     tap(() => {
       localStorage.removeItem(TOKEN)
       this.router.navigate(['auth/login'])

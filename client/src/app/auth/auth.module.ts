@@ -4,15 +4,16 @@ import { RouterModule, Routes } from '@angular/router'
 import { ReactiveFormsModule } from '@angular/forms'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
-
 import { AngularMaterialModule } from '../angular-material.module'
 import { AuthComponent } from './components/auth.component'
 import { LoginComponent } from './components/login.component'
 import { SignupComponent } from './components/signup.component'
 import { AuthFormComponent } from './components/auth-form.component'
 import { AuthService } from './auth.service'
-import { AuthReducer } from './store/auth.reducer'
+import * as fromAuth from './store/auth.reducer'
+import * as fromAuthView from './store/auth-view.reducer'
 import { AuthEffects } from './store/auth.effects'
+import { AuthGuard } from './auth.guard'
 
 const routes: Routes = [
   { path: 'auth', component: AuthComponent, children: [
@@ -26,7 +27,10 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('auth', AuthReducer),
+    StoreModule.forFeature('auth', {
+      status: fromAuth.reducer,
+      view: fromAuthView.reducer
+    }),
     EffectsModule.forFeature([AuthEffects]),
     AngularMaterialModule
   ],
@@ -38,7 +42,8 @@ const routes: Routes = [
     AuthFormComponent
   ],
   providers: [
-    AuthService
+    AuthService,
+    AuthGuard
   ],
 })
 export class AuthModule { }

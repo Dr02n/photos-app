@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
-
-import { User } from './auth/interfaces'
+import { User } from './auth/user.model'
 
 @Component({
   selector: 'app-header',

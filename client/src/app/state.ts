@@ -1,5 +1,9 @@
-import { State as AuthState } from './auth/store/auth.reducer'
+import * as fromAuth from './auth/store/auth.reducer'
+import * as fromAuthView from './auth/store/auth-view.reducer'
 
 export interface AppState {
-  auth: AuthState
+  auth: {
+    state: fromAuth.State,
+    view: fromAuthView.State
+  }
 }

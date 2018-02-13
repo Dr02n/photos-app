@@ -3,9 +3,9 @@ import { Store, select } from '@ngrx/store'
 import { Observable } from 'rxjs/Observable'
 import { Router, NavigationEnd } from '@angular/router'
 import { AppState } from './state'
-import { User } from './auth/interfaces'
 import { Logout } from './auth/store/auth.actions'
 import { filter, map } from 'rxjs/operators'
+import { User } from './auth/user.model'
 
 @Component({
   selector: 'app-root',
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<AppState>, private router: Router) { }
 
   ngOnInit() {
-    this.user$ = this.store.pipe(select('auth'), select('user'))
+    this.user$ = this.store.pipe(select('auth'), select('status'), select('user'))
 
     this.url$ = this.router.events.pipe(
       filter(ev => ev instanceof NavigationEnd),
