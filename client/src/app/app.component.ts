@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<AppState>, private router: Router) { }
 
   ngOnInit() {
-    this.user$ = this.store.pipe(select('auth'), select('status'), select('user'))
+    this.user$ = this.store.pipe(select(state => state.auth.status.user))
 
     this.url$ = this.router.events.pipe(
       filter(ev => ev instanceof NavigationEnd),

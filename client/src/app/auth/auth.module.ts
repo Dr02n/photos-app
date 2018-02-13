@@ -22,15 +22,22 @@ const routes: Routes = [
   ]}
 ]
 
+export interface AuthState {
+  status: fromAuth.State,
+  view: fromAuthView.State
+}
+
+const reducers = {
+  status: fromAuth.reducer,
+  view: fromAuthView.reducer
+}
+
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('auth', {
-      status: fromAuth.reducer,
-      view: fromAuthView.reducer
-    }),
+    StoreModule.forFeature('auth', reducers),
     EffectsModule.forFeature([AuthEffects]),
     AngularMaterialModule
   ],
