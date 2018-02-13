@@ -11,7 +11,7 @@ import {
 } from '@angular/material'
 
 
-const modules = [
+const MODULES = [
   MatButtonModule,
   MatCheckboxModule,
   MatIconModule,
@@ -23,7 +23,7 @@ const modules = [
 ]
 
 @NgModule({
-  imports: modules,
-  exports: modules,
+  imports: MODULES,
+  exports: MODULES,
 })
 export class AngularMaterialModule { }

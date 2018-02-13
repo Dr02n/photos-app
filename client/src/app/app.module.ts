@@ -7,13 +7,14 @@ import { HttpClientModule } from '@angular/common/http'
 import { StoreModule, ActionReducer } from '@ngrx/store'
 import { storeLogger } from 'ngrx-store-logger'
 import { EffectsModule } from '@ngrx/effects'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { environment } from '../environments/environment'
 import { AngularMaterialModule } from './angular-material.module'
 import { AuthModule } from './auth/auth.module'
+import { AuthGuard } from './auth/auth.guard'
 import { AppComponent } from './app.component'
 import { AppHeaderComponent } from './app-header.component'
 import { HomeComponent } from './home.component'
-import { AuthGuard } from './auth/auth.guard'
 
 export function logger(reducer: ActionReducer<any>): any {
   return storeLogger()(reducer)
@@ -38,9 +39,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     AngularMaterialModule,
-    AuthModule,
     StoreModule.forRoot({}, { metaReducers }),
-    EffectsModule.forRoot([])
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 25 }) : [],
+    EffectsModule.forRoot([]),
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

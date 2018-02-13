@@ -27,7 +27,11 @@ export function reducer(state = initialState, action: auth.Actions): State {
     }
 
     case auth.LOGOUT: {
-      return initialState
+      return {
+        ...state,
+        loggedIn: false,
+        user: null
+      }
     }
 
     default: {
