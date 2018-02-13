@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 @Component({
   selector: 'home-page',
   template: `
-    <h1>Home Page</h1>
+    <h1>Home Page 123</h1>
   `
 })
 

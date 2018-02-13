@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators/map'
       <app-header
         [user]="authService.user"
         [url]="url$ | async"
-        (logout)="authService.logout()"
+        (logout)="logout()"
       ></app-header>
       <router-outlet></router-outlet>
     </div>
@@ -28,5 +28,9 @@ export class AppComponent implements OnInit {
       filter(ev => ev instanceof NavigationEnd),
       map((ev: NavigationEnd) => ev.url)
     )
+  }
+
+  logout() {
+    this.authService.logout()
   }
 }

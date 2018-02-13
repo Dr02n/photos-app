@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { tap } from 'rxjs/operators/tap'
-import { pipe } from 'rxjs/util/pipe'
 import * as decode from 'jwt-decode'
 import { catchError } from 'rxjs/operators/catchError'
 import { of } from 'rxjs/observable/of'
