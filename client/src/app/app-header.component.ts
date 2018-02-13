@@ -7,7 +7,7 @@ import { User } from './auth/auth.service'
     <header>
       <mat-toolbar color="primary">
         <mat-toolbar-row>
-          <a routerLink="/" mat-button>My App {{ url$ | async }}</a>
+          <a routerLink="/" mat-button>My Photos App {{ url$ | async }}</a>
           <div class="spacer"></div>
 
           <a routerLink="/" mat-button *ngIf="user">{{ user.email }}</a>

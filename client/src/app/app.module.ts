@@ -6,10 +6,12 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { AngularMaterialModule } from './angular-material.module'
 import { AuthModule } from './auth/auth.module'
+import { AuthGuard } from './auth/auth.guard'
 import { AppComponent } from './app.component'
 import { AppHeaderComponent } from './app-header.component'
 import { HomeComponent } from './home.component'
-import { AuthGuard } from './auth/auth.guard'
+import { UserComponent } from './user.component'
+import { AlbumsComponent } from './albums.component'
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] }
@@ -19,7 +21,9 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     AppHeaderComponent,
-    HomeComponent
+    HomeComponent,
+    UserComponent,
+    AlbumsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,42 @@
+.user-banner {
+  height: 220px;
+  background-image: url(https://yt3.ggpht.com/-tmGEWA-9a6yTnPzPOJB3xmkT0_TWAmqI-z21FczbeUvIHnQ6rp_9LyTA0vj7KR2_6qTOxSp=w2120-fcrop64=1,00000000ffffffff-nd-c0xffffffff-rj-k-no);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.user-header-wrap {
+  margin-bottom: 24px;
+  background: #fafafa;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  height: 144px;
+  box-sizing: border-box;
+}
+
+.user-header__avatar {
+  float: 0;
+  margin-right: 24px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  overflow: hidden;
+
+  img {
+    display: block;
+  }
+}
+
+.user-header__text {
+  h1 {
+    margin-bottom: 8px;
+  }
+
+  p {
+    max-width: 400px;
+    margin-bottom: 0;
+  }
+}

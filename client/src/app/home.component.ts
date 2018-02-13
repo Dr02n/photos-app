@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'home-page',
+  selector: 'app-home',
   template: `
-    <h1>Home Page 123</h1>
+    <app-user></app-user>
+    <div class="container">
+      <div class="d-flex justify-between align-start">
+        <h2>My albums</h2>
+        <button mat-button (click)="addAlbum()">Add New +</button>
+      </div>
+      <app-albums></app-albums>
+    </div>
   `
 })
 
@@ -11,4 +18,8 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() { }
+
+  addAlbum() {
+    console.log('add album')
+  }
 }
