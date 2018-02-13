@@ -20,6 +20,8 @@ export function logger(reducer: ActionReducer<any>): any {
 
 export const metaReducers = environment.production ? [] : [logger]
 
+const routes: Routes = []
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +31,7 @@ export const metaReducers = environment.production ? [] : [logger]
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot([]),
+    RouterModule.forRoot(routes),
     HttpClientModule,
     AngularMaterialModule,
     AuthModule,

@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 
-import { Credentials } from './interfaces'
+interface Credentials {
+  email: string
+  password: string
+}
 
 interface Response {
   token: string

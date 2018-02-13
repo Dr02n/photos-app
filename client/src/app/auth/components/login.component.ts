@@ -1,7 +1,5 @@
 import { Component } from '@angular/core'
 import { Store, select } from '@ngrx/store'
-import { Observable } from 'rxjs/Observable'
-
 import { AppState } from '../../state'
 import { Login } from '../store/auth.actions'
 
