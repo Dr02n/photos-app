@@ -2,37 +2,28 @@ import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { AngularMaterialModule } from './angular-material.module'
 import { AuthModule } from './auth/auth.module'
-import { AuthGuard } from './auth/auth.guard'
+import { CoreModule } from './core/core.module'
 import { AppComponent } from './app.component'
 import { AppHeaderComponent } from './app-header.component'
-import { HomeComponent } from './home.component'
-import { UserComponent } from './user.component'
-import { AlbumsComponent } from './albums.component'
 
-const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] }
-]
+const routes: Routes = []
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppHeaderComponent,
-    HomeComponent,
-    UserComponent,
-    AlbumsComponent
+    AppHeaderComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
     AngularMaterialModule,
     AuthModule,
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]

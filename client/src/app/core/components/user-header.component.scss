@@ -1,4 +1,4 @@
-.user-banner {
+.banner {
   height: 220px;
   background-image: url(https://yt3.ggpht.com/-tmGEWA-9a6yTnPzPOJB3xmkT0_TWAmqI-z21FczbeUvIHnQ6rp_9LyTA0vj7KR2_6qTOxSp=w2120-fcrop64=1,00000000ffffffff-nd-c0xffffffff-rj-k-no);
   background-position: center;
@@ -6,19 +6,19 @@
   background-repeat: no-repeat;
 }
 
-.user-header-wrap {
+.header {
   margin-bottom: 24px;
-  background: #fafafa;
+  background: #ededed;
 }
 
-.user-header {
+.header-inner {
   display: flex;
   align-items: center;
   height: 144px;
   box-sizing: border-box;
 }
 
-.user-header__avatar {
+.avatar {
   float: 0;
   margin-right: 24px;
   border-radius: 50%;
@@ -27,10 +27,12 @@
 
   img {
     display: block;
+    width: 80px;
+    height: 80px;
   }
 }
 
-.user-header__text {
+.text {
   h1 {
     margin-bottom: 8px;
   }

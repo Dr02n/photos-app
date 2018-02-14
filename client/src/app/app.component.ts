@@ -8,14 +8,12 @@ import { map } from 'rxjs/operators/map'
 @Component({
   selector: 'app-root',
   template: `
-    <div class="mat-typography">
-      <app-header
-        [user]="authService.user"
-        [url]="url$ | async"
-        (logout)="logout()"
-      ></app-header>
-      <router-outlet></router-outlet>
-    </div>
+    <app-header
+      [user]="authService.user"
+      [url]="url$ | async"
+      (logout)="logout()"
+    ></app-header>
+    <router-outlet></router-outlet>
   `,
 })
 export class AppComponent implements OnInit {

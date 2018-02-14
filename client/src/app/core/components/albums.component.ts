@@ -3,11 +3,15 @@ import { Component, OnInit, Input } from '@angular/core'
 @Component({
   selector: 'app-albums',
   template: `
-    <div class="albums-container">
-      <mat-card *ngFor="let album of albums" class="album-card">
+    <div class="cards-container">
+      <mat-card
+        *ngFor="let album of albums"
+        [routerLink]="['/albums', album._id]"
+        class="card"
+      >
         <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg">
         <mat-card-content>
-          <h3>Album {{ album }}</h3>
+          <h3>{{ album.name }}</h3>
         </mat-card-content>
       </mat-card>
     </div>
@@ -16,7 +20,7 @@ import { Component, OnInit, Input } from '@angular/core'
 })
 
 export class AlbumsComponent implements OnInit {
-  @Input() albums: any[] = [1, 2, 3, 4, 5]
+  @Input() albums: any[]
 
   constructor() { }
 

@@ -7,7 +7,7 @@ import { of } from 'rxjs/observable/of'
 import { map } from 'rxjs/operators/map'
 import { Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
-import { LocalStorageItem } from '../local-storage-item'
+import { LocalStorageItem } from './local-storage-item'
 
 export class User {
   email: string
@@ -22,10 +22,11 @@ export class AuthService {
 
   user: User | null = null
   pending = false
+  redirectUrl: string
+  token = new LocalStorageItem('token')
 
   private signupUrl = '/api/auth/signup'
   private loginUrl = '/api/auth/login'
-  private token = new LocalStorageItem('token')
 
   constructor(private http: HttpClient, private router: Router) {
     if (this.token.value) { this.user = new User(decode(this.token.value)) }
@@ -55,7 +56,8 @@ export class AuthService {
       tap(({ token }) => this.token.value = token),
       map(({ token }) => ({ user: new User(decode(token)) })),
       tap(({ user }) => this.user = user),
-      tap(() => this.router.navigate(['/'])),
+      tap(() => this.router.navigate([this.redirectUrl || '/'])),
+      tap(() => this.redirectUrl = null),
       catchError(this.handleError),
       tap(() => this.pending = false)
     )
