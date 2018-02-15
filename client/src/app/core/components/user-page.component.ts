@@ -11,7 +11,9 @@ import { AlbumFormComponent } from './album-form.component'
   selector: 'app-user-page',
   template: `
     <div *ngIf="user && albums; else loader">
-      <app-user-header [user]="user"></app-user-header>
+      <app-user-header [user]="user">
+        <button mat-button>Edit</button>
+      </app-user-header>
       <div class="container">
         <div class="d-flex justify-between align-start">
           <h2>My albums</h2>

@@ -7,11 +7,15 @@ import { Component, OnInit, Input } from '@angular/core'
       <div class="container">
         <div class="header-inner">
           <div class="avatar">
-            <img src="http://placehold.it/80/80" >
+            <img [src]="placeholderImg" >
           </div>
           <div class="text">
-            <h1>User component</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            <h1>User Name</h1>
+            <h3 class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h3>
+            <p>2 albums &middot; 10 photos</p>
+          </div>
+          <div class="actions">
+            <ng-content></ng-content>
           </div>
         </div>
       </div>
@@ -22,6 +26,8 @@ import { Component, OnInit, Input } from '@angular/core'
 
 export class UserHeaderComponent implements OnInit {
   @Input() user: any
+
+  placeholderImg = 'http://placehold.it/120/e6e6e6?text=No%20Image'
 
   constructor() { }
 

@@ -9,7 +9,8 @@ import {
   MatDialogModule,
   MatProgressSpinnerModule,
   MatProgressBarModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatMenuModule
 } from '@angular/material'
 
 const MODULES = [
@@ -22,7 +23,8 @@ const MODULES = [
   MatDialogModule,
   MatProgressSpinnerModule,
   MatProgressBarModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatMenuModule
 ]
 
 @NgModule({
