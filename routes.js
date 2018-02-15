@@ -48,6 +48,7 @@ albums
 photos
   .use(authenticate('jwt'))
   .param('photo', findById('Photo'))
+  .get('/', photosController.get)
   .patch('/:photo', photosController.patch)
   .delete('/:photo', photosController.delete)
 

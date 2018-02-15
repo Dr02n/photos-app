@@ -9,7 +9,9 @@ import { Photo } from '../photo.model'
         <img mat-card-image [src]="photo.path" class="img">
         <mat-card-content>
           <h4 class="text-truncate">{{ photo.name }}</h4>
-          <p class="mat-caption">{{ photo.size | filesize }} &middot; {{ photo.mimetype | mimetype }}</p>
+          <p class="mat-caption">
+            {{ photo.createdAt | date }} &middot; {{ photo.size | filesize }} &middot; {{ photo.mimetype | mimetype }}
+          </p>
         </mat-card-content>
         <mat-card-actions>
           <button mat-button (click)="edit.emit(photo)">Edit</button>

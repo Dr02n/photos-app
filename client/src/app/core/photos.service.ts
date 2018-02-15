@@ -8,12 +8,15 @@ import { Photo } from './photo.model'
 @Injectable()
 export class PhotosService extends BaseService {
 
+  private photosUrl = '/api/photos'
+
   constructor(private http: HttpClient, authService: AuthService) {
     super(authService.headers)
   }
 
-  getLatestPhotos() {
-    // TBD
+  getPhotos() {
+    return this.http.get<Photo[]>(this.photosUrl, this.httpOptions)
+      .pipe(catchError(this.handleError))
   }
 
   getAlbumPhotos(albumId: string) {
@@ -26,12 +29,12 @@ export class PhotosService extends BaseService {
   }
 
   editPhoto(id: string, data: { name: string, description: string }) {
-    return this.http.patch<Photo>(`/api/photos/${id}`, data, this.httpOptions)
+    return this.http.patch<Photo>(`${this.photosUrl}/${id}`, data, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 
   removePhoto(id: string) {
-    return this.http.delete<any>(`/api/photos/${id}`, this.httpOptions)
+    return this.http.delete<any>(`${this.photosUrl}/${id}`, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 }

@@ -27,8 +27,7 @@ exports.delete = async (ctx) => {
 }
 
 exports.getByAuthor = async (ctx) => {
-  const albums = await Album.find({ author: ctx.user.id })
-    .populate('cover')
+  const albums = await Album.find({ author: ctx.user.id }).populate('cover')
 
   await Promise.all(albums.map(album => album.populatePhotosCount()))
 
@@ -36,8 +35,7 @@ exports.getByAuthor = async (ctx) => {
 }
 
 exports.getMyAlbums = async (ctx) => {
-  const albums = await Album.find({ author: ctx.state.user.id })
-    .populate('cover')
+  const albums = await Album.find({ author: ctx.state.user.id }).populate('cover')
 
   await Promise.all(albums.map(album => album.populatePhotosCount()))
 
