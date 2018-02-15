@@ -22,7 +22,7 @@ exports.patch = async(ctx) => {
 exports.delete = async(ctx) => {
   await ctx.album.remove()
   // TODO remove photos
-  ctx.body = 'OK'
+  ctx.body = { status: 'OK' }
 }
 
 exports.getByAuthor = async(ctx) => {

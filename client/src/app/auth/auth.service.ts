@@ -23,8 +23,8 @@ export class AuthService {
   user: User | null = null
   pending = false
   redirectUrl: string
-  token = new LocalStorageItem('token')
 
+  private token = new LocalStorageItem('token')
   private signupUrl = '/api/auth/signup'
   private loginUrl = '/api/auth/login'
 
@@ -34,6 +34,12 @@ export class AuthService {
 
   get isLoggedIn() {
     return !!this.user
+  }
+
+  get headers() {
+    return {
+      'Authorization': this.token.value
+    }
   }
 
   signup(credentials) {

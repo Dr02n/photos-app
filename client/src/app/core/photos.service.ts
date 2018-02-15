@@ -9,7 +9,7 @@ import { Photo } from './photo.model'
 export class PhotosService extends BaseService {
 
   constructor(private http: HttpClient, authService: AuthService) {
-    super(authService.token.value)
+    super(authService.headers)
   }
 
   getLatestPhotos() {
@@ -21,7 +21,17 @@ export class PhotosService extends BaseService {
       .pipe(catchError(this.handleError))
   }
 
-  getPhotosUrl(albumId: string) {
+  addPhotosUrl(albumId: string) {
     return `/api/albums/${albumId}/photos`
+  }
+
+  editPhoto(id: string, data: { name: string, description: string }) {
+    return this.http.patch<Photo>(`/api/photos/${id}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError))
+  }
+
+  removePhoto(id: string) {
+    return this.http.delete<any>(`/api/photos/${id}`, this.httpOptions)
+      .pipe(catchError(this.handleError))
   }
 }

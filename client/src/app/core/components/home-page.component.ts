@@ -16,7 +16,7 @@ import { Component, OnInit } from '@angular/core'
 })
 
 export class HomePageComponent implements OnInit {
-  photos = [1, 2, 3, 4, 5, 6]
+  photos = []
 
   constructor() { }
 

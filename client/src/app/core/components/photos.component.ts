@@ -1,24 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Photo } from '../photo.model'
 
 @Component({
   selector: 'app-photos',
   template: `
     <div class="cards-container">
-      <mat-card
-        *ngFor="let photo of photos"
-        class="card"
-      >
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg">
+      <mat-card *ngFor="let photo of photos" class="card">
+        <img mat-card-image [src]="photo.path" class="img">
         <mat-card-content>
-          <h3>Photo {{ photo }}</h3>
+          <h4 class="text-truncate">{{ photo.name }}</h4>
+          <p class="mat-caption">{{ photo.size | filesize }} &middot; {{ photo.mimetype | mimetype }}</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-icon-button color="primary">
-            <mat-icon>favorite</mat-icon>
-          </button> 123
-          <button mat-icon-button color="primary">
-            <mat-icon>comment</mat-icon>
-          </button> 123
+          <button mat-button (click)="edit.emit(photo)">Edit</button>
+          <button mat-button color="warn" (click)="remove.emit(photo)">Remove</button>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -27,7 +22,10 @@ import { Component, OnInit, Input } from '@angular/core'
 })
 
 export class PhotosComponent implements OnInit {
-  @Input() photos: any[]
+  @Input() photos: Photo[]
+
+  @Output() remove = new EventEmitter<Photo>()
+  @Output() edit = new EventEmitter<Photo>()
 
   constructor() { }
 

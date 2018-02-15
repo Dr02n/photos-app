@@ -8,13 +8,11 @@ import { User } from './user.model'
 @Injectable()
 export class UsersService extends BaseService {
   constructor(private http: HttpClient, authService: AuthService) {
-    super(authService.token.value)
+    super(authService.headers)
   }
 
   getMe() {
     return this.http.get<User>('/api/users/me', this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      )
+      .pipe(catchError(this.handleError))
   }
 }

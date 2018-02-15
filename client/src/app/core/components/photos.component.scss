@@ -8,8 +8,14 @@
   box-sizing: border-box;
   margin-bottom: 1%;
   margin-right: 1%;
+  overflow: hidden;
 
-  &:nth-child(4) {
+  &:nth-child(4n) {
     margin-right: 0;
   }
+}
+
+.img {
+  height: 250px;
+  object-fit: cover;
 }

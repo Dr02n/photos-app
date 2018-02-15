@@ -1,25 +1,33 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { MatDialog } from '@angular/material'
-import { AlbumsService } from '../albums.service'
 import { Album } from '../album.model'
 import { Photo } from '../photo.model'
+import { AlbumsService } from '../albums.service'
 import { PhotosService } from '../photos.service'
+import { AuthService } from '../../auth/auth.service'
 import { AlbumFormComponent } from './album-form.component'
 import { AddPhotosComponent } from './add-photos.component'
+import { ConfirmDialogComponent } from './confirm-dialog.component'
 
 @Component({
   selector: 'app-album-page',
   template: `
-    <app-album-header [album]="album">
+    <app-album-header [album]="album" [photosCount]="photos?.length">
       <button mat-button (click)="editAlbum()">Edit</button>
+      <button mat-button color="warn" (click)="removeAlbum()">Remove</button>
     </app-album-header>
     <div class="container">
       <div class="d-flex justify-between align-start">
         <h2>Photos</h2>
         <button mat-button (click)="addPhotos()">Add Photos +</button>
       </div>
-      <app-photos [photos]="photos" *ngIf="photos; else loader"></app-photos>
+      <app-photos
+        *ngIf="photos; else loader"
+        [photos]="photos"
+        (remove)="removePhoto($event)"
+        (edit)="editPhoto($event)"
+      ></app-photos>
       <ng-template #loader>
         <mat-progress-spinner mode="indeterminate" class="loader"></mat-progress-spinner>
       </ng-template>
@@ -33,20 +41,22 @@ export class AlbumPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private matDialog: MatDialog,
     private albumsService: AlbumsService,
-    private photosService: PhotosService
+    private photosService: PhotosService,
+    private authService: AuthService
   ) { }
 
+  get id() { return this.route.snapshot.paramMap.get('id') }
+
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id')
-    this.albumsService.getAlbum(id).subscribe(album => this.album = album)
-    this.photosService.getAlbumPhotos(id).subscribe(photos => this.photos = photos)
+    this.albumsService.getAlbum(this.id).subscribe(album => this.album = album)
+    this.photosService.getAlbumPhotos(this.id).subscribe(photos => this.photos = photos)
   }
 
   editAlbum() {
     const { name, description } = this.album
-    const id = this.route.snapshot.paramMap.get('id')
 
     this.matDialog
       .open(AlbumFormComponent, {
@@ -58,19 +68,56 @@ export class AlbumPageComponent implements OnInit {
       })
       .afterClosed().subscribe(result => {
         if (!result) { return }
-        this.albumsService.updateAlbum(id, result).subscribe(album => this.album = album)
+        this.albumsService.updateAlbum(this.id, result).subscribe(album => this.album = album)
+      })
+  }
+
+  removeAlbum() {
+    this.matDialog
+      .open(ConfirmDialogComponent, {
+        width: '600px',
+        data: {
+          title: 'Remove album'
+        }
+      })
+      .afterClosed().subscribe(result => {
+        if (!result) { return }
+        this.albumsService.removeAlbum(this.id).subscribe(() => this.router.navigate(['users/me']))
       })
   }
 
   addPhotos() {
-    const id = this.route.snapshot.paramMap.get('id')
-
     this.matDialog
       .open(AddPhotosComponent, {
         width: '600px',
         data: {
-          url: this.photosService.getPhotosUrl(id)
+          url: this.photosService.addPhotosUrl(this.id),
+          headers: this.authService.headers
         }
       })
+      .componentInstance.photoAdded.subscribe(photo => this.photos.push(photo))
+  }
+
+  editPhoto(photo: Photo) {
+    const { name, description } = photo
+
+    this.matDialog
+      .open(AlbumFormComponent, {
+        width: '600px',
+        data: {
+          title: 'Edit Photo',
+          values: { name, description }
+        }
+      })
+      .afterClosed().subscribe(result => {
+        if (!result) { return }
+        this.photosService.editPhoto(photo._id, result)
+          .subscribe(newPhoto => this.photos = this.photos.map(el => el._id === newPhoto._id ? newPhoto : el))
+      })
+  }
+
+  removePhoto(photo: Photo) {
+    this.photosService.removePhoto(photo._id)
+      .subscribe(() => this.photos = this.photos.filter(({ _id }) => _id !== photo._id))
   }
 }

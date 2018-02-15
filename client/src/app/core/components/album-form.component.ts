@@ -34,20 +34,20 @@ export class AlbumFormComponent implements OnInit {
     fb: FormBuilder
   ) {
     this.form = fb.group({
-      name: [data.values ? data.values.name : '', Validators.required],
-      description: [data.values ? data.values.description : '']
+      name: ['', Validators.required],
+      description: ''
     })
   }
 
   get title() { return this.data.title }
 
-  get name() { return this.form.get('name')}
+  get name() { return this.form.get('name') }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.data.values) { this.form.patchValue(this.data.values) }
+  }
 
   onSubmit() {
-    if (this.form.valid) {
-      this.dialogRef.close(this.form.value)
-    }
+    if (this.form.valid) { this.dialogRef.close(this.form.value) }
   }
 }

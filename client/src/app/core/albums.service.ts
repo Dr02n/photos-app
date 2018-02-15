@@ -14,7 +14,7 @@ interface Data {
 @Injectable()
 export class AlbumsService extends BaseService {
   constructor(private http: HttpClient, authService: AuthService) {
-    super(authService.token.value)
+    super(authService.headers)
   }
 
   getUserAlbums(userId: number): Observable<Album[]> {
@@ -34,6 +34,11 @@ export class AlbumsService extends BaseService {
 
   updateAlbum(id: string, data: Data): Observable<Album> {
     return this.http.patch<Album>(`/api/albums/${id}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError))
+  }
+
+  removeAlbum(id: string) {
+    return this.http.delete<any>(`/api/albums/${id}`, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 }
