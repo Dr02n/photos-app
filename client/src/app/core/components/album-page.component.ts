@@ -13,25 +13,26 @@ import { ConfirmDialogComponent } from './confirm-dialog.component'
 @Component({
   selector: 'app-album-page',
   template: `
-    <app-album-header [album]="album" [photosCount]="photos?.length">
-      <button mat-button (click)="editAlbum()">Edit</button>
-      <button mat-button color="warn" (click)="removeAlbum()">Remove</button>
-    </app-album-header>
-    <div class="container">
-      <div class="d-flex justify-between align-start">
-        <h2>Photos</h2>
-        <button mat-button (click)="addPhotos()">Add Photos +</button>
+    <div *ngIf="album && photos; else loader">
+      <app-album-header [album]="album">
+        <button mat-button (click)="editAlbum()">Edit</button>
+        <button mat-button color="warn" (click)="removeAlbum()">Remove</button>
+      </app-album-header>
+      <div class="container">
+        <div class="d-flex justify-between align-start">
+          <h2>Photos</h2>
+          <button mat-button (click)="addPhotos()">Add Photos +</button>
+        </div>
+        <app-photos
+          [photos]="photos"
+          (remove)="removePhoto($event)"
+          (edit)="editPhoto($event)"
+        ></app-photos>
       </div>
-      <app-photos
-        *ngIf="photos; else loader"
-        [photos]="photos"
-        (remove)="removePhoto($event)"
-        (edit)="editPhoto($event)"
-      ></app-photos>
-      <ng-template #loader>
-        <mat-progress-spinner mode="indeterminate" class="loader"></mat-progress-spinner>
-      </ng-template>
     </div>
+    <ng-template #loader>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
   `,
 })
 

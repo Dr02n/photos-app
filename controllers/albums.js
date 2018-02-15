@@ -1,6 +1,6 @@
 const Album = require('../models/Album')
 
-exports.post = async(ctx) => {
+exports.post = async (ctx) => {
   const { name, description } = ctx.request.body
   ctx.body = await Album.create({
     name,
@@ -9,22 +9,37 @@ exports.post = async(ctx) => {
   })
 }
 
-exports.get = async(ctx) => {
+exports.get = async (ctx) => {
+  await ctx.album.populatePhotosCount()
   ctx.body = ctx.album
 }
 
-exports.patch = async(ctx) => {
+exports.patch = async (ctx) => {
   const { name, description } = ctx.request.body
   Object.assign(ctx.album, { name, description })
   ctx.body = await ctx.album.save()
 }
 
-exports.delete = async(ctx) => {
+exports.delete = async (ctx) => {
   await ctx.album.remove()
   // TODO remove photos
   ctx.body = { status: 'OK' }
 }
 
-exports.getByAuthor = async(ctx) => {
-  ctx.body = await Album.find({ author: ctx.user.id }).populate('author')
+exports.getByAuthor = async (ctx) => {
+  const albums = await Album.find({ author: ctx.user.id })
+    .populate('cover')
+
+  await Promise.all(albums.map(album => album.populatePhotosCount()))
+
+  ctx.body = albums
+}
+
+exports.getMyAlbums = async (ctx) => {
+  const albums = await Album.find({ author: ctx.state.user.id })
+    .populate('cover')
+
+  await Promise.all(albums.map(album => album.populatePhotosCount()))
+
+  ctx.body = albums
 }

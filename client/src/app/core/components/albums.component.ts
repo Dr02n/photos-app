@@ -9,9 +9,10 @@ import { Component, OnInit, Input } from '@angular/core'
         [routerLink]="['/albums', album._id]"
         class="card"
       >
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg">
+        <img mat-card-image [src]="album.cover?.path || placeholderUrl" class="img">
         <mat-card-content>
-          <h3>{{ album.name }}</h3>
+          <h4 class="text-truncate">{{ album.name }}</h4>
+          <p class="mat-caption">{{ album.photosCount }} photos</p>
         </mat-card-content>
       </mat-card>
     </div>
@@ -21,6 +22,8 @@ import { Component, OnInit, Input } from '@angular/core'
 
 export class AlbumsComponent implements OnInit {
   @Input() albums: any[]
+
+  placeholderUrl = 'http://placehold.it/300/e6e6e6?text=No%20Image'
 
   constructor() { }
 

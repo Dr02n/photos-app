@@ -17,32 +17,48 @@ body {
   flex-grow: 1;
 }
 
-.loader{
-  margin: 0 auto;
+.spinner {
+  margin: 48px auto;
 }
+
+/* Text Utils */
 
 .text-center {
   text-align: center;
 }
 
-.d-flex {
-  display: flex;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.align-start {
-  align-items: flex-start;
+.text-right {
+  text-align: right;
 }
 
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Flexbox utils */
+
+.d-flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: flex-end;
 }

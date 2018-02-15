@@ -32,6 +32,7 @@ users
   .get('/me', usersController.getMe)
   .get('/:user', usersController.get)
   .patch('/:user', usersController.patch)
+  .get('/me/albums', albumsController.getMyAlbums)
   .get('/:user/albums', albumsController.getByAuthor)
 
 albums

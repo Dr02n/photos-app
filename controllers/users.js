@@ -1,4 +1,4 @@
-const User = require('../models/User')
+// const User = require('../models/User')
 
 exports.get = async (ctx) => {
   ctx.body = ctx.user

@@ -13,32 +13,35 @@ interface Data {
 
 @Injectable()
 export class AlbumsService extends BaseService {
+
+  private albumsUrl = '/api/albums'
+
   constructor(private http: HttpClient, authService: AuthService) {
     super(authService.headers)
   }
 
-  getUserAlbums(userId: number): Observable<Album[]> {
+  getUserAlbums(userId: string): Observable<Album[]> {
     return this.http.get<Album[]>(`/api/users/${userId}/albums`, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 
   createAlbum(data: Data): Observable<Album> {
-    return this.http.post<Album>('/api/albums', data, this.httpOptions)
+    return this.http.post<Album>(this.albumsUrl, data, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 
   getAlbum(id: string): Observable<Album> {
-    return this.http.get<Album>(`/api/albums/${id}`, this.httpOptions)
+    return this.http.get<Album>(`${this.albumsUrl}/${id}`, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 
   updateAlbum(id: string, data: Data): Observable<Album> {
-    return this.http.patch<Album>(`/api/albums/${id}`, data, this.httpOptions)
+    return this.http.patch<Album>(`${this.albumsUrl}/${id}`, data, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 
   removeAlbum(id: string) {
-    return this.http.delete<any>(`/api/albums/${id}`, this.httpOptions)
+    return this.http.delete<any>(`${this.albumsUrl}/${id}`, this.httpOptions)
       .pipe(catchError(this.handleError))
   }
 }
