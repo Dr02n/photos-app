@@ -15,6 +15,7 @@ import { AlbumFormComponent } from './components/album-form.component'
 import { PhotosComponent } from './components/photos.component'
 import { AddPhotosComponent } from './components/add-photos.component'
 import { ConfirmDialogComponent } from './components/confirm-dialog.component'
+import { UserFormComponent } from './components/user-form.component'
 import { UsersService } from './users.service'
 import { AlbumsService } from './albums.service'
 import { PhotosService } from './photos.service'
@@ -47,13 +48,15 @@ const routes: Routes = [
     PhotosComponent,
     AddPhotosComponent,
     ConfirmDialogComponent,
+    UserFormComponent,
     FilesizePipe,
     MimetypePipe
   ],
   entryComponents: [
     AlbumFormComponent,
     AddPhotosComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    UserFormComponent
   ],
   providers: [
     UsersService,
