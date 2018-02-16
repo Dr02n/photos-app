@@ -6,9 +6,9 @@ import { Photo } from '../photo.model'
 import { AlbumsService } from '../albums.service'
 import { PhotosService } from '../photos.service'
 import { AuthService } from '../../auth/auth.service'
-import { AlbumFormComponent } from './album-form.component'
-import { AddPhotosComponent } from './add-photos.component'
-import { ConfirmDialogComponent } from './confirm-dialog.component'
+import { AlbumFormComponent } from '../components/album-form.component'
+import { AddPhotosComponent } from '../components/add-photos.component'
+import { ConfirmDialogComponent } from '../components/confirm-dialog.component'
 
 @Component({
   selector: 'app-album-page',

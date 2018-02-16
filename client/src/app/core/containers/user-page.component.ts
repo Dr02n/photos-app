@@ -5,7 +5,7 @@ import { UsersService } from '../users.service'
 import { AlbumsService } from '../albums.service'
 import { User } from '../user.model'
 import { Album } from '../album.model'
-import { AlbumFormComponent } from './album-form.component'
+import { AlbumFormComponent } from '../components/album-form.component'
 
 @Component({
   selector: 'app-user-page',
