@@ -12,8 +12,6 @@ export class BaseService {
 
   protected handleError(error: HttpErrorResponse) {
     console.error('Error:', error.error)
-
-    // return an ErrorObservable with a user-facing error message
     return new ErrorObservable('Something bad happened; please try again later.')
   }
 }
