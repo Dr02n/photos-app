@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { Router } from '@angular/router'
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable'
+import { catchError } from 'rxjs/operators/catchError'
+import { Observable } from 'rxjs/Observable'
 import { tap } from 'rxjs/operators/tap'
 import * as decode from 'jwt-decode'
-import { catchError } from 'rxjs/operators/catchError'
-import { Router } from '@angular/router'
-import { Observable } from 'rxjs/Observable'
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable'
-import { LocalStorageItem } from './local-storage-item'
 
 export class User {
   email: string
@@ -19,16 +18,16 @@ export class User {
 @Injectable()
 export class AuthService {
 
-  user: User | null = null
+  user: User
   pending = false
   redirectUrl: string
 
-  private token = new LocalStorageItem('token')
   private signupUrl = '/api/auth/signup'
   private loginUrl = '/api/auth/login'
+  private tokenKey = 'token'
 
   constructor(private http: HttpClient, private router: Router) {
-    if (this.token.value) { this.user = this.getUserFromToken(this.token.value) }
+    if (this.token) { this.user = this.getUserFromToken(this.token) }
   }
 
   get isLoggedIn() {
@@ -37,7 +36,19 @@ export class AuthService {
 
   get headers() {
     return {
-      'Authorization': this.token.value
+      'Authorization': this.token
+    }
+  }
+
+  get token() {
+    return localStorage.getItem(this.tokenKey)
+  }
+
+  set token(value) {
+    if (value) {
+      localStorage.setItem(this.tokenKey, value)
+    } else {
+      localStorage.removeItem(this.tokenKey)
     }
   }
 
@@ -51,7 +62,7 @@ export class AuthService {
 
   logout() {
     this.user = null
-    this.token.value = null
+    this.token = null
     this.router.navigate(['auth/login'])
   }
 
@@ -63,11 +74,11 @@ export class AuthService {
         ({ token }) => {
           this.pending = false
           this.user = this.getUserFromToken(token)
-          this.token.value = token
+          this.token = token
           this.router.navigate([this.redirectUrl || '/'])
           if (this.redirectUrl) { this.redirectUrl = null }
         },
-        () => this.pending = false
+        (err) => this.pending = false
       )
     )
   }
