@@ -1,17 +1,13 @@
 import { Component } from '@angular/core'
 import { AuthService } from '../auth.service'
-import { Subject } from 'rxjs/Subject'
-import { switchMap } from 'rxjs/operators/switchMap'
-import { map } from 'rxjs/operators/map'
-import { of } from 'rxjs/observable/of'
-import { concat } from 'rxjs/observable/concat'
 
 @Component({
   selector: 'signup-page',
   template: `
     <auth-form
       (submitted)="signup($event)"
-      [errorMessage]="error$ | async"
+      [errorMessage]="error"
+      [pending]="authService.pending"
     >
       <h1 class="text-center">Create your account</h1>
       <span>Create account</span>
@@ -21,14 +17,16 @@ import { concat } from 'rxjs/observable/concat'
 })
 
 export class SignupComponent {
-  requests = new Subject<any>()
-  error$ = this.requests.pipe(
-    switchMap(data => concat(of(null), this.authService.signup(data).pipe(map(result => result.error))))
-  )
+  error: string
 
   constructor(private authService: AuthService) { }
 
   signup(formValue) {
-    this.requests.next(formValue)
+    this.error = null
+    this.authService.signup(formValue)
+      .subscribe(
+        () => {},
+        err => this.error = err
+      )
   }
 }

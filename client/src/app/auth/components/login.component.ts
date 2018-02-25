@@ -1,9 +1,4 @@
 import { Component } from '@angular/core'
-import { switchMap } from 'rxjs/operators/switchMap'
-import { concat } from 'rxjs/observable/concat'
-import { Subject } from 'rxjs/Subject'
-import { of } from 'rxjs/observable/of'
-import { map } from 'rxjs/operators/map'
 import { AuthService } from '../auth.service'
 
 @Component({
@@ -11,7 +6,7 @@ import { AuthService } from '../auth.service'
   template: `
     <auth-form
       (submitted)="login($event)"
-      [errorMessage]="error$ | async"
+      [errorMessage]="error"
       [pending]="authService.pending"
     >
       <h1 class="text-center">Log in</h1>
@@ -23,14 +18,16 @@ import { AuthService } from '../auth.service'
 })
 
 export class LoginComponent {
-  requests = new Subject<any>()
-  error$ = this.requests.pipe(
-    switchMap(data => concat(of(null), this.authService.login(data).pipe(map(result => result.error))))
-  )
+  error: string
 
   constructor(private authService: AuthService) { }
 
   login(formValue) {
-    this.requests.next(formValue)
+    this.error = null
+    this.authService.login(formValue)
+      .subscribe(
+        () => {},
+        err => this.error = err
+      )
   }
 }

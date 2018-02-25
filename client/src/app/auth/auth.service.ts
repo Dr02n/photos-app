@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { tap } from 'rxjs/operators/tap'
 import * as decode from 'jwt-decode'
 import { catchError } from 'rxjs/operators/catchError'
-import { of } from 'rxjs/observable/of'
-import { map } from 'rxjs/operators/map'
 import { Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable'
 import { LocalStorageItem } from './local-storage-item'
 
 export class User {
@@ -29,7 +28,7 @@ export class AuthService {
   private loginUrl = '/api/auth/login'
 
   constructor(private http: HttpClient, private router: Router) {
-    if (this.token.value) { this.user = new User(decode(this.token.value)) }
+    if (this.token.value) { this.user = this.getUserFromToken(this.token.value) }
   }
 
   get isLoggedIn() {
@@ -56,22 +55,34 @@ export class AuthService {
     this.router.navigate(['auth/login'])
   }
 
-  private request(url: string, credentials: { email, password }): Observable<{ user?, error?}> {
+  private request(url: string, credentials: { email, password }): Observable<{ user }> {
     this.pending = true
     return this.http.post<{ token }>(url, credentials).pipe(
-      tap(({ token }) => this.token.value = token),
-      map(({ token }) => ({ user: new User(decode(token)) })),
-      tap(({ user }) => this.user = user),
-      tap(() => this.router.navigate([this.redirectUrl || '/'])),
-      tap(() => this.redirectUrl = null),
       catchError(this.handleError),
-      tap(() => this.pending = false)
+      tap(
+        ({ token }) => {
+          this.pending = false
+          this.user = this.getUserFromToken(token)
+          this.token.value = token
+          this.router.navigate([this.redirectUrl || '/'])
+          if (this.redirectUrl) { this.redirectUrl = null }
+        },
+        () => this.pending = false
+      )
     )
   }
 
-  private handleError(err) {
-    const error = err.error.message || (err.status === 401 ? 'Invalid username or password' : null)
-    if (err.status !== 422 && err.status !== 401) { console.error(err) }
-    return of({ error })
+  private handleError(error: HttpErrorResponse) {
+    if (error.status >= 500) { console.error('Error:', error) }
+
+    const message = error.error.message || (error.status === 401
+      ? 'Invalid username or password'
+      : 'Something bad happened; please try again later.'
+    )
+    return new ErrorObservable(message)
+  }
+
+  private getUserFromToken(token) {
+    return new User(decode(token))
   }
 }

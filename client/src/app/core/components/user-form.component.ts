@@ -30,7 +30,7 @@ export class UserFormComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<UserFormComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) data: any,
     fb: FormBuilder
   ) {
     this.form = fb.group({

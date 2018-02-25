@@ -1,3 +1,9 @@
+const fs = require('fs')
+
+if (!fs.existsSync('.env')) {
+    throw new Error('.env file does not exist')
+}
+
 require('dotenv').config()
 const Koa = require('koa')
 const debug = require('debug')('app:http')
