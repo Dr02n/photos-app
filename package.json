@@ -6,7 +6,8 @@
     "start:server": "nodemon app --ignore client/",
     "start:client": "cd client && npm start",
     "start": "run-p start:server start:client",
-    "test": "mocha --timeout 10000"
+    "test": "mocha --timeout 10000",
+    "clear": "node db/drop && rm -rf public/uploads"
   },
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
