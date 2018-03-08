@@ -1,17 +1,14 @@
+// Load .env file first
 const fs = require('fs')
-
 if (!fs.existsSync('.env')) {
-    throw new Error('.env file does not exist')
+  throw new Error('.env file does not exist')
 }
-
 require('dotenv').config()
+
 const Koa = require('koa')
-const debug = require('debug')('app:http')
 const router = require('./routes')
 const mongoose = require('./modules/mongoose')
 require('./modules/passport')
-
-debug('booting app')
 
 const app = new Koa()
 
@@ -31,7 +28,7 @@ if (!process.env.PORT) process.env.PORT = 3000
 
 // Start server
 const server = app.listen(process.env.PORT)
-server.on('listening', () => debug('listening on ' + server.address().port))
+server.on('listening', () => console.log('listening on http://localhost:' + server.address().port)) // eslint-disable-line
 server.on('close', () => mongoose.disconnect())
 
 module.exports = server
