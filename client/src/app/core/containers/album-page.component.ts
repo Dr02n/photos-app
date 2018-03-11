@@ -6,9 +6,10 @@ import { switchMap, filter, tap } from 'rxjs/operators'
 
 import { Album } from '../album.model'
 import { Photo } from '../photo.model'
+import { AuthService } from '../../auth/auth.service'
 import { AlbumsService } from '../albums.service'
 import { PhotosService } from '../photos.service'
-import { AuthService } from '../../auth/auth.service'
+import { DialogsService } from '../dialogs.service'
 import { AlbumFormComponent } from '../components/album-form.component'
 import { AddPhotosComponent } from '../components/add-photos.component'
 import { ConfirmDialogComponent } from '../components/confirm-dialog.component'
@@ -52,7 +53,8 @@ export class AlbumPageComponent implements OnInit, OnDestroy {
     private matDialog: MatDialog,
     private albumsService: AlbumsService,
     private photosService: PhotosService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialogsService: DialogsService
   ) {
     albumsService.currentAlbum.subscribe(album => this.album = album)
     this.photos = albumsService.currentAlbumPhotos
@@ -70,17 +72,7 @@ export class AlbumPageComponent implements OnInit, OnDestroy {
   }
 
   editAlbum() {
-    const { name, description } = this.album
-    const config = {
-      width: '600px',
-      data: {
-        title: 'Edit Album',
-        values: { name, description }
-      }
-    }
-
-    this.matDialog
-      .open(AlbumFormComponent, config)
+    this.dialogsService.openEditAlbumDialog(this.album)
       .afterClosed()
       .pipe(
         filter(result => !!result),
@@ -90,15 +82,7 @@ export class AlbumPageComponent implements OnInit, OnDestroy {
   }
 
   removeAlbum() {
-    const config = {
-      width: '600px',
-      data: {
-        title: 'Remove album'
-      }
-    }
-
-    this.matDialog
-      .open(ConfirmDialogComponent, config)
+    this.dialogsService.openRemoveAlbumDialog()
       .afterClosed()
       .pipe(
         filter(result => !!result),
@@ -109,32 +93,13 @@ export class AlbumPageComponent implements OnInit, OnDestroy {
   }
 
   addPhotos() {
-    const config = {
-      width: '600px',
-      data: {
-        url: this.photosService.createPhotoUrlForAlbum(this.id),
-        headers: this.authService.headers
-      }
-    }
-
-    this.matDialog
-      .open(AddPhotosComponent, config)
+    this.dialogsService.openAddPhtosDialog(this.id)
       .componentInstance.photoAdded
       .subscribe(data => this.photosService.addPhotos(new Photo(data)))
   }
 
   editPhoto(photo: Photo) {
-    const { name, description } = photo
-    const config = {
-      width: '600px',
-      data: {
-        title: 'Edit Photo',
-        values: { name, description }
-      }
-    }
-
-    this.matDialog
-      .open(AlbumFormComponent, config)
+    this.dialogsService.openEditPhotoDialog(photo)
       .afterClosed()
       .pipe(
         filter(result => !!result),

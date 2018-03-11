@@ -22,6 +22,7 @@ import { PhotosService } from './photos.service'
 import { FilesizePipe } from './filesize.pipe'
 import { MimetypePipe } from './mimetype.pipe'
 import { LoggerService } from './logger.service'
+import { DialogsService } from './dialogs.service';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent, canActivate: [AuthGuard] },
@@ -66,7 +67,8 @@ const routes: Routes = [
     {
       provide: LoggerService,
       useFactory: () => new LoggerService()
-    }
+    },
+    DialogsService
   ],
 })
 export class CoreModule { }
