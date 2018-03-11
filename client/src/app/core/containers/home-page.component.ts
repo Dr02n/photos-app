@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Observable } from 'rxjs/Observable'
 import { Photo } from '../photo.model'
 import { PhotosService } from '../photos.service'
 
@@ -7,7 +8,7 @@ import { PhotosService } from '../photos.service'
   template: `
     <div class="container" *ngIf="photos; else loader">
       <h2>Latest Photos</h2>
-      <app-photos [photos]="photos"></app-photos>
+      <app-photos [photos]="photos | async"></app-photos>
     </div>
     <ng-template #loader>
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -21,11 +22,13 @@ import { PhotosService } from '../photos.service'
 })
 
 export class HomePageComponent implements OnInit {
-  photos: Photo[]
+  photos: Observable<Photo[]>
 
-  constructor(private photosService: PhotosService) { }
+  constructor(private photosService: PhotosService) {
+    this.photos = photosService.photos
+   }
 
   ngOnInit() {
-    this.photosService.getPhotos().subscribe(photos => this.photos = photos)
+    this.photosService.getPhotos().subscribe()
   }
 }

@@ -2,11 +2,11 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable'
 
 export class BaseService {
-  protected httpOptions
+  constructor(private authService) { }
 
-  constructor(headers) {
-    this.httpOptions = {
-      headers: new HttpHeaders(headers)
+  get httpOptions() {
+    return {
+      headers: new HttpHeaders(this.authService.headers)
     }
   }
 

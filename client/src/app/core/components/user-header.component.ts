@@ -19,6 +19,9 @@ import { Component, OnInit, Input } from '@angular/core'
           </div>
         </div>
       </div>
+
+      {{ user | json }}
+
     </div>
   `,
   styleUrls: ['user-header.component.scss']

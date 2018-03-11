@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MatDialog } from '@angular/material'
+import { Observable } from 'rxjs/Observable'
+import { switchMap, filter, tap } from 'rxjs/operators'
+
 import { Album } from '../album.model'
 import { Photo } from '../photo.model'
 import { AlbumsService } from '../albums.service'
@@ -13,10 +16,13 @@ import { ConfirmDialogComponent } from '../components/confirm-dialog.component'
 @Component({
   selector: 'app-album-page',
   template: `
-    <div *ngIf="album && photos; else loader">
+    <div *ngIf="album else loader">
       <app-album-header [album]="album">
         <button mat-button (click)="editAlbum()">Edit</button>
         <button mat-button color="warn" (click)="removeAlbum()">Remove</button>
+        <pre>
+          {{ album | json }}
+        </pre>
       </app-album-header>
       <div class="container">
         <div class="d-flex justify-between align-start">
@@ -24,7 +30,7 @@ import { ConfirmDialogComponent } from '../components/confirm-dialog.component'
           <button mat-button (click)="addPhotos()">Add Photos +</button>
         </div>
         <app-photos
-          [photos]="photos"
+          [photos]="photos | async"
           (remove)="removePhoto($event)"
           (edit)="editPhoto($event)"
         ></app-photos>
@@ -36,9 +42,9 @@ import { ConfirmDialogComponent } from '../components/confirm-dialog.component'
   `,
 })
 
-export class AlbumPageComponent implements OnInit {
+export class AlbumPageComponent implements OnInit, OnDestroy {
   album: Album
-  photos: Photo[]
+  photos: Observable<Photo[]>
 
   constructor(
     private route: ActivatedRoute,
@@ -47,78 +53,97 @@ export class AlbumPageComponent implements OnInit {
     private albumsService: AlbumsService,
     private photosService: PhotosService,
     private authService: AuthService
-  ) { }
+  ) {
+    albumsService.currentAlbum.subscribe(album => this.album = album)
+    this.photos = albumsService.currentAlbumPhotos
+  }
 
   get id() { return this.route.snapshot.paramMap.get('id') }
 
   ngOnInit() {
-    this.albumsService.getAlbum(this.id).subscribe(album => this.album = album)
-    this.photosService.getAlbumPhotos(this.id).subscribe(photos => this.photos = photos)
+    this.albumsService.setCurrentAlbumId(this.id)
+    this.albumsService.getAlbumPhotos(this.id).subscribe()
+  }
+
+  ngOnDestroy() {
+    this.albumsService.setCurrentAlbumId(null)
   }
 
   editAlbum() {
     const { name, description } = this.album
+    const config = {
+      width: '600px',
+      data: {
+        title: 'Edit Album',
+        values: { name, description }
+      }
+    }
 
     this.matDialog
-      .open(AlbumFormComponent, {
-        width: '600px',
-        data: {
-          title: 'Edit Album',
-          values: { name, description }
-        }
-      })
-      .afterClosed().subscribe(result => {
-        if (!result) { return }
-        this.albumsService.updateAlbum(this.id, result).subscribe(album => this.album = album)
-      })
+      .open(AlbumFormComponent, config)
+      .afterClosed()
+      .pipe(
+        filter(result => !!result),
+        switchMap(result => this.albumsService.updateAlbum(this.id, result))
+      )
+      .subscribe()
   }
 
   removeAlbum() {
+    const config = {
+      width: '600px',
+      data: {
+        title: 'Remove album'
+      }
+    }
+
     this.matDialog
-      .open(ConfirmDialogComponent, {
-        width: '600px',
-        data: {
-          title: 'Remove album'
-        }
-      })
-      .afterClosed().subscribe(result => {
-        if (!result) { return }
-        this.albumsService.removeAlbum(this.id).subscribe(() => this.router.navigate(['users/me']))
-      })
+      .open(ConfirmDialogComponent, config)
+      .afterClosed()
+      .pipe(
+        filter(result => !!result),
+        tap(() => this.router.navigate(['users/me'])),
+        switchMap(result => this.albumsService.deleteAlbum(this.id))
+      )
+      .subscribe()
   }
 
   addPhotos() {
+    const config = {
+      width: '600px',
+      data: {
+        url: this.photosService.createPhotoUrlForAlbum(this.id),
+        headers: this.authService.headers
+      }
+    }
+
     this.matDialog
-      .open(AddPhotosComponent, {
-        width: '600px',
-        data: {
-          url: this.photosService.addPhotosUrl(this.id),
-          headers: this.authService.headers
-        }
-      })
-      .componentInstance.photoAdded.subscribe(photo => this.photos.push(photo))
+      .open(AddPhotosComponent, config)
+      .componentInstance.photoAdded
+      .subscribe(data => this.photosService.addPhotos(new Photo(data)))
   }
 
   editPhoto(photo: Photo) {
     const { name, description } = photo
+    const config = {
+      width: '600px',
+      data: {
+        title: 'Edit Photo',
+        values: { name, description }
+      }
+    }
 
     this.matDialog
-      .open(AlbumFormComponent, {
-        width: '600px',
-        data: {
-          title: 'Edit Photo',
-          values: { name, description }
-        }
-      })
-      .afterClosed().subscribe(result => {
-        if (!result) { return }
-        this.photosService.editPhoto(photo._id, result)
-          .subscribe(newPhoto => this.photos = this.photos.map(el => el._id === newPhoto._id ? newPhoto : el))
-      })
+      .open(AlbumFormComponent, config)
+      .afterClosed()
+      .pipe(
+        filter(result => !!result),
+        switchMap(result => this.photosService.editPhoto(photo._id, result))
+      )
+      .subscribe()
   }
 
   removePhoto(photo: Photo) {
-    this.photosService.removePhoto(photo._id)
-      .subscribe(() => this.photos = this.photos.filter(({ _id }) => _id !== photo._id))
+    this.photosService.removePhoto(photo._id).subscribe()
   }
 }
