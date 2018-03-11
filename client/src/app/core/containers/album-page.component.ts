@@ -1,18 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { MatDialog } from '@angular/material'
 import { Observable } from 'rxjs/Observable'
 import { switchMap, filter, tap } from 'rxjs/operators'
 
 import { Album } from '../album.model'
 import { Photo } from '../photo.model'
-import { AuthService } from '../../auth/auth.service'
 import { AlbumsService } from '../albums.service'
 import { PhotosService } from '../photos.service'
 import { DialogsService } from '../dialogs.service'
-import { AlbumFormComponent } from '../components/album-form.component'
-import { AddPhotosComponent } from '../components/add-photos.component'
-import { ConfirmDialogComponent } from '../components/confirm-dialog.component'
+
 
 @Component({
   selector: 'app-album-page',
@@ -50,10 +46,8 @@ export class AlbumPageComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private matDialog: MatDialog,
     private albumsService: AlbumsService,
     private photosService: PhotosService,
-    private authService: AuthService,
     private dialogsService: DialogsService
   ) {
     albumsService.currentAlbum.subscribe(album => this.album = album)
