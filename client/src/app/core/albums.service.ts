@@ -58,11 +58,22 @@ export class AlbumsService extends BaseService {
       refCount()
     )
 
-    this.currentAlbumPhotos = photosService.photos // TODO
+    this.currentAlbumPhotos = this.currentAlbumId.pipe(
+      combineLatest(photosService.photos),
+      map(([id, photos]) => {
+        return id ? photos.filter(photo => photo.album._id === id) : []
+      }),
+      publishReplay(1),
+      refCount()
+    )
 
     this.albums.subscribe(val => this.logger.log('albums', val))
     this.currentAlbum.subscribe(val => this.logger.log('currentAlbum', val))
   }
+
+  /**
+   * Local operations
+   */
 
   setCurrentAlbumId(id: string) {
     this.currentAlbumId.next(id)
@@ -84,6 +95,10 @@ export class AlbumsService extends BaseService {
       return newAlbumsMap
     })
   }
+
+  /**
+   * Server interactions
+   */
 
   createAlbum(data: Data) {
     return this.http.post<Album>(this.BASE_URL, data, this.httpOptions)

@@ -1,7 +1,7 @@
 export class Photo {
   _id: string
   author: string
-  album: string
+  album: any // id or Album
   name: string
   path: string
   mimetype: string

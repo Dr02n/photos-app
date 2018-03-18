@@ -2,7 +2,7 @@ export class Album {
   _id: string
   name: string
   description: string
-  author: any // id or object
+  author: any // id or User
   photos: string[]
   photosCount: number
 
