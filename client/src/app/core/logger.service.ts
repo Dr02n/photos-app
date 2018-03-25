@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core'
 export class LoggerService {
     constructor(
         private color: string = 'black',
-        private title: string = ''
+        private title: string = '_'
     ) { }
 
-    getLogger(...args) {
-        return new LoggerService(...args)
+    create(color: string, title: string) {
+        return new LoggerService(color, title)
     }
 
     log(key: string, value: any) {

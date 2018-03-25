@@ -28,7 +28,7 @@ export class UsersService extends BaseService {
   ) {
     super(authService)
 
-    this.logger = loggerService.getLogger('green', this.constructor.name)
+    this.logger = loggerService.create('green', this.constructor.name)
 
     this.currentUserAlbums = this.currentUser.pipe(
       combineLatest(

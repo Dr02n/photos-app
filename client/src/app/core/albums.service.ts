@@ -37,7 +37,7 @@ export class AlbumsService extends BaseService {
   ) {
     super(authService)
 
-    this.logger = loggerService.getLogger('blue', this.constructor.name)
+    this.logger = loggerService.create('blue', this.constructor.name)
 
     this.albums = this.updates.pipe(
       scan((albums: Album[], operation: any) => operation(albums), {}),

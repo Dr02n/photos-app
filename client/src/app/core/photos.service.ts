@@ -26,7 +26,7 @@ export class PhotosService extends BaseService {
   ) {
     super(authService)
 
-    this.logger = loggerService.getLogger('red', this.constructor.name)
+    this.logger = loggerService.create('red', this.constructor.name)
 
     this.photos = this.updates.pipe(
       scan((photos: Photo[], operation: any) => operation(photos), {}),
