@@ -87,7 +87,7 @@ export class AlbumPageComponent implements OnInit, OnDestroy {
   }
 
   addPhotos() {
-    this.dialogsService.openAddPhtosDialog(this.id)
+    this.dialogsService.openAddPhotosDialog(this.id)
       .componentInstance.photoAdded
       .subscribe(data => this.photosService.addPhotos(new Photo(data)))
   }

@@ -1,21 +1,18 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { MatDialog } from '@angular/material'
 import { Observable } from 'rxjs/Observable'
 import { filter, switchMap } from 'rxjs/operators'
-
 import { UsersService } from '../users.service'
 import { AlbumsService } from '../albums.service'
+import { DialogsService } from '../dialogs.service'
 import { User } from '../user.model'
 import { Album } from '../album.model'
-import { AlbumFormComponent } from '../components/album-form.component'
-import { UserFormComponent } from '../components/user-form.component'
 
 @Component({
   selector: 'app-user-page',
   template: `
     <div *ngIf="user && albums; else loader">
-      <app-user-header [user]="user | async">
+      <app-user-header [user]="user">
         <button mat-button (click)="editUser()">Edit</button>
       </app-user-header>
       <div class="container">
@@ -32,16 +29,16 @@ import { UserFormComponent } from '../components/user-form.component'
   `
 })
 export class UserPageComponent implements OnInit {
-  user: Observable<User>
+  user: User
   albums: Observable<Album[]>
 
   constructor(
     private route: ActivatedRoute,
-    private matDialog: MatDialog,
     private userService: UsersService,
-    private albumsService: AlbumsService
+    private albumsService: AlbumsService,
+    private dialogService: DialogsService
   ) {
-    this.user = userService.currentUser
+    userService.currentUser.subscribe(user => this.user = user)
     this.albums = userService.currentUserAlbums
   }
 
@@ -52,11 +49,7 @@ export class UserPageComponent implements OnInit {
   }
 
   addAlbum() {
-    this.matDialog
-      .open(AlbumFormComponent, {
-        width: '600px',
-        data: { title: 'Create new album' }
-      })
+    this.dialogService.openAddAlbumDialog()
       .afterClosed()
       .pipe(
         filter(result => !!result),
@@ -66,11 +59,7 @@ export class UserPageComponent implements OnInit {
   }
 
   editUser() {
-    this.matDialog
-      .open(UserFormComponent, {
-        width: '600px',
-        data: { user: this.user }
-      })
+    this.dialogService.openEditUserDialog(this.user)
       .afterClosed()
       .pipe(
         filter(result => !!result)
