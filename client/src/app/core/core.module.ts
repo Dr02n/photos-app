@@ -19,6 +19,7 @@ import { UserFormComponent } from './components/user-form.component'
 import { UsersService } from './users.service'
 import { AlbumsService } from './albums.service'
 import { PhotosService } from './photos.service'
+import { DialogsService } from './dialogs.service'
 import { FilesizePipe } from './filesize.pipe'
 import { MimetypePipe } from './mimetype.pipe'
 
@@ -61,7 +62,8 @@ const routes: Routes = [
   providers: [
     UsersService,
     AlbumsService,
-    PhotosService
+    PhotosService,
+    DialogsService
   ],
 })
 export class CoreModule { }

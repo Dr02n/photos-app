@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { MatDialog } from '@angular/material'
+import { filter, switchMap } from 'rxjs/operators'
 import { UsersService } from '../users.service'
 import { AlbumsService } from '../albums.service'
+import { DialogsService } from '../dialogs.service'
 import { User } from '../user.model'
 import { Album } from '../album.model'
-import { AlbumFormComponent } from '../components/album-form.component'
-import { UserFormComponent } from '../components/user-form.component'
 
 @Component({
   selector: 'app-user-page',
@@ -34,9 +33,9 @@ export class UserPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private matDialog: MatDialog,
     private userService: UsersService,
-    private albumsService: AlbumsService
+    private albumsService: AlbumsService,
+    private dialogService: DialogsService
   ) { }
 
   ngOnInit() {
@@ -46,27 +45,19 @@ export class UserPageComponent implements OnInit {
   }
 
   addAlbum() {
-    this.matDialog
-      .open(AlbumFormComponent, {
-        width: '600px',
-        data: { title: 'Create new album' }
-      })
-      .afterClosed().subscribe(result => {
-        if (!result) { return }
-        this.albumsService.createAlbum(result)
-          .subscribe((album) => this.albums.push(album))
-      })
+    this.dialogService.openAddAlbumDialog()
+      .afterClosed()
+      .pipe(
+        filter(Boolean),
+        switchMap(data => this.albumsService.createAlbum(data)))
+      .subscribe((album) => this.albums.push(album))
   }
 
   editUser() {
-    this.matDialog
-      .open(UserFormComponent, {
-        width: '600px',
-        data: { user: this.user }
-      })
-      .afterClosed().subscribe(result => {
-        if (!result) { return }
-        console.log(result)
-      })
+    this.dialogService.openEditUserDialog(this.user)
+      .afterClosed()
+      .pipe(
+        filter(Boolean))
+      .subscribe(result => { console.log(result) })
   }
 }

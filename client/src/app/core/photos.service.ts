@@ -24,7 +24,7 @@ export class PhotosService extends BaseService {
       .pipe(catchError(this.handleError))
   }
 
-  addPhotosUrl(albumId: string) {
+  createPhotoUrlForAlbum(albumId: string) {
     return `/api/albums/${albumId}/photos`
   }
 
